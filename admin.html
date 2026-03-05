@@ -1161,6 +1161,14 @@ if (!localStorage.getItem(K.members)) {
   localStorage.setItem('members_cache', JSON.stringify(INITIAL_MEMBERS));
 }
 
+// ── Script URL 하드코딩
+const HARDCODED_URL = 'https://script.google.com/macros/s/AKfycbyWjRnaNRr_PERyLfoyNSY7JIk4rZBsEWymk7UB23VDU0wNJ_es-5cXUnDQoX8Pqcym/exec';
+if (!localStorage.getItem('scriptUrl')) {
+  localStorage.setItem('scriptUrl', HARDCODED_URL);
+}
+const _cfg = loadConfig();
+if (!_cfg.scriptUrl) { _cfg.scriptUrl = HARDCODED_URL; save(K.config, _cfg); }
+
 // ── SW 등록
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('./sw.js').catch(()=>{});

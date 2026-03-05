@@ -242,7 +242,7 @@
 // ══════════════════════════════════════════
 //  설정
 // ══════════════════════════════════════════
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyWjRnaNRr_PERyLfoyNSY7JIk4rZBsEWymk7UB23VDU0wNJ_es-5cXUnDQoX8Pqcym/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzycyMkszAeqYCH4-UVJYXUvnEFh4dZSrJGWEmm76UYNRJjanJk1V-j2MRNFm4vamhT/exec';
 localStorage.setItem('scriptUrl', SCRIPT_URL);  // 관리자 앱과 공유
 const AUTO_CLOSE = 2500;   // 결과 화면 자동 닫힘 (ms)
 
@@ -424,18 +424,22 @@ function showOverlay(type, msg, sub) {
 }
 
 // ══════════════════════════════════════════
-//  Google Sheets 전송
+//  Google Sheets 전송 (GET 방식 — CORS 우회)
 // ══════════════════════════════════════════
 async function sendToSheets(record) {
   if (!SCRIPT_URL) return;
   try {
-    await fetch(SCRIPT_URL, {
-      method: 'POST', mode: 'no-cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'addRecord', data: record }),
+    const params = new URLSearchParams({
+      action    : 'addRecord',
+      id        : record.id,
+      phone     : record.phone,
+      name      : record.name,
+      date      : record.date,
+      time      : record.time,
+      registered: record.registered ? 'true' : 'false',
     });
+    await fetch(SCRIPT_URL + '?' + params.toString(), { method: 'GET', mode: 'no-cors' });
   } catch {
-    // 오프라인 큐에 저장 → 관리자 앱에서 나중에 동기화
     const q = JSON.parse(localStorage.getItem('offline_queue') || '[]');
     q.push(record);
     localStorage.setItem('offline_queue', JSON.stringify(q));

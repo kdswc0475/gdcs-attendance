@@ -43,6 +43,23 @@ function doGet(e) {
   if (action === 'getStats')
     return json({ stats: readStats(e.parameter.month || '') });
 
+  // ── GET 파라미터로 출석 기록 추가 (키오스크 CORS 우회용)
+  if (action === 'addRecord') {
+    const record = {
+      id        : e.parameter.id || String(Date.now()),
+      phone     : e.parameter.phone || '',
+      name      : e.parameter.name  || '',
+      date      : e.parameter.date  || '',
+      time      : e.parameter.time  || '',
+      registered: e.parameter.registered === 'true',
+    };
+    if (record.phone && record.date) {
+      appendRecord(record);
+      updateStats(record.date);
+    }
+    return json({ status: 'ok' });
+  }
+
   return json({ status: 'ok' });
 }
 

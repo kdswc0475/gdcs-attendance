@@ -965,24 +965,50 @@ async function doSync() {
   if (!cfg.scriptUrl) { toast('Script URL을 먼저 설정하세요', 'error'); return; }
   toast('동기화 중...');
   try {
-    // 오프라인 큐 전송
+    // ① Sheets에서 최신 출석 기록 가져오기 (키오스크 데이터 포함)
+    const res = await fetch(cfg.scriptUrl + '?action=getRecords');
+    const data = await res.json();
+    if (data.records && data.records.length > 0) {
+      // 로컬 기록과 Sheets 기록 병합 (id 기준 중복 제거)
+      const local = load(K.records) || [];
+      const merged = [...local];
+      data.records.forEach(sr => {
+        if (!merged.find(lr => String(lr.id) === String(sr.id))) {
+          merged.push({
+            ...sr,
+            registered: sr.registered === true || sr.registered === 'true' || sr.registered === '등록',
+          });
+        }
+      });
+      // 날짜+시간 순 정렬
+      merged.sort((a, b) => (a.date + a.time) > (b.date + b.time) ? 1 : -1);
+      save(K.records, merged);
+      // kiosk_records도 갱신
+      localStorage.setItem('kiosk_records', JSON.stringify(merged));
+    }
+
+    // ② 오프라인 큐 전송
     const queue = load(K.kiosk_q) || [];
     if (queue.length > 0) {
-      await fetch(cfg.scriptUrl, {
-        method: 'POST', mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'addBatch', records: queue }),
-      });
+      for (const r of queue) {
+        const params = new URLSearchParams({
+          action: 'addRecord', id: r.id, phone: r.phone,
+          name: r.name, date: r.date, time: r.time,
+          registered: r.registered ? 'true' : 'false',
+        });
+        await fetch(cfg.scriptUrl + '?' + params.toString(), { method: 'GET', mode: 'no-cors' });
+      }
       localStorage.removeItem(K.kiosk_q);
     }
-    // 전체 동기화
-    await fetch(cfg.scriptUrl, {
-      method: 'POST', mode: 'no-cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'syncAll', members: getMembers(), records: getRecords() }),
-    });
-    document.getElementById('sync-time').textContent = new Date().toTimeString().slice(0,5);
+
+    document.getElementById('sync-time').textContent = new Date().toTimeString().slice(0, 5);
     checkOfflineQueue();
+
+    // ③ 화면 갱신
+    renderDashboard();
+    renderToday();
+    renderRecords();
+
     toast('✓ Google Sheets 동기화 완료');
   } catch(e) { toast('동기화 실패: ' + e.message, 'error'); }
 }

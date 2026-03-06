@@ -960,16 +960,35 @@ async function deleteRecord(id, name, date) {
 // ══════════════════════════════════════════
 //  GOOGLE SHEETS SYNC
 // ══════════════════════════════════════════
+// JSONP 방식으로 Apps Script GET 호출 (CORS 완전 우회)
+function jsonpFetch(url) {
+  return new Promise((resolve, reject) => {
+    const cbName = '_jsonp_' + Date.now();
+    const script = document.createElement('script');
+    const timer = setTimeout(() => {
+      cleanup();
+      reject(new Error('JSONP timeout'));
+    }, 8000);
+    function cleanup() {
+      clearTimeout(timer);
+      delete window[cbName];
+      if (script.parentNode) script.parentNode.removeChild(script);
+    }
+    window[cbName] = (data) => { cleanup(); resolve(data); };
+    script.src = url + '&callback=' + cbName;
+    script.onerror = () => { cleanup(); reject(new Error('JSONP error')); };
+    document.head.appendChild(script);
+  });
+}
+
 async function doSync() {
   const cfg = getConfig();
   if (!cfg.scriptUrl) { toast('Script URL을 먼저 설정하세요', 'error'); return; }
   toast('동기화 중...');
   try {
-    // ① Sheets에서 최신 출석 기록 가져오기 (키오스크 데이터 포함)
-    const res = await fetch(cfg.scriptUrl + '?action=getRecords');
-    const data = await res.json();
-    if (data.records && data.records.length > 0) {
-      // 로컬 기록과 Sheets 기록 병합 (id 기준 중복 제거)
+    // ① Sheets에서 최신 출석 기록 가져오기 (JSONP 방식 — CORS 우회)
+    const data = await jsonpFetch(cfg.scriptUrl + '?action=getRecords');
+    if (data && data.records && data.records.length > 0) {
       const local = load(K.records) || [];
       const merged = [...local];
       data.records.forEach(sr => {
@@ -980,10 +999,8 @@ async function doSync() {
           });
         }
       });
-      // 날짜+시간 순 정렬
       merged.sort((a, b) => (a.date + a.time) > (b.date + b.time) ? 1 : -1);
       save(K.records, merged);
-      // kiosk_records도 갱신
       localStorage.setItem('kiosk_records', JSON.stringify(merged));
     }
 
@@ -1231,11 +1248,11 @@ if (!localStorage.getItem(K.members)) {
 }
 
 // ── Script URL 하드코딩
-const HARDCODED_URL = 'https://script.google.com/macros/s/AKfycbzycyMkszAeqYCH4-UVJYXUvnEFh4dZSrJGWEmm76UYNRJjanJk1V-j2MRNFm4vamhT/exec';
+const HARDCODED_URL = 'https://script.google.com/macros/s/AKfycbw4wHR4VpAomKGMizlV2dTZS7X5p8mqIb0DmEViuP147Y51ezbh10eKkYOcyoEO02UL/exec';
 if (!localStorage.getItem('scriptUrl')) {
   localStorage.setItem('scriptUrl', HARDCODED_URL);
 }
-const _cfg = loadConfig();
+const _cfg = getConfig();
 if (!_cfg.scriptUrl) { _cfg.scriptUrl = HARDCODED_URL; save(K.config, _cfg); }
 
 // ── SW 등록

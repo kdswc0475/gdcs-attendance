@@ -279,6 +279,16 @@
 
     .empty { text-align: center; padding: 40px; color: var(--muted); font-size: 14px; }
 
+    /* ── 삭제 버튼 ── */
+    .btn-del {
+      padding: 4px 10px; border-radius: 8px; border: none;
+      cursor: pointer; font-family: inherit; font-size: 11px; font-weight: 700;
+      background: rgba(239,68,68,0.15); color: var(--error);
+      border: 1px solid rgba(239,68,68,0.3);
+      transition: all 0.1s; white-space: nowrap;
+    }
+    .btn-del:active { background: var(--error); color: #fff; transform: scale(0.95); }
+
     @media (max-width: 600px) {
       .stat-row  { grid-template-columns: repeat(2,1fr); }
       .form-grid { grid-template-columns: 1fr; }
@@ -390,7 +400,7 @@
       <div class="card" style="overflow-x:auto">
         <table class="records-table" id="rec-table">
           <thead><tr>
-            <th>번호</th><th>날짜</th><th>시간</th><th>이름</th><th>전화번호</th><th>구분</th>
+            <th>번호</th><th>날짜</th><th>시간</th><th>이름</th><th>전화번호</th><th>구분</th><th>삭제</th>
           </tr></thead>
           <tbody id="rec-tbody"></tbody>
         </table>
@@ -724,6 +734,7 @@ function todayItemHtml(r, n) {
         <div class="today-meta">010-${r.phone.slice(0,4)}-${r.phone.slice(4)}</div>
       </div>
       <div class="today-time">${r.time}</div>
+      <button class="btn-del" onclick="deleteRecord('${r.id}', '${r.name}', '${r.date}')">삭제</button>
     </div>`;
 }
 
@@ -746,6 +757,7 @@ function renderRecords() {
           <td>${r.name}</td>
           <td>010-${r.phone.slice(0,4)}-${r.phone.slice(4)}</td>
           <td><span class="${r.registered ? 'badge-reg' : 'badge-unreg'}">${r.registered ? '등록' : '미등록'}</span></td>
+          <td><button class="btn-del" onclick="deleteRecord('${r.id}', '${r.name}', '${r.date}')">삭제</button></td>
         </tr>`).join('');
 }
 
@@ -912,6 +924,37 @@ function changePin() {
   document.getElementById('pin-cur').value = '';
   document.getElementById('pin-new').value = '';
   toast('PIN 변경 완료');
+}
+
+// ══════════════════════════════════════════
+//  DELETE RECORD
+// ══════════════════════════════════════════
+async function deleteRecord(id, name, date) {
+  if (!confirm(`${name} 어르신의 ${date} 출석 기록을 삭제하시겠습니까?`)) return;
+
+  // 1) localStorage 삭제 (admin + kiosk 양쪽)
+  const adminRecs = JSON.parse(localStorage.getItem('gdcs_records') || '[]');
+  const kioskRecs = JSON.parse(localStorage.getItem('kiosk_records') || '[]');
+  const filteredAdmin = adminRecs.filter(r => String(r.id) !== String(id));
+  const filteredKiosk = kioskRecs.filter(r => String(r.id) !== String(id));
+  localStorage.setItem('gdcs_records', JSON.stringify(filteredAdmin));
+  localStorage.setItem('kiosk_records', JSON.stringify(filteredKiosk));
+
+  // 2) Google Sheets 삭제
+  const cfg = getConfig();
+  if (cfg.scriptUrl) {
+    try {
+      const params = new URLSearchParams({ action: 'deleteRecord', id: String(id) });
+      await fetch(cfg.scriptUrl + '?' + params.toString(), { method: 'GET', mode: 'no-cors' });
+    } catch(e) { console.warn('Sheets 삭제 실패:', e); }
+  }
+
+  toast(`${name} 어르신 출석 기록 삭제 완료`);
+
+  // 3) 현재 탭 새로고침
+  renderDashboard();
+  renderToday();
+  renderRecords();
 }
 
 // ══════════════════════════════════════════

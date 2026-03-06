@@ -60,6 +60,13 @@ function doGet(e) {
     return json({ status: 'ok' });
   }
 
+  // ── 출석 기록 삭제
+  if (action === 'deleteRecord') {
+    const id = e.parameter.id || '';
+    if (id) deleteRecordById(id);
+    return json({ status: 'ok' });
+  }
+
   return json({ status: 'ok' });
 }
 
@@ -162,6 +169,20 @@ function writeRecords(records) {
   sh.getRange(2, 1, records.length, 6).setValues(
     records.map(r => [r.id||'', r.date, r.time, r.name, r.phone, r.registered?'등록':'미등록'])
   );
+}
+
+function deleteRecordById(id) {
+  const sh = getSheet(SH.RECORDS, RECORD_HDR);
+  const data = sh.getDataRange().getValues();
+  // 헤더(1행) 제외, id 일치하는 행 찾기
+  for (let i = data.length - 1; i >= 1; i--) {
+    if (String(data[i][0]) === String(id)) {
+      sh.deleteRow(i + 1);  // 시트는 1-indexed
+      break;
+    }
+  }
+  // 통계 재계산
+  rebuildStats();
 }
 
 // ══ 월별 통계 ════════════════════════════

@@ -1,29 +1,21 @@
 <!DOCTYPE html>
 <html lang="ko">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>경로식당 출석체크</title>
   <style>
     * {
-      margin: 0;
-      padding: 0;
+      margin: 0; padding: 0;
       box-sizing: border-box;
       -webkit-tap-highlight-color: transparent;
       -webkit-touch-callout: none;
       -webkit-user-select: none;
     }
 
-    /* ── 핵심: JS로 계산한 --vh 를 사용 ── */
-    :root {
-      --vh: 1vh;
-    }
-
-    html,
-    body {
+    html, body {
       width: 100%;
-      height: calc(var(--vh, 1vh) * 100);
+      /* vh 완전 제거 — JS가 실제 높이를 px로 직접 설정 */
       overflow: hidden;
       background: #1976d2;
       font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
@@ -34,291 +26,252 @@
       flex-direction: column;
     }
 
-    /* ── 헤더 ── */
+    /* ── 헤더 (고정 비율: 전체의 ~9%) ── */
     .header {
       background: #ffe000;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0.8vh 2vw;
+      padding: 6px 14px;
       flex-shrink: 0;
     }
+    .header h1 { font-size: 18px; font-weight: 900; color: #000; line-height: 1.3; }
+    .header p  { font-size: 12px; color: #444; }
+    .clock     { font-size: 30px; font-weight: 900; color: #000; }
 
-    .header h1 {
-      font-size: clamp(13px, 2.2vh, 22px);
-      font-weight: 900;
-      color: #000;
-    }
-
-    .header p {
-      font-size: clamp(10px, 1.5vh, 14px);
-      color: #333;
-    }
-
-    .clock {
-      font-size: clamp(22px, 4vh, 40px);
-      font-weight: 900;
-      color: #000;
-    }
-
-    /* ── 안내문 ── */
+    /* ── 안내문 (고정) ── */
     .guide {
       background: #1565c0;
       text-align: center;
       color: #fff;
-      font-size: clamp(13px, 2vh, 18px);
+      font-size: 16px;
       font-weight: 700;
-      padding: 0.6vh 0;
+      padding: 7px 0;
       flex-shrink: 0;
     }
 
-    /* ── 번호 디스플레이 ── */
+    /* ── 번호 디스플레이 (고정) ── */
     .display {
       background: #fff;
-      margin: 1vh 1.5vw 0.5vh;
+      margin: 6px 8px 4px;
       border-radius: 10px;
-      padding: 1vh 2vw;
+      padding: 8px 14px;
       text-align: center;
       flex-shrink: 0;
     }
-
     .disp-num {
-      font-size: clamp(20px, 4.5vh, 44px);
+      font-size: 30px;
       font-weight: 900;
-      letter-spacing: 0.15em;
+      letter-spacing: 0.12em;
       color: #1565c0;
-      line-height: 1.1;
+      line-height: 1.2;
     }
-
     .disp-name {
-      font-size: clamp(12px, 2vh, 18px);
+      font-size: 15px;
       font-weight: 700;
       min-height: 1.4em;
     }
+    .found    { color: #2e7d32; }
+    .notfound { color: #c62828; }
 
-    .found {
-      color: #2e7d32;
-    }
-
-    .notfound {
-      color: #c62828;
-    }
-
-    /* ── 키패드 래퍼: 남은 공간 100% 차지 ── */
+    /* ── 키패드 래퍼: 나머지 공간 전부 ── */
     .keypad-wrap {
       flex: 1;
       min-height: 0;
-      /* flex overflow 방지 */
       display: flex;
       flex-direction: column;
-      padding: 0.5vh 1.5vw 0.8vh;
-      gap: 0.5vh;
+      padding: 4px 8px 6px;
+      gap: 5px;
     }
 
-    /* ── 숫자 그리드: 높이 비율로 분배 ── */
+    /* ── 4행 3열 그리드: flex:1 로 높이 자동 분배 ── */
     .keypad {
       flex: 1;
       min-height: 0;
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       grid-template-rows: repeat(4, 1fr);
-      /* 4행 균등 */
-      gap: clamp(3px, 0.6vh, 8px);
+      gap: 5px;
     }
 
+    /* 버튼 크기는 그리드가 결정 — px 고정 없음 */
     .key {
       background: #1976d2;
-      border: 2px solid rgba(255, 255, 255, 0.4);
-      border-radius: clamp(8px, 1.5vh, 16px);
+      border: 2px solid rgba(255,255,255,0.4);
+      border-radius: 12px;
       color: #fff;
       font-weight: 900;
-      font-size: clamp(18px, 4.5vh, 48px);
-      /* 뷰포트 높이 기준 */
+      /* 폰트: vh 대신 % 단위 — 부모(그리드 셀) 높이 기준 */
+      font-size: 35%;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       touch-action: manipulation;
       transition: background 0.07s, transform 0.07s;
-      /* width/height 100% — 그리드가 크기 결정 */
       width: 100%;
       height: 100%;
     }
 
-    .key.pressed,
-    .key:active {
+    .key.pressed, .key:active {
       background: #fff200;
       color: #000;
-      transform: scale(0.92);
+      transform: scale(0.93);
     }
 
-    .key-clear {
-      font-size: clamp(14px, 2.8vh, 28px);
-      color: #ffe082;
-    }
+    .key-clear { font-size: 22%; color: #ffe082; }
+    .key-del   { font-size: 30%; }
 
-    .key-del {
-      font-size: clamp(18px, 3.5vh, 36px);
-    }
-
-    /* ── 출석체크 버튼 ── */
+    /* ── 출석체크 버튼 (flex-shrink:0, 비율 고정) ── */
     .submit-btn {
       flex-shrink: 0;
-      height: clamp(44px, 8vh, 72px);
+      /* 키패드 높이의 약 1행 분량 */
+      flex-basis: 13%;
       border: none;
-      border-radius: clamp(8px, 1.5vh, 14px);
+      border-radius: 12px;
       background: linear-gradient(135deg, #66bb6a, #388e3c);
       color: #fff;
-      font-size: clamp(16px, 3vh, 30px);
+      font-size: 22px;
       font-weight: 900;
       letter-spacing: 0.25em;
       cursor: pointer;
       touch-action: manipulation;
       transition: opacity 0.15s, transform 0.08s;
     }
-
     .submit-btn:disabled {
-      background: rgba(255, 255, 255, 0.22);
-      color: rgba(255, 255, 255, 0.45);
+      background: rgba(255,255,255,0.22);
+      color: rgba(255,255,255,0.45);
     }
-
-    .submit-btn:not(:disabled):active {
-      transform: scale(0.97);
-    }
+    .submit-btn:not(:disabled):active { transform: scale(0.97); }
 
     /* ── 하단 상태바 ── */
     .statusbar {
       flex-shrink: 0;
-      background: rgba(0, 0, 0, 0.28);
+      background: rgba(0,0,0,0.28);
       display: flex;
       justify-content: space-between;
-      padding: 0.4vh 1.5vw;
-      font-size: clamp(10px, 1.4vh, 13px);
-      color: rgba(255, 255, 255, 0.8);
+      padding: 3px 10px;
+      font-size: 11px;
+      color: rgba(255,255,255,0.8);
     }
   </style>
 </head>
-
 <body>
 
-  <div class="header">
-    <div>
-      <h1>강동종합사회복지관 경로식당</h1>
-      <p>출석체크 시스템</p>
-    </div>
-    <div class="clock" id="clock">--:--</div>
+<div class="header">
+  <div>
+    <h1>강동종합사회복지관 경로식당</h1>
+    <p>출석체크 시스템</p>
   </div>
+  <div class="clock" id="clock">--:--</div>
+</div>
 
-  <div class="guide">010을 제외한 휴대 전화 번호를 입력하세요</div>
+<div class="guide">010을 제외한 휴대 전화 번호를 입력하세요</div>
 
-  <div class="display">
-    <div class="disp-num" id="disp-num">— — — — — — — —</div>
-    <div class="disp-name" id="disp-name"></div>
+<div class="display">
+  <div class="disp-num"  id="disp-num">— — — — — — — —</div>
+  <div class="disp-name" id="disp-name"></div>
+</div>
+
+<div class="keypad-wrap">
+  <div class="keypad">
+    <button class="key" data-k="1">1</button>
+    <button class="key" data-k="2">2</button>
+    <button class="key" data-k="3">3</button>
+    <button class="key" data-k="4">4</button>
+    <button class="key" data-k="5">5</button>
+    <button class="key" data-k="6">6</button>
+    <button class="key" data-k="7">7</button>
+    <button class="key" data-k="8">8</button>
+    <button class="key" data-k="9">9</button>
+    <button class="key key-clear" data-k="clear">지우기</button>
+    <button class="key" data-k="0">0</button>
+    <button class="key key-del"   data-k="del">←</button>
   </div>
+  <button class="submit-btn" id="submit-btn" disabled>출 석 체 크</button>
+</div>
 
-  <div class="keypad-wrap">
-    <div class="keypad">
-      <button class="key" data-k="1">1</button>
-      <button class="key" data-k="2">2</button>
-      <button class="key" data-k="3">3</button>
-      <button class="key" data-k="4">4</button>
-      <button class="key" data-k="5">5</button>
-      <button class="key" data-k="6">6</button>
-      <button class="key" data-k="7">7</button>
-      <button class="key" data-k="8">8</button>
-      <button class="key" data-k="9">9</button>
-      <button class="key key-clear" data-k="clear">지우기</button>
-      <button class="key" data-k="0">0</button>
-      <button class="key key-del" data-k="del">←</button>
-    </div>
+<div class="statusbar">
+  <span>● 온라인</span>
+  <span id="stat-count">오늘 출석: 0명</span>
+  <span id="stat-sync">동기화 --:--</span>
+</div>
 
-    <button class="submit-btn" id="submit-btn" disabled>출 석 체 크</button>
-  </div>
+<script>
+  /* ─────────────────────────────────────────────
+     핵심 수정: vh를 일절 쓰지 않고
+     window.innerHeight(주소창 제외 실제 높이)를
+     body에 직접 px로 세팅
+  ───────────────────────────────────────────── */
+  function fixHeight() {
+    document.body.style.height = window.innerHeight + 'px';
+  }
+  fixHeight();
+  window.addEventListener('resize', fixHeight);
+  window.addEventListener('orientationchange', () => setTimeout(fixHeight, 400));
 
-  <div class="statusbar">
-    <span>● 온라인</span>
-    <span id="stat-count">오늘 출석: 0명</span>
-    <span id="stat-sync">동기화 --:--</span>
-  </div>
+  /* ── 시계 ── */
+  function updateClock() {
+    const n = new Date();
+    const t = String(n.getHours()).padStart(2,'0') + ':' + String(n.getMinutes()).padStart(2,'0');
+    document.getElementById('clock').textContent = t;
+    document.getElementById('stat-sync').textContent = '동기화 ' + t;
+  }
+  updateClock();
+  setInterval(updateClock, 1000);
 
-  <script>
-    /* ────────────────────────────────────────────
-       핵심: Safari 주소창 높이를 제외한 실제 뷰포트를
-       CSS 변수 --vh 에 반영 → 레이아웃이 정확히 맞춤
-    ──────────────────────────────────────────── */
-    function setVH() {
-      const vh = window.innerHeight * 0.01;
-      document.documentElement.style.setProperty('--vh', vh + 'px');
+  /* ── 회원 명단 ── */
+  const members = [
+    // { phone: '12345678', name: '홍길동' },
+  ];
+
+  /* ── 입력 로직 ── */
+  let input = '';
+
+  function keyPress(k) {
+    if      (k === 'clear') input = '';
+    else if (k === 'del')   input = input.slice(0, -1);
+    else if (input.length < 8) input += k;
+    updateDisplay();
+  }
+
+  function updateDisplay() {
+    const numEl  = document.getElementById('disp-num');
+    const nameEl = document.getElementById('disp-name');
+    const btn    = document.getElementById('submit-btn');
+
+    const chars = input.split('').concat(Array(8 - input.length).fill('—'));
+    numEl.textContent = chars.join(' ');
+
+    if (input.length === 8) {
+      const m = members.find(x => x.phone === input);
+      nameEl.textContent = m ? '✓ ' + m.name + ' 어르신' : '⚠ 미등록 번호입니다';
+      nameEl.className   = 'disp-name ' + (m ? 'found' : 'notfound');
+      btn.disabled = false;
+    } else {
+      nameEl.textContent = '';
+      nameEl.className   = 'disp-name';
+      btn.disabled = true;
     }
-    setVH();
-    window.addEventListener('resize', setVH);
-    window.addEventListener('orientationchange', () => setTimeout(setVH, 300));
+  }
 
-    /* ── 시계 ── */
-    function updateClock() {
-      const n = new Date();
-      const t = String(n.getHours()).padStart(2, '0') + ':' + String(n.getMinutes()).padStart(2, '0');
-      document.getElementById('clock').textContent = t;
-      document.getElementById('stat-sync').textContent = '동기화 ' + t;
-    }
-    updateClock();
-    setInterval(updateClock, 1000);
+  /* ── 버튼 이벤트 ── */
+  document.querySelectorAll('.key').forEach(btn => {
+    btn.addEventListener('touchstart', e => {
+      e.preventDefault();
+      keyPress(btn.dataset.k);
+      btn.classList.add('pressed');
+    }, { passive: false });
+    btn.addEventListener('touchend', () => btn.classList.remove('pressed'));
+    btn.addEventListener('mousedown', () => keyPress(btn.dataset.k));
+  });
 
-    /* ── 회원 명단 (실제 데이터로 교체) ── */
-    const members = [
-      // { phone: '12345678', name: '홍길동' },
-    ];
-
-    /* ── 입력 로직 ── */
-    let input = '';
-
-    function keyPress(k) {
-      if (k === 'clear') input = '';
-      else if (k === 'del') input = input.slice(0, -1);
-      else if (input.length < 8) input += k;
-      updateDisplay();
-    }
-
-    function updateDisplay() {
-      const numEl = document.getElementById('disp-num');
-      const nameEl = document.getElementById('disp-name');
-      const btn = document.getElementById('submit-btn');
-
-      // 입력된 숫자 + 나머지 대시
-      const chars = input.split('').concat(Array(8 - input.length).fill('—'));
-      numEl.textContent = chars.join(' ');
-
-      if (input.length === 8) {
-        const m = members.find(x => x.phone === input);
-        nameEl.textContent = m ? '✓ ' + m.name + ' 어르신' : '⚠ 미등록 번호입니다';
-        nameEl.className = 'disp-name ' + (m ? 'found' : 'notfound');
-        btn.disabled = false;
-      } else {
-        nameEl.textContent = '';
-        nameEl.className = 'disp-name';
-        btn.disabled = true;
-      }
-    }
-
-    /* ── 버튼 이벤트 (touchstart 로 반응속도 최적화) ── */
-    document.querySelectorAll('.key').forEach(btn => {
-      btn.addEventListener('touchstart', e => {
-        e.preventDefault();
-        keyPress(btn.dataset.k);
-        btn.classList.add('pressed');
-      }, { passive: false });
-      btn.addEventListener('touchend', () => btn.classList.remove('pressed'));
-      btn.addEventListener('mousedown', () => keyPress(btn.dataset.k)); // 데스크탑 테스트용
-    });
-
-    document.getElementById('submit-btn').addEventListener('click', () => {
-      if (document.getElementById('submit-btn').disabled) return;
-      // TODO: 실제 출석 처리 로직 연결
-      alert('출석이 완료되었습니다!');
-      input = '';
-      updateDisplay();
-    });
-  </script>
+  document.getElementById('submit-btn').addEventListener('click', () => {
+    if (document.getElementById('submit-btn').disabled) return;
+    alert('출석이 완료되었습니다!');
+    input = '';
+    updateDisplay();
+  });
+</script>
 </body>
-
 </html>

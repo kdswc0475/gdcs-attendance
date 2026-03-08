@@ -15,7 +15,6 @@
 
     html, body {
       width: 100%;
-      /* vh 완전 제거 — JS가 실제 높이를 px로 직접 설정 */
       overflow: hidden;
       background: #1976d2;
       font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
@@ -26,7 +25,6 @@
       flex-direction: column;
     }
 
-    /* ── 헤더 (고정 비율: 전체의 ~9%) ── */
     .header {
       background: #ffe000;
       display: flex;
@@ -35,74 +33,68 @@
       padding: 6px 14px;
       flex-shrink: 0;
     }
-    .header h1 { font-size: 18px; font-weight: 900; color: #000; line-height: 1.3; }
-    .header p  { font-size: 12px; color: #444; }
-    .clock     { font-size: 30px; font-weight: 900; color: #000; }
+    .header h1 { font-size: 4vmin; font-weight: 900; color: #000; }
+    .header p  { font-size: 2.5vmin; color: #444; }
+    .clock     { font-size: 6vmin; font-weight: 900; color: #000; }
 
-    /* ── 안내문 (고정) ── */
     .guide {
       background: #1565c0;
       text-align: center;
       color: #fff;
-      font-size: 16px;
+      font-size: 3vmin;
       font-weight: 700;
-      padding: 7px 0;
+      padding: 1.2vmin 0;
       flex-shrink: 0;
     }
 
-    /* ── 번호 디스플레이 (고정) ── */
     .display {
       background: #fff;
-      margin: 6px 8px 4px;
+      margin: 1.5vmin 2vmin 1vmin;
       border-radius: 10px;
-      padding: 8px 14px;
+      padding: 1.5vmin 3vmin;
       text-align: center;
       flex-shrink: 0;
     }
     .disp-num {
-      font-size: 30px;
+      font-size: 7vmin;
       font-weight: 900;
       letter-spacing: 0.12em;
       color: #1565c0;
       line-height: 1.2;
     }
     .disp-name {
-      font-size: 15px;
+      font-size: 3vmin;
       font-weight: 700;
       min-height: 1.4em;
     }
     .found    { color: #2e7d32; }
     .notfound { color: #c62828; }
 
-    /* ── 키패드 래퍼: 나머지 공간 전부 ── */
     .keypad-wrap {
       flex: 1;
       min-height: 0;
       display: flex;
       flex-direction: column;
-      padding: 4px 8px 6px;
-      gap: 5px;
+      padding: 1vmin 2vmin 1.5vmin;
+      gap: 1vmin;
     }
 
-    /* ── 4행 3열 그리드: flex:1 로 높이 자동 분배 ── */
     .keypad {
       flex: 1;
       min-height: 0;
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       grid-template-rows: repeat(4, 1fr);
-      gap: 5px;
+      gap: 1vmin;
     }
 
-    /* 버튼 크기는 그리드가 결정 — px 고정 없음 */
     .key {
       background: #1976d2;
       border: 2px solid rgba(255,255,255,0.4);
-      border-radius: 12px;
+      border-radius: 2vmin;
       color: #fff;
       font-weight: 900;
-      /* 폰트: vh 대신 % 단위 — 부모(그리드 셀) 높이 기준 */
-      font-size: 35%;
+      font-size: 8vmin;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -119,19 +111,17 @@
       transform: scale(0.93);
     }
 
-    .key-clear { font-size: 22%; color: #ffe082; }
-    .key-del   { font-size: 30%; }
+    .key-clear { font-size: 4.5vmin; color: #ffe082; }
+    .key-del   { font-size: 6vmin; }
 
-    /* ── 출석체크 버튼 (flex-shrink:0, 비율 고정) ── */
     .submit-btn {
       flex-shrink: 0;
-      /* 키패드 높이의 약 1행 분량 */
-      flex-basis: 13%;
+      height: 11vmin;
       border: none;
-      border-radius: 12px;
+      border-radius: 2vmin;
       background: linear-gradient(135deg, #66bb6a, #388e3c);
       color: #fff;
-      font-size: 22px;
+      font-size: 5vmin;
       font-weight: 900;
       letter-spacing: 0.25em;
       cursor: pointer;
@@ -144,14 +134,13 @@
     }
     .submit-btn:not(:disabled):active { transform: scale(0.97); }
 
-    /* ── 하단 상태바 ── */
     .statusbar {
       flex-shrink: 0;
       background: rgba(0,0,0,0.28);
       display: flex;
       justify-content: space-between;
-      padding: 3px 10px;
-      font-size: 11px;
+      padding: 0.8vmin 2vmin;
+      font-size: 2.2vmin;
       color: rgba(255,255,255,0.8);
     }
   </style>
@@ -198,11 +187,7 @@
 </div>
 
 <script>
-  /* ─────────────────────────────────────────────
-     핵심 수정: vh를 일절 쓰지 않고
-     window.innerHeight(주소창 제외 실제 높이)를
-     body에 직접 px로 세팅
-  ───────────────────────────────────────────── */
+  /* body 높이 = 주소창 제외 실제 높이 */
   function fixHeight() {
     document.body.style.height = window.innerHeight + 'px';
   }
@@ -210,7 +195,7 @@
   window.addEventListener('resize', fixHeight);
   window.addEventListener('orientationchange', () => setTimeout(fixHeight, 400));
 
-  /* ── 시계 ── */
+  /* 시계 */
   function updateClock() {
     const n = new Date();
     const t = String(n.getHours()).padStart(2,'0') + ':' + String(n.getMinutes()).padStart(2,'0');
@@ -220,12 +205,11 @@
   updateClock();
   setInterval(updateClock, 1000);
 
-  /* ── 회원 명단 ── */
+  /* 회원 명단 */
   const members = [
     // { phone: '12345678', name: '홍길동' },
   ];
 
-  /* ── 입력 로직 ── */
   let input = '';
 
   function keyPress(k) {
@@ -239,10 +223,8 @@
     const numEl  = document.getElementById('disp-num');
     const nameEl = document.getElementById('disp-name');
     const btn    = document.getElementById('submit-btn');
-
-    const chars = input.split('').concat(Array(8 - input.length).fill('—'));
+    const chars  = input.split('').concat(Array(8 - input.length).fill('—'));
     numEl.textContent = chars.join(' ');
-
     if (input.length === 8) {
       const m = members.find(x => x.phone === input);
       nameEl.textContent = m ? '✓ ' + m.name + ' 어르신' : '⚠ 미등록 번호입니다';
@@ -255,7 +237,6 @@
     }
   }
 
-  /* ── 버튼 이벤트 ── */
   document.querySelectorAll('.key').forEach(btn => {
     btn.addEventListener('touchstart', e => {
       e.preventDefault();

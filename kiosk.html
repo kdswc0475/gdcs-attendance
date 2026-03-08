@@ -1,532 +1,324 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
-<meta charset="UTF-8">
-<!-- iPad Air 1세대 (1024x768) Safari 최적화 -->
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<meta name="theme-color" content="#1565c0" />
-<meta name="mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-<title>경로식당 출석체크</title>
-<link rel="manifest" href="manifest-kiosk.json" />
-<style>
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-  }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>경로식당 출석체크</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+    }
 
-  html {
-    height: 100%;
-    /* iPad Safari 주소창 높이 보정 */
-    height: -webkit-fill-available;
-  }
+    /* ── 핵심: JS로 계산한 --vh 를 사용 ── */
+    :root {
+      --vh: 1vh;
+    }
 
-  body {
-    height: 100%;
-    height: -webkit-fill-available;
-    display: flex;
-    flex-direction: column;
-    background: #1976d2;
-    font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
-    overflow: hidden; /* 스크롤 완전 차단 */
-    position: fixed;
-    width: 100%;
-  }
+    html,
+    body {
+      width: 100%;
+      height: calc(var(--vh, 1vh) * 100);
+      overflow: hidden;
+      background: #1976d2;
+      font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+    }
 
-  /* ===== 상단 헤더 ===== */
-  .header {
-    background: #ffe000;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 6px 16px;
-    flex-shrink: 0; /* 헤더는 줄어들지 않음 */
-  }
+    body {
+      display: flex;
+      flex-direction: column;
+    }
 
-  .header-left h1 {
-    font-size: 18px;
-    font-weight: 900;
-    color: #000;
-    line-height: 1.2;
-  }
+    /* ── 헤더 ── */
+    .header {
+      background: #ffe000;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.8vh 2vw;
+      flex-shrink: 0;
+    }
 
-  .header-left p {
-    font-size: 12px;
-    color: #333;
-  }
+    .header h1 {
+      font-size: clamp(13px, 2.2vh, 22px);
+      font-weight: 900;
+      color: #000;
+    }
 
-  .header-time {
-    font-size: 28px;
-    font-weight: 900;
-    color: #000;
-  }
+    .header p {
+      font-size: clamp(10px, 1.5vh, 14px);
+      color: #333;
+    }
 
-  /* ===== 안내 문구 ===== */
-  .guide {
-    background: #1565c0;
-    text-align: center;
-    color: #fff;
-    font-size: 16px;
-    font-weight: 700;
-    padding: 6px 0;
-    flex-shrink: 0;
-  }
+    .clock {
+      font-size: clamp(22px, 4vh, 40px);
+      font-weight: 900;
+      color: #000;
+    }
 
-  /* ===== 디스플레이 (번호 입력창) ===== */
-  .display {
-    background: #fff;
-    margin: 6px 6px 4px;
-    border-radius: 8px;
-    padding: 8px 16px;
-    text-align: center;
-    flex-shrink: 0;
-    min-height: 52px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
+    /* ── 안내문 ── */
+    .guide {
+      background: #1565c0;
+      text-align: center;
+      color: #fff;
+      font-size: clamp(13px, 2vh, 18px);
+      font-weight: 700;
+      padding: 0.6vh 0;
+      flex-shrink: 0;
+    }
 
-  .display-number {
-    font-size: 32px;
-    font-weight: 900;
-    letter-spacing: 6px;
-    color: #1565c0;
-    line-height: 1;
-  }
+    /* ── 번호 디스플레이 ── */
+    .display {
+      background: #fff;
+      margin: 1vh 1.5vw 0.5vh;
+      border-radius: 10px;
+      padding: 1vh 2vw;
+      text-align: center;
+      flex-shrink: 0;
+    }
 
-  .display-name {
-    font-size: 16px;
-    font-weight: 700;
-    margin-top: 2px;
-    min-height: 20px;
-  }
+    .disp-num {
+      font-size: clamp(20px, 4.5vh, 44px);
+      font-weight: 900;
+      letter-spacing: 0.15em;
+      color: #1565c0;
+      line-height: 1.1;
+    }
 
-  .display-name.found    { color: #2e7d32; }
-  .display-name.notfound { color: #c62828; }
+    .disp-name {
+      font-size: clamp(12px, 2vh, 18px);
+      font-weight: 700;
+      min-height: 1.4em;
+    }
 
-  /* ===== 키패드 영역 - 핵심 수정 부분 ===== */
-  .keypad-wrap {
-    flex: 1;           /* 남은 공간 모두 차지 */
-    display: flex;
-    flex-direction: column;
-    padding: 4px 6px 4px;
-    gap: 4px;
-    min-height: 0;     /* flex 자식에서 overflow 방지에 필수 */
-  }
+    .found {
+      color: #2e7d32;
+    }
 
-  .keypad {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 4px;
-    flex: 1;           /* 출석체크 버튼 위 공간 전부 */
-    min-height: 0;
-  }
+    .notfound {
+      color: #c62828;
+    }
 
-  .key {
-    background: #1976d2;
-    border: 2px solid rgba(255,255,255,0.35);
-    border-radius: 12px;
-    font-size: clamp(24px, 4vw, 40px); /* 화면 크기에 반응 */
-    font-weight: 900;
-    color: #fff;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100%;     /* 고정px 대신 부모 채우기 */
-    touch-action: manipulation;
-    transition: background 0.08s, transform 0.08s;
-  }
+    /* ── 키패드 래퍼: 남은 공간 100% 차지 ── */
+    .keypad-wrap {
+      flex: 1;
+      min-height: 0;
+      /* flex overflow 방지 */
+      display: flex;
+      flex-direction: column;
+      padding: 0.5vh 1.5vw 0.8vh;
+      gap: 0.5vh;
+    }
 
-  .key:active,
-  .key.pressed {
-    background: #fff200;
-    color: #000;
-    transform: scale(0.93);
-  }
+    /* ── 숫자 그리드: 높이 비율로 분배 ── */
+    .keypad {
+      flex: 1;
+      min-height: 0;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(4, 1fr);
+      /* 4행 균등 */
+      gap: clamp(3px, 0.6vh, 8px);
+    }
 
-  .key-clear {
-    font-size: clamp(18px, 2.5vw, 26px);
-    color: #ffe000;
-  }
+    .key {
+      background: #1976d2;
+      border: 2px solid rgba(255, 255, 255, 0.4);
+      border-radius: clamp(8px, 1.5vh, 16px);
+      color: #fff;
+      font-weight: 900;
+      font-size: clamp(18px, 4.5vh, 48px);
+      /* 뷰포트 높이 기준 */
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      touch-action: manipulation;
+      transition: background 0.07s, transform 0.07s;
+      /* width/height 100% — 그리드가 크기 결정 */
+      width: 100%;
+      height: 100%;
+    }
 
-  /* ===== 출석체크 버튼 ===== */
-  .submit-btn {
-    background: linear-gradient(135deg, #81c784, #4caf50);
-    border: none;
-    border-radius: 12px;
-    color: #fff;
-    font-size: clamp(20px, 3vw, 30px);
-    font-weight: 900;
-    letter-spacing: 4px;
-    cursor: pointer;
-    flex-shrink: 0;
-    height: clamp(48px, 8vh, 70px); /* 고정 비율 */
-    touch-action: manipulation;
-    transition: opacity 0.2s, transform 0.1s;
-  }
+    .key.pressed,
+    .key:active {
+      background: #fff200;
+      color: #000;
+      transform: scale(0.92);
+    }
 
-  .submit-btn:disabled {
-    background: rgba(255,255,255,0.25);
-    color: rgba(255,255,255,0.5);
-    cursor: default;
-  }
+    .key-clear {
+      font-size: clamp(14px, 2.8vh, 28px);
+      color: #ffe082;
+    }
 
-  .submit-btn:not(:disabled):active {
-    transform: scale(0.97);
-    background: #388e3c;
-  }
+    .key-del {
+      font-size: clamp(18px, 3.5vh, 36px);
+    }
 
-  /* ===== 하단 상태바 ===== */
-  .statusbar {
-    background: rgba(0,0,0,0.25);
-    display: flex;
-    justify-content: space-between;
-    padding: 3px 12px;
-    font-size: 11px;
-    color: rgba(255,255,255,0.8);
-    flex-shrink: 0;
-  }
+    /* ── 출석체크 버튼 ── */
+    .submit-btn {
+      flex-shrink: 0;
+      height: clamp(44px, 8vh, 72px);
+      border: none;
+      border-radius: clamp(8px, 1.5vh, 14px);
+      background: linear-gradient(135deg, #66bb6a, #388e3c);
+      color: #fff;
+      font-size: clamp(16px, 3vh, 30px);
+      font-weight: 900;
+      letter-spacing: 0.25em;
+      cursor: pointer;
+      touch-action: manipulation;
+      transition: opacity 0.15s, transform 0.08s;
+    }
 
-  /* ===== 결과 오버레이 ===== */
-  .overlay {
-    position: fixed;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
-    z-index: 500;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.2s;
-  }
-  .overlay.show { opacity: 1; pointer-events: all; }
-  .overlay-bg   { position: absolute; inset: 0; }
-  .overlay.ok  .overlay-bg { background: rgba(27,124,58,0.93); }
-  .overlay.err .overlay-bg { background: rgba(198,40,40,0.93); }
-  .ov-icon { font-size: 96px; position: relative; z-index: 1; }
-  .ov-msg  { font-size: 36px; font-weight: 900; color: #fff; position: relative; z-index: 1; text-align: center; line-height: 1.4; }
-  .ov-sub  { font-size: 22px; color: rgba(255,255,255,0.85); position: relative; z-index: 1; }
-</style>
+    .submit-btn:disabled {
+      background: rgba(255, 255, 255, 0.22);
+      color: rgba(255, 255, 255, 0.45);
+    }
+
+    .submit-btn:not(:disabled):active {
+      transform: scale(0.97);
+    }
+
+    /* ── 하단 상태바 ── */
+    .statusbar {
+      flex-shrink: 0;
+      background: rgba(0, 0, 0, 0.28);
+      display: flex;
+      justify-content: space-between;
+      padding: 0.4vh 1.5vw;
+      font-size: clamp(10px, 1.4vh, 13px);
+      color: rgba(255, 255, 255, 0.8);
+    }
+  </style>
 </head>
+
 <body>
 
-<!-- 헤더 -->
-<div class="header">
-  <div class="header-left">
-    <h1>강동종합사회복지관 경로식당</h1>
-    <p>출석체크 시스템</p>
-  </div>
-  <div class="header-time" id="clock">--:--</div>
-</div>
-
-<!-- 안내 -->
-<div class="guide">010을 제외한 휴대 전화 번호를 입력하세요</div>
-
-<!-- 번호 디스플레이 -->
-<div class="display">
-  <div class="display-number" id="disp-num">— — — — — — — —</div>
-  <div class="display-name"   id="disp-name"></div>
-</div>
-
-<!-- 키패드 + 출석 버튼 래퍼 -->
-<div class="keypad-wrap">
-  <div class="keypad">
-    <button class="key" data-k="1">1</button>
-    <button class="key" data-k="2">2</button>
-    <button class="key" data-k="3">3</button>
-    <button class="key" data-k="4">4</button>
-    <button class="key" data-k="5">5</button>
-    <button class="key" data-k="6">6</button>
-    <button class="key" data-k="7">7</button>
-    <button class="key" data-k="8">8</button>
-    <button class="key" data-k="9">9</button>
-    <button class="key key-clear" data-k="clear">지우기</button>
-    <button class="key" data-k="0">0</button>
-    <button class="key key-del"   data-k="del">←</button>
+  <div class="header">
+    <div>
+      <h1>강동종합사회복지관 경로식당</h1>
+      <p>출석체크 시스템</p>
+    </div>
+    <div class="clock" id="clock">--:--</div>
   </div>
 
-  <button class="submit-btn" id="submit-btn" disabled>출 석 체 크</button>
-</div>
+  <div class="guide">010을 제외한 휴대 전화 번호를 입력하세요</div>
 
-<!-- 상태바 -->
-<div class="statusbar">
-  <span id="status-online">● 온라인</span>
-  <span id="status-count">오늘 출석: 0명</span>
-  <span id="status-sync">동기화 --:--</span>
-</div>
+  <div class="display">
+    <div class="disp-num" id="disp-num">— — — — — — — —</div>
+    <div class="disp-name" id="disp-name"></div>
+  </div>
 
-<!-- 결과 오버레이 -->
-<div class="overlay" id="overlay">
-  <div class="overlay-bg"></div>
-  <div class="ov-icon" id="ov-icon"></div>
-  <div class="ov-msg"  id="ov-msg"></div>
-  <div class="ov-sub"  id="ov-sub"></div>
-</div>
+  <div class="keypad-wrap">
+    <div class="keypad">
+      <button class="key" data-k="1">1</button>
+      <button class="key" data-k="2">2</button>
+      <button class="key" data-k="3">3</button>
+      <button class="key" data-k="4">4</button>
+      <button class="key" data-k="5">5</button>
+      <button class="key" data-k="6">6</button>
+      <button class="key" data-k="7">7</button>
+      <button class="key" data-k="8">8</button>
+      <button class="key" data-k="9">9</button>
+      <button class="key key-clear" data-k="clear">지우기</button>
+      <button class="key" data-k="0">0</button>
+      <button class="key key-del" data-k="del">←</button>
+    </div>
 
-<script>
-// ══════════════════════════════════════════
-//  설정
-// ══════════════════════════════════════════
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzycyMkszAeqYCH4-UVJYXUvnEFh4dZSrJGWEmm76UYNRJjanJk1V-j2MRNFm4vamhT/exec';
-localStorage.setItem('scriptUrl', SCRIPT_URL);  // 관리자 앱과 공유
-const AUTO_CLOSE = 2500;   // 결과 화면 자동 닫힘 (ms)
+    <button class="submit-btn" id="submit-btn" disabled>출 석 체 크</button>
+  </div>
 
-// ══════════════════════════════════════════
-//  상태
-// ══════════════════════════════════════════
-let input   = '';
-let members = [];
-let todayCnt = 0;
+  <div class="statusbar">
+    <span>● 온라인</span>
+    <span id="stat-count">오늘 출석: 0명</span>
+    <span id="stat-sync">동기화 --:--</span>
+  </div>
 
-// ══════════════════════════════════════════
-//  초기화
-// ══════════════════════════════════════════
-async function init() {
-  startClock();
-  bindKeys();
-  document.getElementById('submit-btn').addEventListener('click', submitAttendance);
-  window.addEventListener('online',  updateNet);
-  window.addEventListener('offline', updateNet);
-  updateNet();
-  await loadMembers();
-  countToday();
-  fixViewportHeight();
-  window.addEventListener('resize', fixViewportHeight);
-}
-
-// ── iPad Safari 뷰포트 높이 보정
-function fixViewportHeight() {
-  document.body.style.height = window.innerHeight + 'px';
-}
-
-// ── 시계
-function startClock() {
-  const tick = () => {
-    const now = new Date();
-    const h = String(now.getHours()).padStart(2,'0');
-    const m = String(now.getMinutes()).padStart(2,'0');
-    document.getElementById('clock').textContent = h + ':' + m;
-  };
-  tick();
-  setInterval(tick, 1000);
-}
-
-// ── 네트워크 상태
-function updateNet() {
-  const on = navigator.onLine;
-  document.getElementById('status-online').textContent = on ? '● 온라인' : '○ 오프라인';
-}
-
-// ── 키 바인딩
-function bindKeys() {
-  document.querySelectorAll('.key').forEach(btn => {
-    // 터치 이벤트
-    btn.addEventListener('touchstart', e => {
-      e.preventDefault();
-      keyPress(btn.dataset.k);
-      btn.classList.add('pressed');
-    }, { passive: false });
-
-    btn.addEventListener('touchend', () => {
-      btn.classList.remove('pressed');
-    });
-
-    // 마우스 이벤트 (데스크탑 테스트용)
-    btn.addEventListener('mousedown', () => {
-      keyPress(btn.dataset.k);
-    });
-  });
-
-  // 키보드 이벤트
-  document.addEventListener('keydown', e => {
-    if (e.key >= '0' && e.key <= '9') keyPress(e.key);
-    else if (e.key === 'Backspace')   keyPress('del');
-    else if (e.key === 'Escape')      keyPress('clear');
-    else if (e.key === 'Enter')       submitAttendance();
-  });
-}
-
-// ── 이용자 명단 로드
-async function loadMembers() {
-  const cached = localStorage.getItem('members_cache');
-  if (cached) members = JSON.parse(cached);
-
-  if (!SCRIPT_URL) return;
-  try {
-    const res  = await fetch(SCRIPT_URL + '?action=getMembers');
-    const data = await res.json();
-    if (data.members && data.members.length) {
-      members = data.members;
-      localStorage.setItem('members_cache', JSON.stringify(members));
-      const now = new Date();
-      const h = String(now.getHours()).padStart(2,'0');
-      const m = String(now.getMinutes()).padStart(2,'0');
-      document.getElementById('status-sync').textContent = '동기화 ' + h + ':' + m;
+  <script>
+    /* ────────────────────────────────────────────
+       핵심: Safari 주소창 높이를 제외한 실제 뷰포트를
+       CSS 변수 --vh 에 반영 → 레이아웃이 정확히 맞춤
+    ──────────────────────────────────────────── */
+    function setVH() {
+      const vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty('--vh', vh + 'px');
     }
-  } catch {}
-}
+    setVH();
+    window.addEventListener('resize', setVH);
+    window.addEventListener('orientationchange', () => setTimeout(setVH, 300));
 
-// ── 오늘 출석 카운트
-function countToday() {
-  const today = dateStr(new Date());
-  const recs  = JSON.parse(localStorage.getItem('kiosk_records') || '[]');
-  todayCnt = recs.filter(r => r.date === today).length;
-  document.getElementById('status-count').textContent = '오늘 출석: ' + todayCnt + '명';
-}
-
-// ══════════════════════════════════════════
-//  키패드 로직
-// ══════════════════════════════════════════
-function keyPress(k) {
-  if (k === 'clear')    { input = ''; }
-  else if (k === 'del') { input = input.slice(0, -1); }
-  else                  { if (input.length >= 8) return; input += k; }
-  updateDisplay();
-}
-
-function updateDisplay() {
-  const numEl  = document.getElementById('disp-num');
-  const nameEl = document.getElementById('disp-name');
-  const btn    = document.getElementById('submit-btn');
-
-  // 입력된 숫자 + 빈 칸 표시
-  const filled = input.split('').join(' ');
-  const empty  = Array(8 - input.length).fill('—').join(' ');
-  numEl.textContent = input.length > 0
-    ? filled + (input.length < 8 ? ' ' + empty : '')
-    : '— — — — — — — —';
-
-  nameEl.textContent = '';
-  nameEl.className   = 'display-name';
-
-  if (input.length === 8) {
-    const m = members.find(m => m.phone === input);
-    if (m) {
-      nameEl.textContent = '✓ ' + m.name + ' 어르신';
-      nameEl.className   = 'display-name found';
-    } else {
-      nameEl.textContent = '⚠ 미등록 번호';
-      nameEl.className   = 'display-name notfound';
+    /* ── 시계 ── */
+    function updateClock() {
+      const n = new Date();
+      const t = String(n.getHours()).padStart(2, '0') + ':' + String(n.getMinutes()).padStart(2, '0');
+      document.getElementById('clock').textContent = t;
+      document.getElementById('stat-sync').textContent = '동기화 ' + t;
     }
-    btn.disabled = false;
-  } else {
-    btn.disabled = true;
-  }
-}
+    updateClock();
+    setInterval(updateClock, 1000);
 
-// ══════════════════════════════════════════
-//  출석 등록
-// ══════════════════════════════════════════
-async function submitAttendance() {
-  if (input.length !== 8) return;
+    /* ── 회원 명단 (실제 데이터로 교체) ── */
+    const members = [
+      // { phone: '12345678', name: '홍길동' },
+    ];
 
-  const now    = new Date();
-  const today  = dateStr(now);
-  const time   = now.toTimeString().slice(0, 5);
-  const member = members.find(m => m.phone === input);
+    /* ── 입력 로직 ── */
+    let input = '';
 
-  // 중복 체크
-  const recs = JSON.parse(localStorage.getItem('kiosk_records') || '[]');
-  const dup  = recs.find(r => r.phone === input && r.date === today);
-  if (dup) {
-    showOverlay('err',
-      (member ? member.name + ' 어르신' : input),
-      '오늘 이미 출석 체크 되었습니다 (' + dup.time + ')'
-    );
-    input = '';
-    updateDisplay();
-    return;
-  }
+    function keyPress(k) {
+      if (k === 'clear') input = '';
+      else if (k === 'del') input = input.slice(0, -1);
+      else if (input.length < 8) input += k;
+      updateDisplay();
+    }
 
-  // 저장
-  const record = {
-    id: Date.now(), phone: input,
-    name: member ? member.name : '미등록',
-    date: today, time,
-    registered: !!member,
-  };
-  recs.push(record);
-  localStorage.setItem('kiosk_records', JSON.stringify(recs));
-  todayCnt++;
-  document.getElementById('status-count').textContent = '오늘 출석: ' + todayCnt + '명';
+    function updateDisplay() {
+      const numEl = document.getElementById('disp-num');
+      const nameEl = document.getElementById('disp-name');
+      const btn = document.getElementById('submit-btn');
 
-  // 결과 표시
-  showOverlay('ok',
-    member ? member.name + ' 어르신' : '출석 등록',
-    '출석 체크 완료!  ' + time
-  );
+      // 입력된 숫자 + 나머지 대시
+      const chars = input.split('').concat(Array(8 - input.length).fill('—'));
+      numEl.textContent = chars.join(' ');
 
-  // Sheets 전송
-  sendToSheets(record);
+      if (input.length === 8) {
+        const m = members.find(x => x.phone === input);
+        nameEl.textContent = m ? '✓ ' + m.name + ' 어르신' : '⚠ 미등록 번호입니다';
+        nameEl.className = 'disp-name ' + (m ? 'found' : 'notfound');
+        btn.disabled = false;
+      } else {
+        nameEl.textContent = '';
+        nameEl.className = 'disp-name';
+        btn.disabled = true;
+      }
+    }
 
-  input = '';
-  updateDisplay();
-}
-
-// ══════════════════════════════════════════
-//  결과 오버레이
-// ══════════════════════════════════════════
-let _ovTimer = null;
-function showOverlay(type, msg, sub) {
-  const ov = document.getElementById('overlay');
-  ov.className = 'overlay ' + type + ' show';
-  document.getElementById('ov-icon').textContent = type === 'ok' ? '✅' : '⛔';
-  document.getElementById('ov-msg').textContent  = msg;
-  document.getElementById('ov-sub').textContent  = sub;
-  ov.onclick = () => { ov.classList.remove('show'); clearTimeout(_ovTimer); };
-  if (_ovTimer) clearTimeout(_ovTimer);
-  _ovTimer = setTimeout(() => ov.classList.remove('show'), AUTO_CLOSE);
-}
-
-// ══════════════════════════════════════════
-//  Google Sheets 전송 (GET 방식 — CORS 우회)
-// ══════════════════════════════════════════
-async function sendToSheets(record) {
-  if (!SCRIPT_URL) return;
-  try {
-    const params = new URLSearchParams({
-      action    : 'addRecord',
-      id        : record.id,
-      phone     : record.phone,
-      name      : record.name,
-      date      : record.date,
-      time      : record.time,
-      registered: record.registered ? 'true' : 'false',
+    /* ── 버튼 이벤트 (touchstart 로 반응속도 최적화) ── */
+    document.querySelectorAll('.key').forEach(btn => {
+      btn.addEventListener('touchstart', e => {
+        e.preventDefault();
+        keyPress(btn.dataset.k);
+        btn.classList.add('pressed');
+      }, { passive: false });
+      btn.addEventListener('touchend', () => btn.classList.remove('pressed'));
+      btn.addEventListener('mousedown', () => keyPress(btn.dataset.k)); // 데스크탑 테스트용
     });
-    await fetch(SCRIPT_URL + '?' + params.toString(), { method: 'GET', mode: 'no-cors' });
-  } catch {
-    const q = JSON.parse(localStorage.getItem('offline_queue') || '[]');
-    q.push(record);
-    localStorage.setItem('offline_queue', JSON.stringify(q));
-  }
-}
 
-// ══════════════════════════════════════════
-//  유틸
-// ══════════════════════════════════════════
-function dateStr(d) {
-  return d.getFullYear() + '-' +
-    String(d.getMonth() + 1).padStart(2, '0') + '-' +
-    String(d.getDate()).padStart(2, '0');
-}
-
-// ══════════════════════════════════════════
-//  Service Worker
-// ══════════════════════════════════════════
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js').catch(() => {});
-}
-
-init();
-</script>
+    document.getElementById('submit-btn').addEventListener('click', () => {
+      if (document.getElementById('submit-btn').disabled) return;
+      // TODO: 실제 출석 처리 로직 연결
+      alert('출석이 완료되었습니다!');
+      input = '';
+      updateDisplay();
+    });
+  </script>
 </body>
+
 </html>

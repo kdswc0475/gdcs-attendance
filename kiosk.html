@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <!-- iPad Air 1세대 최적화 (9.7", 2048x1536) -->
+  <meta name="viewport" content="width=1024, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#1565c0" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>경로식당 출석체크</title>
+  <link rel="manifest" href="manifest-kiosk.json" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap');
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    html, body {
+      width: 100%; height: 100%;
+      font-family: 'Noto Sans KR', sans-serif;
+      background: #1565c0;   /* 파란 배경 — 기존 앱과 동일 톤 */
+      color: #fff;
+      overflow: hidden;
+      user-select: none; -webkit-user-select: none;
+      touch-action: manipulation;
+    }
+
+    /* ═══════════════════════════════════════
+       전체를 100vh 안에 flex column으로 꽉 채움
+       각 영역 flex 비율로 공간 배분
+       iPad Air 최적화: 더 큰 패딩과 간격
+    ═══════════════════════════════════════ */
+    .wrap {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      height: 100vh;
+      height: 100dvh;          /* 모바일 주소창 제외 실제 뷰포트 */
+      padding: 16px 20px;
+      gap: 12px;
+    }
+
+    /* ── 헤더 (flex: 0 / 고정) ── */
+    .hd {
+      flex: 0 0 auto;
+      background: #fff200;     /* 노란 헤더 — 기존 앱 동일 */
+      border-radius: 12px;
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .hd-title { font-size: 18px; font-weight: 900; color: #1a1a1a; line-height: 1.3; }
+    .hd-time  { font-size: 28px; font-weight: 900; color: #1a1a1a; font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+    /* ── 안내문 ── */
+    .guide {
+      flex: 0 0 auto;
+      text-align: center;
+      font-size: 22px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 1px;
+    }
+
+    /* ── 입력 디스플레이 (어르신들을 위한 큰 숫자) ── */
+    .display {
+      flex: 0 0 auto;
+      background: rgba(255,255,255,0.95);
+      border-radius: 16px;
+      padding: 0 24px;
+      height: 90px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+    .display-number {
+      font-size: 56px;
+      font-weight: 900;
+      letter-spacing: 10px;
+      color: #1565c0;
+      font-variant-numeric: tabular-nums;
+    }
+    .display-name {
+      font-size: 20px;
+      font-weight: 700;
+      color: #1a1a1a;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .display-name.found    { color: #1b7c3a; }
+    .display-name.notfound { color: #c62828; }
+
+    /* ── 키패드 (어르신들을 위한 큰 버튼) ── */
+    .keypad {
+      flex: 1 1 0;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(4, 1fr);
+      gap: 14px;
+      min-height: 0;           /* flex 자식이 넘치지 않도록 */
+    }
+    .key {
+      background: #1976d2;
+      border: 3px solid rgba(255,255,255,0.4);
+      border-radius: 18px;
+      font-family: inherit;
+      font-size: 64px;         /* 어르신들을 위한 큰 숫자 */
+      font-weight: 900;
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.08s, transform 0.08s;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+      /* 터치 피드백 */
+      -webkit-user-select: none;
+    }
+    .key:active {
+      background: #fff200;
+      color: #000;
+      transform: scale(0.95);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    .key.key-clear {
+      font-size: 26px;
+      font-weight: 900;
+      color: #ffcdd2;
+      border-color: rgba(255,205,210,0.5);
+    }
+    .key.key-del {
+      font-size: 42px;
+      color: rgba(255,255,255,0.85);
+    }
+
+    /* ── 출석 체크 버튼 ── */
+    .submit-btn {
+      flex: 0 0 auto;
+      width: 100%;
+      height: 80px;
+      background: #fff200;
+      color: #000;
+      font-family: inherit;
+      font-size: 32px;
+      font-weight: 900;
+      letter-spacing: 8px;
+      border: none;
+      border-radius: 16px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      transition: background 0.1s, transform 0.1s, opacity 0.2s;
+    }
+    .submit-btn:active    { background: #e6d800; transform: scale(0.98); box-shadow: 0 2px 6px rgba(0,0,0,0.25); }
+    .submit-btn:disabled  { opacity: 0.4; cursor: not-allowed; }
+
+    /* ── 하단 상태 바 ── */
+    .status-bar {
+      flex: 0 0 auto;
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      color: rgba(255,255,255,0.5);
+      padding: 0 6px;
+    }
+    .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; vertical-align: middle; }
+    .dot.on  { background: #4caf50; animation: blink 2s infinite; }
+    .dot.off { background: #f44336; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+    /* ── 결과 오버레이 ── */
+    .overlay {
+      position: fixed; inset: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 16px; z-index: 500;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.2s;
+    }
+    .overlay.show { opacity: 1; pointer-events: all; }
+    .overlay-bg   { position: absolute; inset: 0; }
+    .overlay.ok  .overlay-bg { background: rgba(27,124,58,0.93); }
+    .overlay.err .overlay-bg { background: rgba(198,40,40,0.93); }
+    .ov-icon { font-size: 96px; position: relative; z-index: 1; }
+    .ov-msg  { font-size: 36px; font-weight: 900; color: #fff; position: relative; z-index: 1; text-align: center; line-height: 1.4; }
+    .ov-sub  { font-size: 22px; color: rgba(255,255,255,0.85); position: relative; z-index: 1; }
+  </style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- 헤더 -->
+  <div class="hd">
+    <div class="hd-title">강동종합사회복지관 경로식당<br><span style="font-size:14px;font-weight:700">출석체크 시스템</span></div>
+    <div class="hd-time" id="hd-clock">00:00</div>
+  </div>
+
+  <!-- 안내 문구 -->
+  <div class="guide">010을 제외한 휴대 전화 번호를 입력하세요</div>
+
+  <!-- 입력 디스플레이 -->
+  <div class="display">
+    <div class="display-number" id="disp-num">________</div>
+    <div class="display-name"   id="disp-name"></div>
+  </div>
+
+  <!-- 키패드 -->
+  <div class="keypad">
+    <button class="key" data-k="1">1</button>
+    <button class="key" data-k="2">2</button>
+    <button class="key" data-k="3">3</button>
+    <button class="key" data-k="4">4</button>
+    <button class="key" data-k="5">5</button>
+    <button class="key" data-k="6">6</button>
+    <button class="key" data-k="7">7</button>
+    <button class="key" data-k="8">8</button>
+    <button class="key" data-k="9">9</button>
+    <button class="key key-clear" data-k="clear">지우기</button>
+    <button class="key" data-k="0">0</button>
+    <button class="key key-del"   data-k="del">←</button>
+  </div>
+
+  <!-- 출석 체크 버튼 -->
+  <button class="submit-btn" id="submit-btn" disabled>출 석 체 크</button>
+
+  <!-- 상태 바 -->
+  <div class="status-bar">
+    <span><span class="dot on" id="net-dot"></span><span id="net-lbl">온라인</span></span>
+    <span id="today-cnt">오늘 출석: 0명</span>
+    <span id="sync-lbl">-</span>
+  </div>
+
+</div>
+
+<!-- 결과 오버레이 -->
+<div class="overlay" id="overlay">
+  <div class="overlay-bg"></div>
+  <div class="ov-icon" id="ov-icon"></div>
+  <div class="ov-msg"  id="ov-msg"></div>
+  <div class="ov-sub"  id="ov-sub"></div>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+//  설정
+// ══════════════════════════════════════════
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzycyMkszAeqYCH4-UVJYXUvnEFh4dZSrJGWEmm76UYNRJjanJk1V-j2MRNFm4vamhT/exec';
+localStorage.setItem('scriptUrl', SCRIPT_URL);  // 관리자 앱과 공유
+const AUTO_CLOSE = 2500;   // 결과 화면 자동 닫힘 (ms)
+
+// ══════════════════════════════════════════
+//  상태
+// ══════════════════════════════════════════
+let input   = '';
+let members = [];
+let todayCnt = 0;
+
+// ══════════════════════════════════════════
+//  초기화
+// ══════════════════════════════════════════
+async function init() {
+  startClock();
+  bindKeys();
+  document.getElementById('submit-btn').addEventListener('click', submitAttendance);
+  window.addEventListener('online',  updateNet);
+  window.addEventListener('offline', updateNet);
+  updateNet();
+  await loadMembers();
+  countToday();
+}
+
+// ── 시계
+function startClock() {
+  const tick = () => {
+    document.getElementById('hd-clock').textContent =
+      new Date().toTimeString().slice(0, 5);
+  };
+  tick();
+  setInterval(tick, 1000);
+}
+
+// ── 네트워크 상태
+function updateNet() {
+  const on = navigator.onLine;
+  document.getElementById('net-dot').className = 'dot ' + (on ? 'on' : 'off');
+  document.getElementById('net-lbl').textContent = on ? '온라인' : '오프라인';
+}
+
+// ── 키 바인딩
+function bindKeys() {
+  document.querySelectorAll('.key').forEach(btn => {
+    btn.addEventListener('click', () => keyPress(btn.dataset.k));
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key >= '0' && e.key <= '9') keyPress(e.key);
+    else if (e.key === 'Backspace')   keyPress('del');
+    else if (e.key === 'Escape')      keyPress('clear');
+    else if (e.key === 'Enter')       submitAttendance();
+  });
+}
+
+// ── 이용자 명단 로드
+async function loadMembers() {
+  const cached = localStorage.getItem('members_cache');
+  if (cached) members = JSON.parse(cached);
+
+  if (!SCRIPT_URL) return;
+  try {
+    const res  = await fetch(SCRIPT_URL + '?action=getMembers');
+    const data = await res.json();
+    if (data.members && data.members.length) {
+      members = data.members;
+      localStorage.setItem('members_cache', JSON.stringify(members));
+      document.getElementById('sync-lbl').textContent =
+        '동기화 ' + new Date().toTimeString().slice(0, 5);
+    }
+  } catch {}
+}
+
+// ── 오늘 출석 카운트
+function countToday() {
+  const today = dateStr(new Date());
+  const recs  = JSON.parse(localStorage.getItem('kiosk_records') || '[]');
+  todayCnt = recs.filter(r => r.date === today).length;
+  document.getElementById('today-cnt').textContent = '오늘 출석: ' + todayCnt + '명';
+}
+
+// ══════════════════════════════════════════
+//  키패드 로직
+// ══════════════════════════════════════════
+function keyPress(k) {
+  if (k === 'clear')    { input = ''; }
+  else if (k === 'del') { input = input.slice(0, -1); }
+  else                  { if (input.length >= 8) return; input += k; }
+  updateDisplay();
+}
+
+function updateDisplay() {
+  const numEl  = document.getElementById('disp-num');
+  const nameEl = document.getElementById('disp-name');
+  const btn    = document.getElementById('submit-btn');
+
+  // 숫자 표시: 입력된 부분은 숫자, 나머지는 _ 로 채움
+  numEl.textContent = (input + '________').slice(0, 8);
+
+  nameEl.textContent = '';
+  nameEl.className   = 'display-name';
+
+  if (input.length === 8) {
+    const m = members.find(m => m.phone === input);
+    if (m) {
+      nameEl.textContent = '✓ ' + m.name + ' 어르신';
+      nameEl.className   = 'display-name found';
+    } else {
+      nameEl.textContent = '⚠ 미등록 번호';
+      nameEl.className   = 'display-name notfound';
+    }
+    btn.disabled = false;
+  } else {
+    btn.disabled = true;
+  }
+}
+
+// ══════════════════════════════════════════
+//  출석 등록
+// ══════════════════════════════════════════
+async function submitAttendance() {
+  if (input.length !== 8) return;
+
+  const now    = new Date();
+  const today  = dateStr(now);
+  const time   = now.toTimeString().slice(0, 5);
+  const member = members.find(m => m.phone === input);
+
+  // 중복 체크
+  const recs = JSON.parse(localStorage.getItem('kiosk_records') || '[]');
+  const dup  = recs.find(r => r.phone === input && r.date === today);
+  if (dup) {
+    showOverlay('err',
+      (member ? member.name + ' 어르신' : input),
+      '오늘 이미 출석 체크 되었습니다 (' + dup.time + ')'
+    );
+    input = '';
+    updateDisplay();
+    return;
+  }
+
+  // 저장
+  const record = {
+    id: Date.now(), phone: input,
+    name: member ? member.name : '미등록',
+    date: today, time,
+    registered: !!member,
+  };
+  recs.push(record);
+  localStorage.setItem('kiosk_records', JSON.stringify(recs));
+  todayCnt++;
+  document.getElementById('today-cnt').textContent = '오늘 출석: ' + todayCnt + '명';
+
+  // 결과 표시
+  showOverlay('ok',
+    member ? member.name + ' 어르신' : '출석 등록',
+    '출석 체크 완료!  ' + time
+  );
+
+  // Sheets 전송
+  sendToSheets(record);
+
+  input = '';
+  updateDisplay();
+}
+
+// ══════════════════════════════════════════
+//  결과 오버레이
+// ══════════════════════════════════════════
+let _ovTimer = null;
+function showOverlay(type, msg, sub) {
+  const ov = document.getElementById('overlay');
+  ov.className = 'overlay ' + type + ' show';
+  document.getElementById('ov-icon').textContent = type === 'ok' ? '✅' : '⛔';
+  document.getElementById('ov-msg').textContent  = msg;
+  document.getElementById('ov-sub').textContent  = sub;
+  ov.onclick = () => { ov.classList.remove('show'); clearTimeout(_ovTimer); };
+  if (_ovTimer) clearTimeout(_ovTimer);
+  _ovTimer = setTimeout(() => ov.classList.remove('show'), AUTO_CLOSE);
+}
+
+// ══════════════════════════════════════════
+//  Google Sheets 전송 (GET 방식 — CORS 우회)
+// ══════════════════════════════════════════
+async function sendToSheets(record) {
+  if (!SCRIPT_URL) return;
+  try {
+    const params = new URLSearchParams({
+      action    : 'addRecord',
+      id        : record.id,
+      phone     : record.phone,
+      name      : record.name,
+      date      : record.date,
+      time      : record.time,
+      registered: record.registered ? 'true' : 'false',
+    });
+    await fetch(SCRIPT_URL + '?' + params.toString(), { method: 'GET', mode: 'no-cors' });
+  } catch {
+    const q = JSON.parse(localStorage.getItem('offline_queue') || '[]');
+    q.push(record);
+    localStorage.setItem('offline_queue', JSON.stringify(q));
+  }
+}
+
+// ══════════════════════════════════════════
+//  유틸
+// ══════════════════════════════════════════
+function dateStr(d) {
+  return d.getFullYear() + '-' +
+    String(d.getMonth() + 1).padStart(2, '0') + '-' +
+    String(d.getDate()).padStart(2, '0');
+}
+
+// ══════════════════════════════════════════
+//  Service Worker
+// ══════════════════════════════════════════
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./sw.js').catch(() => {});
+}
+
+init();
+</script>
+</body>
+</html>

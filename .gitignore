@@ -1,0 +1,9 @@
+# macOS metadata files
+._*
+.DS_Store
+
+# Claude Code
+.claude/
+
+# Logs
+*.log

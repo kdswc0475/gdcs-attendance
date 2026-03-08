@@ -13,87 +13,106 @@
       -webkit-user-select: none;
     }
 
-    html, body {
-      width: 100%;
-      overflow: hidden;
-      background: #1976d2;
-      font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+    html {
+      /* Retina 2x → CSS 픽셀 768px 높이 */
+      height: 100%;
     }
 
     body {
+      width: 100%;
       display: flex;
       flex-direction: column;
+      overflow: hidden;
+      background: #1976d2;
+      font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+      /* JS가 window.innerHeight 를 여기에 직접 px 세팅 */
     }
 
+    /* ── 헤더: 고정 50px ── */
     .header {
+      height: 50px;
+      flex-shrink: 0;
       background: #ffe000;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 6px 14px;
-      flex-shrink: 0;
+      padding: 0 14px;
     }
-    .header h1 { font-size: 4vmin; font-weight: 900; color: #000; }
-    .header p  { font-size: 2.5vmin; color: #444; }
-    .clock     { font-size: 6vmin; font-weight: 900; color: #000; }
+    .header h1 { font-size: 17px; font-weight: 900; color: #000; }
+    .header p  { font-size: 11px; color: #444; }
+    .clock     { font-size: 28px; font-weight: 900; color: #000; }
 
+    /* ── 안내문: 고정 32px ── */
     .guide {
-      background: #1565c0;
-      text-align: center;
-      color: #fff;
-      font-size: 3vmin;
-      font-weight: 700;
-      padding: 1.2vmin 0;
+      height: 32px;
       flex-shrink: 0;
+      background: #1565c0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 700;
     }
 
+    /* ── 번호 디스플레이: 고정 64px ── */
     .display {
-      background: #fff;
-      margin: 1.5vmin 2vmin 1vmin;
-      border-radius: 10px;
-      padding: 1.5vmin 3vmin;
-      text-align: center;
+      height: 64px;
       flex-shrink: 0;
+      background: #fff;
+      margin: 6px 8px 4px;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
     }
     .disp-num {
-      font-size: 7vmin;
+      font-size: 28px;
       font-weight: 900;
-      letter-spacing: 0.12em;
+      letter-spacing: 0.15em;
       color: #1565c0;
-      line-height: 1.2;
+      line-height: 1;
     }
     .disp-name {
-      font-size: 3vmin;
+      font-size: 14px;
       font-weight: 700;
-      min-height: 1.4em;
+      min-height: 18px;
+      margin-top: 2px;
     }
     .found    { color: #2e7d32; }
     .notfound { color: #c62828; }
 
+    /* ── 키패드 래퍼: 나머지 전부 ── */
     .keypad-wrap {
       flex: 1;
       min-height: 0;
       display: flex;
       flex-direction: column;
-      padding: 1vmin 2vmin 1.5vmin;
-      gap: 1vmin;
+      padding: 4px 8px 4px;
+      gap: 4px;
     }
 
+    /* ── 4행 3열 그리드 ── */
     .keypad {
       flex: 1;
       min-height: 0;
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       grid-template-rows: repeat(4, 1fr);
-      gap: 1vmin;
+      gap: 4px;
     }
 
     .key {
       background: #1976d2;
-      border: 2px solid rgba(255,255,255,0.4);
-      border-radius: 2vmin;
+      border: 2.5px solid rgba(255,255,255,0.45);
+      border-radius: 12px;
       color: #fff;
       font-weight: 900;
+      /* 
+        vmin 기준: iPad 세로모드에서 vmin = 가로 768px 기준
+        8vmin = 약 61px — 버튼이 120px 높이면 절반 크기로 적절
+      */
       font-size: 8vmin;
       cursor: pointer;
       display: flex;
@@ -111,17 +130,18 @@
       transform: scale(0.93);
     }
 
-    .key-clear { font-size: 4.5vmin; color: #ffe082; }
+    .key-clear { font-size: 4vmin; color: #ffe082; }
     .key-del   { font-size: 6vmin; }
 
+    /* ── 출석체크 버튼: 고정 60px ── */
     .submit-btn {
       flex-shrink: 0;
-      height: 11vmin;
+      height: 60px;
       border: none;
-      border-radius: 2vmin;
+      border-radius: 12px;
       background: linear-gradient(135deg, #66bb6a, #388e3c);
       color: #fff;
-      font-size: 5vmin;
+      font-size: 24px;
       font-weight: 900;
       letter-spacing: 0.25em;
       cursor: pointer;
@@ -134,13 +154,16 @@
     }
     .submit-btn:not(:disabled):active { transform: scale(0.97); }
 
+    /* ── 상태바: 고정 20px ── */
     .statusbar {
+      height: 20px;
       flex-shrink: 0;
       background: rgba(0,0,0,0.28);
       display: flex;
       justify-content: space-between;
-      padding: 0.8vmin 2vmin;
-      font-size: 2.2vmin;
+      align-items: center;
+      padding: 0 10px;
+      font-size: 11px;
       color: rgba(255,255,255,0.8);
     }
   </style>
@@ -187,13 +210,20 @@
 </div>
 
 <script>
-  /* body 높이 = 주소창 제외 실제 높이 */
+  /*
+    핵심: window.innerHeight = Safari 주소창+탭바 제외한 실제 높이
+    iPad Air 1세대 세로모드 Safari 기준 약 620~660px
+    이 값을 body에 직접 px로 고정
+  */
   function fixHeight() {
     document.body.style.height = window.innerHeight + 'px';
   }
   fixHeight();
   window.addEventListener('resize', fixHeight);
   window.addEventListener('orientationchange', () => setTimeout(fixHeight, 400));
+
+  /* 디버그: 실제 높이 확인용 (나중에 삭제 가능) */
+  console.log('innerHeight:', window.innerHeight, 'innerWidth:', window.innerWidth);
 
   /* 시계 */
   function updateClock() {

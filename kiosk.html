@@ -206,7 +206,7 @@
     .success-modal {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.85);
+      background: rgba(46, 125, 50, 0.92);
       display: none;
       flex-direction: column;
       align-items: center;
@@ -220,24 +220,23 @@
     }
 
     .success-icon {
-      font-size: 150px;
-      margin-bottom: 30px;
+      font-size: 130px;
+      margin-bottom: 24px;
       animation: scaleIn 0.5s;
-      color: #4caf50;
-    }
-
-    .success-text {
-      font-size: 80px;
-      font-weight: 900;
-      color: #fff;
-      margin-bottom: 30px;
-      animation: slideUp 0.5s;
     }
 
     .success-name {
       font-size: 64px;
       font-weight: 900;
-      color: #ffe000;
+      color: #fff;
+      margin-bottom: 16px;
+      animation: slideUp 0.5s;
+    }
+
+    .success-text {
+      font-size: 32px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.9);
       animation: slideUp 0.6s;
     }
 
@@ -322,9 +321,9 @@
 
   <!-- 출석 완료 모달 -->
   <div class="success-modal" id="success-modal">
-    <div class="success-icon">✓</div>
-    <div class="success-text">출석 완료</div>
+    <div class="success-icon">✅</div>
     <div class="success-name" id="success-name"></div>
+    <div class="success-text" id="success-text"></div>
   </div>
 
   <script>
@@ -510,7 +509,7 @@
       }
 
       // 출석 완료 모달 표시
-      showSuccessModal(record.name);
+      showSuccessModal(record.name, record.time);
 
       // 입력 초기화 및 다음 출석 준비
       input = '';
@@ -518,17 +517,19 @@
     });
 
     // 출석 완료 모달 표시 함수
-    function showSuccessModal(name) {
+    function showSuccessModal(name, time) {
       const modal = document.getElementById('success-modal');
       const nameEl = document.getElementById('success-name');
+      const textEl = document.getElementById('success-text');
 
       nameEl.textContent = name + ' 어르신';
+      textEl.textContent = '출석 체크 완료! ' + time;
       modal.classList.add('show');
 
-      // 1초 후 자동으로 숨김
+      // 2초 후 자동으로 숨김
       setTimeout(() => {
         modal.classList.remove('show');
-      }, 1000);
+      }, 2000);
     }
 
     // 날짜/시간 포맷 헬퍼

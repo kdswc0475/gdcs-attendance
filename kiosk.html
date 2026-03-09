@@ -166,6 +166,60 @@
       font-size: 11px;
       color: rgba(255,255,255,0.8);
     }
+
+    /* ── 출석 완료 모달 ── */
+    .success-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      animation: fadeIn 0.3s;
+    }
+
+    .success-modal.show {
+      display: flex;
+    }
+
+    .success-icon {
+      font-size: 120px;
+      margin-bottom: 30px;
+      animation: scaleIn 0.5s;
+    }
+
+    .success-text {
+      font-size: 48px;
+      font-weight: 900;
+      color: #fff;
+      margin-bottom: 20px;
+      animation: slideUp 0.5s;
+    }
+
+    .success-name {
+      font-size: 36px;
+      font-weight: 700;
+      color: #ffe000;
+      animation: slideUp 0.6s;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes scaleIn {
+      0% { transform: scale(0); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
   </style>
 </head>
 <body>
@@ -207,6 +261,13 @@
   <span>● 온라인</span>
   <span id="stat-count">오늘 출석: 0명</span>
   <span id="stat-sync">동기화 --:--</span>
+</div>
+
+<!-- 출석 완료 모달 -->
+<div class="success-modal" id="success-modal">
+  <div class="success-icon">✓</div>
+  <div class="success-text">출석 완료</div>
+  <div class="success-name" id="success-name"></div>
 </div>
 
 <script>
@@ -335,12 +396,100 @@
     btn.addEventListener('mousedown', () => keyPress(btn.dataset.k));
   });
 
-  document.getElementById('submit-btn').addEventListener('click', () => {
+  document.getElementById('submit-btn').addEventListener('click', async () => {
     if (document.getElementById('submit-btn').disabled) return;
-    alert('출석이 완료되었습니다!');
+
+    const phone = input;
+    const member = members.find(x => x.phone === phone);
+
+    // 출석 기록 생성
+    const now = new Date();
+    const record = {
+      id: String(Date.now()),
+      phone: phone,
+      name: member ? member.name : '미등록',
+      date: toDateStr(now),
+      time: toTimeStr(now),
+      registered: !!member
+    };
+
+    // localStorage에 저장
+    const kioskRecords = JSON.parse(localStorage.getItem('kiosk_records') || '[]');
+    kioskRecords.push(record);
+    localStorage.setItem('kiosk_records', JSON.stringify(kioskRecords));
+
+    // 오늘 출석 카운트 업데이트
+    const todayCount = kioskRecords.filter(r => r.date === record.date).length;
+    document.getElementById('stat-count').textContent = '오늘 출석: ' + todayCount + '명';
+
+    // Google Sheets 전송
+    const scriptUrl = localStorage.getItem('scriptUrl') ||
+      'https://script.google.com/macros/s/AKfycbzycyMkszAeqYCH4-UVJYXUvnEFh4dZSrJGWEmm76UYNRJjanJk1V-j2MRNFm4vamhT/exec';
+
+    try {
+      const params = new URLSearchParams({
+        action: 'addRecord',
+        id: record.id,
+        phone: record.phone,
+        name: record.name,
+        date: record.date,
+        time: record.time,
+        registered: record.registered ? 'true' : 'false'
+      });
+
+      await fetch(scriptUrl + '?' + params.toString(), {
+        method: 'GET',
+        mode: 'no-cors'
+      });
+
+      console.log('출석 기록 전송 완료:', record);
+    } catch (err) {
+      console.error('온라인 전송 실패, 오프라인 큐에 저장:', err);
+
+      // 오프라인 큐에 저장
+      const queue = JSON.parse(localStorage.getItem('offline_queue') || '[]');
+      queue.push(record);
+      localStorage.setItem('offline_queue', JSON.stringify(queue));
+    }
+
+    // 출석 완료 모달 표시
+    showSuccessModal(record.name);
+
+    // 입력 초기화 및 다음 출석 준비
     input = '';
     updateDisplay();
   });
+
+  // 출석 완료 모달 표시 함수
+  function showSuccessModal(name) {
+    const modal = document.getElementById('success-modal');
+    const nameEl = document.getElementById('success-name');
+
+    nameEl.textContent = name + ' 어르신';
+    modal.classList.add('show');
+
+    // 1초 후 자동으로 숨김
+    setTimeout(() => {
+      modal.classList.remove('show');
+    }, 1000);
+  }
+
+  // 날짜/시간 포맷 헬퍼
+  function toDateStr(d) {
+    return d.getFullYear() + '-' +
+           String(d.getMonth() + 1).padStart(2, '0') + '-' +
+           String(d.getDate()).padStart(2, '0');
+  }
+
+  function toTimeStr(d) {
+    return String(d.getHours()).padStart(2, '0') + ':' +
+           String(d.getMinutes()).padStart(2, '0');
+  }
+
+  // 페이지 로드 시 오늘 출석 카운트 표시
+  const kioskRecords = JSON.parse(localStorage.getItem('kiosk_records') || '[]');
+  const todayCount = kioskRecords.filter(r => r.date === toDateStr(new Date())).length;
+  document.getElementById('stat-count').textContent = '오늘 출석: ' + todayCount + '명';
 </script>
 </body>
 </html>

@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>경로식당 출석체크</title>
   <style>
     * {
-      margin: 0; padding: 0;
+      margin: 0;
+      padding: 0;
       box-sizing: border-box;
       -webkit-tap-highlight-color: transparent;
       -webkit-touch-callout: none;
@@ -38,9 +40,23 @@
       align-items: center;
       padding: 0 14px;
     }
-    .header h1 { font-size: 17px; font-weight: 900; color: #000; }
-    .header p  { font-size: 11px; color: #444; }
-    .clock     { font-size: 28px; font-weight: 900; color: #000; }
+
+    .header h1 {
+      font-size: 17px;
+      font-weight: 900;
+      color: #000;
+    }
+
+    .header p {
+      font-size: 11px;
+      color: #444;
+    }
+
+    .clock {
+      font-size: 28px;
+      font-weight: 900;
+      color: #000;
+    }
 
     /* ── 안내문: 고정 32px ── */
     .guide {
@@ -67,6 +83,7 @@
       align-items: center;
       justify-content: center;
     }
+
     .disp-num {
       font-size: 28px;
       font-weight: 900;
@@ -74,14 +91,21 @@
       color: #1565c0;
       line-height: 1;
     }
+
     .disp-name {
       font-size: 14px;
       font-weight: 700;
       min-height: 18px;
       margin-top: 2px;
     }
-    .found    { color: #2e7d32; }
-    .notfound { color: #c62828; }
+
+    .found {
+      color: #2e7d32;
+    }
+
+    .notfound {
+      color: #c62828;
+    }
 
     /* ── 키패드 래퍼: 나머지 전부 ── */
     .keypad-wrap {
@@ -105,7 +129,7 @@
 
     .key {
       background: #1976d2;
-      border: 2.5px solid rgba(255,255,255,0.45);
+      border: 2.5px solid rgba(255, 255, 255, 0.45);
       border-radius: 12px;
       color: #fff;
       font-weight: 900;
@@ -124,14 +148,21 @@
       height: 100%;
     }
 
-    .key.pressed, .key:active {
+    .key.pressed,
+    .key:active {
       background: #fff200;
       color: #000;
       transform: scale(0.93);
     }
 
-    .key-clear { font-size: 4vmin; color: #ffe082; }
-    .key-del   { font-size: 6vmin; }
+    .key-clear {
+      font-size: 4vmin;
+      color: #ffe082;
+    }
+
+    .key-del {
+      font-size: 6vmin;
+    }
 
     /* ── 출석체크 버튼: 고정 60px ── */
     .submit-btn {
@@ -148,23 +179,27 @@
       touch-action: manipulation;
       transition: opacity 0.15s, transform 0.08s;
     }
+
     .submit-btn:disabled {
-      background: rgba(255,255,255,0.22);
-      color: rgba(255,255,255,0.45);
+      background: rgba(255, 255, 255, 0.22);
+      color: rgba(255, 255, 255, 0.45);
     }
-    .submit-btn:not(:disabled):active { transform: scale(0.97); }
+
+    .submit-btn:not(:disabled):active {
+      transform: scale(0.97);
+    }
 
     /* ── 상태바: 고정 20px ── */
     .statusbar {
       height: 20px;
       flex-shrink: 0;
-      background: rgba(0,0,0,0.28);
+      background: rgba(0, 0, 0, 0.28);
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 0 10px;
       font-size: 11px;
-      color: rgba(255,255,255,0.8);
+      color: rgba(255, 255, 255, 0.8);
     }
 
     /* ── 출석 완료 모달 ── */
@@ -185,311 +220,334 @@
     }
 
     .success-icon {
-      font-size: 120px;
+      font-size: 150px;
       margin-bottom: 30px;
       animation: scaleIn 0.5s;
+      color: #4caf50;
     }
 
     .success-text {
-      font-size: 48px;
+      font-size: 80px;
       font-weight: 900;
       color: #fff;
-      margin-bottom: 20px;
+      margin-bottom: 30px;
       animation: slideUp 0.5s;
     }
 
     .success-name {
-      font-size: 36px;
-      font-weight: 700;
+      font-size: 64px;
+      font-weight: 900;
       color: #ffe000;
       animation: slideUp 0.6s;
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
     }
 
     @keyframes scaleIn {
-      0% { transform: scale(0); }
-      50% { transform: scale(1.2); }
-      100% { transform: scale(1); }
+      0% {
+        transform: scale(0);
+      }
+
+      50% {
+        transform: scale(1.2);
+      }
+
+      100% {
+        transform: scale(1);
+      }
     }
 
     @keyframes slideUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
   </style>
 </head>
+
 <body>
 
-<div class="header">
-  <div>
-    <h1>강동종합사회복지관 경로식당</h1>
-    <p>출석체크 시스템</p>
+  <div class="header">
+    <div>
+      <h1>강동종합사회복지관 경로식당</h1>
+      <p>출석체크 시스템</p>
+    </div>
+    <div class="clock" id="clock">--:--</div>
   </div>
-  <div class="clock" id="clock">--:--</div>
-</div>
 
-<div class="guide">010을 제외한 휴대 전화 번호를 입력하세요</div>
+  <div class="guide">010을 제외한 휴대 전화 번호를 입력하세요</div>
 
-<div class="display">
-  <div class="disp-num"  id="disp-num">— — — — — — — —</div>
-  <div class="disp-name" id="disp-name"></div>
-</div>
-
-<div class="keypad-wrap">
-  <div class="keypad">
-    <button class="key" data-k="1">1</button>
-    <button class="key" data-k="2">2</button>
-    <button class="key" data-k="3">3</button>
-    <button class="key" data-k="4">4</button>
-    <button class="key" data-k="5">5</button>
-    <button class="key" data-k="6">6</button>
-    <button class="key" data-k="7">7</button>
-    <button class="key" data-k="8">8</button>
-    <button class="key" data-k="9">9</button>
-    <button class="key key-clear" data-k="clear">지우기</button>
-    <button class="key" data-k="0">0</button>
-    <button class="key key-del"   data-k="del">←</button>
+  <div class="display">
+    <div class="disp-num" id="disp-num">— — — — — — — —</div>
+    <div class="disp-name" id="disp-name"></div>
   </div>
-  <button class="submit-btn" id="submit-btn" disabled>출 석 체 크</button>
-</div>
 
-<div class="statusbar">
-  <span>● 온라인</span>
-  <span id="stat-count">오늘 출석: 0명</span>
-  <span id="stat-sync">동기화 --:--</span>
-</div>
+  <div class="keypad-wrap">
+    <div class="keypad">
+      <button class="key" data-k="1">1</button>
+      <button class="key" data-k="2">2</button>
+      <button class="key" data-k="3">3</button>
+      <button class="key" data-k="4">4</button>
+      <button class="key" data-k="5">5</button>
+      <button class="key" data-k="6">6</button>
+      <button class="key" data-k="7">7</button>
+      <button class="key" data-k="8">8</button>
+      <button class="key" data-k="9">9</button>
+      <button class="key key-clear" data-k="clear">지우기</button>
+      <button class="key" data-k="0">0</button>
+      <button class="key key-del" data-k="del">←</button>
+    </div>
+    <button class="submit-btn" id="submit-btn" disabled>출 석 체 크</button>
+  </div>
 
-<!-- 출석 완료 모달 -->
-<div class="success-modal" id="success-modal">
-  <div class="success-icon">✓</div>
-  <div class="success-text">출석 완료</div>
-  <div class="success-name" id="success-name"></div>
-</div>
+  <div class="statusbar">
+    <span>● 온라인</span>
+    <span id="stat-count">오늘 출석: 0명</span>
+    <span id="stat-sync">동기화 --:--</span>
+  </div>
 
-<script>
-  /*
-    핵심: window.innerHeight = Safari 주소창+탭바 제외한 실제 높이
-    iPad Air 1세대 세로모드 Safari 기준 약 620~660px
-    이 값을 body에 직접 px로 고정
-  */
-  function fixHeight() {
-    document.body.style.height = window.innerHeight + 'px';
-  }
-  fixHeight();
-  window.addEventListener('resize', fixHeight);
-  window.addEventListener('orientationchange', () => setTimeout(fixHeight, 400));
+  <!-- 출석 완료 모달 -->
+  <div class="success-modal" id="success-modal">
+    <div class="success-icon">✓</div>
+    <div class="success-text">출석 완료</div>
+    <div class="success-name" id="success-name"></div>
+  </div>
 
-  /* 디버그: 실제 높이 확인용 (나중에 삭제 가능) */
-  console.log('innerHeight:', window.innerHeight, 'innerWidth:', window.innerWidth);
-
-  /* 시계 */
-  function updateClock() {
-    const n = new Date();
-    const t = String(n.getHours()).padStart(2,'0') + ':' + String(n.getMinutes()).padStart(2,'0');
-    document.getElementById('clock').textContent = t;
-    document.getElementById('stat-sync').textContent = '동기화 ' + t;
-  }
-  updateClock();
-  setInterval(updateClock, 1000);
-
-  /* 회원 명단 - 기본 명단 + localStorage에서 갱신 */
-  const INITIAL_MEMBERS = [
-    { phone: "64497367", name: "강봉심" }, { phone: "62664333", name: "강화순" },
-    { phone: "65224658", name: "김귀숙" }, { phone: "75067401", name: "김규호" },
-    { phone: "74086020", name: "김금례" }, { phone: "90330778", name: "김금주" },
-    { phone: "29874861", name: "김기연" }, { phone: "51466798", name: "김덕순" },
-    { phone: "52168912", name: "김명석" }, { phone: "75593351", name: "김복식" },
-    { phone: "95264450", name: "김성오" }, { phone: "32277989", name: "김수남" },
-    { phone: "89489318", name: "김승옥" }, { phone: "53098824", name: "김영균" },
-    { phone: "62248949", name: "김영수" }, { phone: "33565885", name: "김영중" },
-    { phone: "43185852", name: "김인근" }, { phone: "56326064", name: "김일규" },
-    { phone: "84282895", name: "김창현" }, { phone: "39733767", name: "김환중" },
-    { phone: "67382253", name: "남승환" }, { phone: "73746113", name: "남정자" },
-    { phone: "33138313", name: "명상엽" }, { phone: "40306303", name: "박금옥" },
-    { phone: "34774529", name: "박길순" }, { phone: "99111947", name: "박바울" },
-    { phone: "34563419", name: "박인순" }, { phone: "71918876", name: "변명성" },
-    { phone: "89744279", name: "서순임" }, { phone: "53062862", name: "서정숙" },
-    { phone: "91645910", name: "송수현" }, { phone: "65505309", name: "안만호" },
-    { phone: "55440422", name: "양영분" }, { phone: "75767678", name: "양재순" },
-    { phone: "95080042", name: "엄성용" }, { phone: "71544431", name: "원기종" },
-    { phone: "86684202", name: "유경자" }, { phone: "58512258", name: "유경하" },
-    { phone: "57366018", name: "이명례" }, { phone: "92657610", name: "이석문" },
-    { phone: "27810185", name: "이성봉" }, { phone: "59694677", name: "이승우" },
-    { phone: "62259192", name: "이영택" }, { phone: "38931560", name: "이중근" },
-    { phone: "55804387", name: "이진우" }, { phone: "44704758", name: "이춘자" },
-    { phone: "40136519", name: "임인혁" }, { phone: "26061518", name: "임정학" },
-    { phone: "94989824", name: "임종두" }, { phone: "71607893", name: "장용규" },
-    { phone: "52665776", name: "전기순" }, { phone: "33404060", name: "조금자" },
-    { phone: "27323817", name: "조순남" }, { phone: "52278532", name: "조은자" },
-    { phone: "96658675", name: "진병호" }, { phone: "31124237", name: "채희균" },
-    { phone: "51325206", name: "최경자" }, { phone: "40879980", name: "최광덕" },
-    { phone: "99444761", name: "최삼영" }, { phone: "89717592", name: "최영자" },
-    { phone: "89884495", name: "하운섭" }, { phone: "47226302", name: "한순동" },
-    { phone: "63209956", name: "한영애" }, { phone: "64366687", name: "홍순용" },
-    { phone: "30610017", name: "황남규" }, { phone: "32131942", name: "황란" },
-    { phone: "22299503", name: "황용구" }, { phone: "99456041", name: "윤옥신" },
-    { phone: "74331058", name: "최상국" }
-  ];
-
-  function getMembers() {
-    try {
-      const cached = localStorage.getItem('members_cache');
-      if (cached) {
-        const parsed = JSON.parse(cached);
-        return parsed.map(m => ({ phone: m.phone, name: m.name }));
-      }
-      const adminMembers = localStorage.getItem('gdcs_members');
-      if (adminMembers) {
-        const parsed = JSON.parse(adminMembers);
-        return parsed.map(m => ({ phone: m.phone, name: m.name }));
-      }
-    } catch (e) {
-      console.error('회원 명단 로드 실패:', e);
+  <script>
+    /*
+      핵심: window.innerHeight = Safari 주소창+탭바 제외한 실제 높이
+      iPad Air 1세대 세로모드 Safari 기준 약 620~660px
+      이 값을 body에 직접 px로 고정
+    */
+    function fixHeight() {
+      document.body.style.height = window.innerHeight + 'px';
     }
-    return INITIAL_MEMBERS;
-  }
+    fixHeight();
+    window.addEventListener('resize', fixHeight);
+    window.addEventListener('orientationchange', () => setTimeout(fixHeight, 400));
 
-  let members = getMembers();
-  let input = '';
+    /* 디버그: 실제 높이 확인용 (나중에 삭제 가능) */
+    console.log('innerHeight:', window.innerHeight, 'innerWidth:', window.innerWidth);
 
-  // 회원 명단 주기적으로 갱신 (관리자에서 추가/삭제 반영)
-  setInterval(() => {
-    members = getMembers();
-  }, 5000);
-
-  function keyPress(k) {
-    if      (k === 'clear') input = '';
-    else if (k === 'del')   input = input.slice(0, -1);
-    else if (input.length < 8) input += k;
-    updateDisplay();
-  }
-
-  function updateDisplay() {
-    const numEl  = document.getElementById('disp-num');
-    const nameEl = document.getElementById('disp-name');
-    const btn    = document.getElementById('submit-btn');
-    const chars  = input.split('').concat(Array(8 - input.length).fill('—'));
-    numEl.textContent = chars.join(' ');
-    if (input.length === 8) {
-      const m = members.find(x => x.phone === input);
-      nameEl.textContent = m ? '✓ ' + m.name + ' 어르신' : '⚠ 미등록 번호입니다';
-      nameEl.className   = 'disp-name ' + (m ? 'found' : 'notfound');
-      btn.disabled = false;
-    } else {
-      nameEl.textContent = '';
-      nameEl.className   = 'disp-name';
-      btn.disabled = true;
+    /* 시계 */
+    function updateClock() {
+      const n = new Date();
+      const t = String(n.getHours()).padStart(2, '0') + ':' + String(n.getMinutes()).padStart(2, '0');
+      document.getElementById('clock').textContent = t;
+      document.getElementById('stat-sync').textContent = '동기화 ' + t;
     }
-  }
+    updateClock();
+    setInterval(updateClock, 1000);
 
-  document.querySelectorAll('.key').forEach(btn => {
-    btn.addEventListener('touchstart', e => {
-      e.preventDefault();
-      keyPress(btn.dataset.k);
-      btn.classList.add('pressed');
-    }, { passive: false });
-    btn.addEventListener('touchend', () => btn.classList.remove('pressed'));
-    btn.addEventListener('mousedown', () => keyPress(btn.dataset.k));
-  });
+    /* 회원 명단 - 기본 명단 + localStorage에서 갱신 */
+    const INITIAL_MEMBERS = [
+      { phone: "64497367", name: "강봉심" }, { phone: "62664333", name: "강화순" },
+      { phone: "65224658", name: "김귀숙" }, { phone: "75067401", name: "김규호" },
+      { phone: "74086020", name: "김금례" }, { phone: "90330778", name: "김금주" },
+      { phone: "29874861", name: "김기연" }, { phone: "51466798", name: "김덕순" },
+      { phone: "52168912", name: "김명석" }, { phone: "75593351", name: "김복식" },
+      { phone: "95264450", name: "김성오" }, { phone: "32277989", name: "김수남" },
+      { phone: "89489318", name: "김승옥" }, { phone: "53098824", name: "김영균" },
+      { phone: "62248949", name: "김영수" }, { phone: "33565885", name: "김영중" },
+      { phone: "43185852", name: "김인근" }, { phone: "56326064", name: "김일규" },
+      { phone: "84282895", name: "김창현" }, { phone: "39733767", name: "김환중" },
+      { phone: "67382253", name: "남승환" }, { phone: "73746113", name: "남정자" },
+      { phone: "33138313", name: "명상엽" }, { phone: "40306303", name: "박금옥" },
+      { phone: "34774529", name: "박길순" }, { phone: "99111947", name: "박바울" },
+      { phone: "34563419", name: "박인순" }, { phone: "71918876", name: "변명성" },
+      { phone: "89744279", name: "서순임" }, { phone: "53062862", name: "서정숙" },
+      { phone: "91645910", name: "송수현" }, { phone: "65505309", name: "안만호" },
+      { phone: "55440422", name: "양영분" }, { phone: "75767678", name: "양재순" },
+      { phone: "95080042", name: "엄성용" }, { phone: "71544431", name: "원기종" },
+      { phone: "86684202", name: "유경자" }, { phone: "58512258", name: "유경하" },
+      { phone: "57366018", name: "이명례" }, { phone: "92657610", name: "이석문" },
+      { phone: "27810185", name: "이성봉" }, { phone: "59694677", name: "이승우" },
+      { phone: "62259192", name: "이영택" }, { phone: "38931560", name: "이중근" },
+      { phone: "55804387", name: "이진우" }, { phone: "44704758", name: "이춘자" },
+      { phone: "40136519", name: "임인혁" }, { phone: "26061518", name: "임정학" },
+      { phone: "94989824", name: "임종두" }, { phone: "71607893", name: "장용규" },
+      { phone: "52665776", name: "전기순" }, { phone: "33404060", name: "조금자" },
+      { phone: "27323817", name: "조순남" }, { phone: "52278532", name: "조은자" },
+      { phone: "96658675", name: "진병호" }, { phone: "31124237", name: "채희균" },
+      { phone: "51325206", name: "최경자" }, { phone: "40879980", name: "최광덕" },
+      { phone: "99444761", name: "최삼영" }, { phone: "89717592", name: "최영자" },
+      { phone: "89884495", name: "하운섭" }, { phone: "47226302", name: "한순동" },
+      { phone: "63209956", name: "한영애" }, { phone: "64366687", name: "홍순용" },
+      { phone: "30610017", name: "황남규" }, { phone: "32131942", name: "황란" },
+      { phone: "22299503", name: "황용구" }, { phone: "99456041", name: "윤옥신" },
+      { phone: "74331058", name: "최상국" }
+    ];
 
-  document.getElementById('submit-btn').addEventListener('click', async () => {
-    if (document.getElementById('submit-btn').disabled) return;
+    function getMembers() {
+      try {
+        const cached = localStorage.getItem('members_cache');
+        if (cached) {
+          const parsed = JSON.parse(cached);
+          return parsed.map(m => ({ phone: m.phone, name: m.name }));
+        }
+        const adminMembers = localStorage.getItem('gdcs_members');
+        if (adminMembers) {
+          const parsed = JSON.parse(adminMembers);
+          return parsed.map(m => ({ phone: m.phone, name: m.name }));
+        }
+      } catch (e) {
+        console.error('회원 명단 로드 실패:', e);
+      }
+      return INITIAL_MEMBERS;
+    }
 
-    const phone = input;
-    const member = members.find(x => x.phone === phone);
+    let members = getMembers();
+    let input = '';
 
-    // 출석 기록 생성
-    const now = new Date();
-    const record = {
-      id: String(Date.now()),
-      phone: phone,
-      name: member ? member.name : '미등록',
-      date: toDateStr(now),
-      time: toTimeStr(now),
-      registered: !!member
-    };
+    // 회원 명단 주기적으로 갱신 (관리자에서 추가/삭제 반영)
+    setInterval(() => {
+      members = getMembers();
+    }, 5000);
 
-    // localStorage에 저장
+    function keyPress(k) {
+      if (k === 'clear') input = '';
+      else if (k === 'del') input = input.slice(0, -1);
+      else if (input.length < 8) input += k;
+      updateDisplay();
+    }
+
+    function updateDisplay() {
+      const numEl = document.getElementById('disp-num');
+      const nameEl = document.getElementById('disp-name');
+      const btn = document.getElementById('submit-btn');
+      const chars = input.split('').concat(Array(8 - input.length).fill('—'));
+      numEl.textContent = chars.join(' ');
+      if (input.length === 8) {
+        const m = members.find(x => x.phone === input);
+        nameEl.textContent = m ? '✓ ' + m.name + ' 어르신' : '⚠ 미등록 번호입니다';
+        nameEl.className = 'disp-name ' + (m ? 'found' : 'notfound');
+        btn.disabled = false;
+      } else {
+        nameEl.textContent = '';
+        nameEl.className = 'disp-name';
+        btn.disabled = true;
+      }
+    }
+
+    document.querySelectorAll('.key').forEach(btn => {
+      btn.addEventListener('touchstart', e => {
+        e.preventDefault();
+        keyPress(btn.dataset.k);
+        btn.classList.add('pressed');
+      }, { passive: false });
+      btn.addEventListener('touchend', () => btn.classList.remove('pressed'));
+      btn.addEventListener('mousedown', () => keyPress(btn.dataset.k));
+    });
+
+    document.getElementById('submit-btn').addEventListener('click', async () => {
+      if (document.getElementById('submit-btn').disabled) return;
+
+      const phone = input;
+      const member = members.find(x => x.phone === phone);
+
+      // 출석 기록 생성
+      const now = new Date();
+      const record = {
+        id: String(Date.now()),
+        phone: phone,
+        name: member ? member.name : '미등록',
+        date: toDateStr(now),
+        time: toTimeStr(now),
+        registered: !!member
+      };
+
+      // localStorage에 저장
+      const kioskRecords = JSON.parse(localStorage.getItem('kiosk_records') || '[]');
+      kioskRecords.push(record);
+      localStorage.setItem('kiosk_records', JSON.stringify(kioskRecords));
+
+      // 오늘 출석 카운트 업데이트
+      const todayCount = kioskRecords.filter(r => r.date === record.date).length;
+      document.getElementById('stat-count').textContent = '오늘 출석: ' + todayCount + '명';
+
+      // Google Sheets 전송
+      const scriptUrl = localStorage.getItem('scriptUrl') ||
+        'https://script.google.com/macros/s/AKfycbzycyMkszAeqYCH4-UVJYXUvnEFh4dZSrJGWEmm76UYNRJjanJk1V-j2MRNFm4vamhT/exec';
+
+      try {
+        const params = new URLSearchParams({
+          action: 'addRecord',
+          id: record.id,
+          phone: record.phone,
+          name: record.name,
+          date: record.date,
+          time: record.time,
+          registered: record.registered ? 'true' : 'false'
+        });
+
+        await fetch(scriptUrl + '?' + params.toString(), {
+          method: 'GET',
+          mode: 'no-cors'
+        });
+
+        console.log('출석 기록 전송 완료:', record);
+      } catch (err) {
+        console.error('온라인 전송 실패, 오프라인 큐에 저장:', err);
+
+        // 오프라인 큐에 저장
+        const queue = JSON.parse(localStorage.getItem('offline_queue') || '[]');
+        queue.push(record);
+        localStorage.setItem('offline_queue', JSON.stringify(queue));
+      }
+
+      // 출석 완료 모달 표시
+      showSuccessModal(record.name);
+
+      // 입력 초기화 및 다음 출석 준비
+      input = '';
+      updateDisplay();
+    });
+
+    // 출석 완료 모달 표시 함수
+    function showSuccessModal(name) {
+      const modal = document.getElementById('success-modal');
+      const nameEl = document.getElementById('success-name');
+
+      nameEl.textContent = name + ' 어르신';
+      modal.classList.add('show');
+
+      // 1초 후 자동으로 숨김
+      setTimeout(() => {
+        modal.classList.remove('show');
+      }, 1000);
+    }
+
+    // 날짜/시간 포맷 헬퍼
+    function toDateStr(d) {
+      return d.getFullYear() + '-' +
+        String(d.getMonth() + 1).padStart(2, '0') + '-' +
+        String(d.getDate()).padStart(2, '0');
+    }
+
+    function toTimeStr(d) {
+      return String(d.getHours()).padStart(2, '0') + ':' +
+        String(d.getMinutes()).padStart(2, '0');
+    }
+
+    // 페이지 로드 시 오늘 출석 카운트 표시
     const kioskRecords = JSON.parse(localStorage.getItem('kiosk_records') || '[]');
-    kioskRecords.push(record);
-    localStorage.setItem('kiosk_records', JSON.stringify(kioskRecords));
-
-    // 오늘 출석 카운트 업데이트
-    const todayCount = kioskRecords.filter(r => r.date === record.date).length;
+    const todayCount = kioskRecords.filter(r => r.date === toDateStr(new Date())).length;
     document.getElementById('stat-count').textContent = '오늘 출석: ' + todayCount + '명';
-
-    // Google Sheets 전송
-    const scriptUrl = localStorage.getItem('scriptUrl') ||
-      'https://script.google.com/macros/s/AKfycbzycyMkszAeqYCH4-UVJYXUvnEFh4dZSrJGWEmm76UYNRJjanJk1V-j2MRNFm4vamhT/exec';
-
-    try {
-      const params = new URLSearchParams({
-        action: 'addRecord',
-        id: record.id,
-        phone: record.phone,
-        name: record.name,
-        date: record.date,
-        time: record.time,
-        registered: record.registered ? 'true' : 'false'
-      });
-
-      await fetch(scriptUrl + '?' + params.toString(), {
-        method: 'GET',
-        mode: 'no-cors'
-      });
-
-      console.log('출석 기록 전송 완료:', record);
-    } catch (err) {
-      console.error('온라인 전송 실패, 오프라인 큐에 저장:', err);
-
-      // 오프라인 큐에 저장
-      const queue = JSON.parse(localStorage.getItem('offline_queue') || '[]');
-      queue.push(record);
-      localStorage.setItem('offline_queue', JSON.stringify(queue));
-    }
-
-    // 출석 완료 모달 표시
-    showSuccessModal(record.name);
-
-    // 입력 초기화 및 다음 출석 준비
-    input = '';
-    updateDisplay();
-  });
-
-  // 출석 완료 모달 표시 함수
-  function showSuccessModal(name) {
-    const modal = document.getElementById('success-modal');
-    const nameEl = document.getElementById('success-name');
-
-    nameEl.textContent = name + ' 어르신';
-    modal.classList.add('show');
-
-    // 1초 후 자동으로 숨김
-    setTimeout(() => {
-      modal.classList.remove('show');
-    }, 1000);
-  }
-
-  // 날짜/시간 포맷 헬퍼
-  function toDateStr(d) {
-    return d.getFullYear() + '-' +
-           String(d.getMonth() + 1).padStart(2, '0') + '-' +
-           String(d.getDate()).padStart(2, '0');
-  }
-
-  function toTimeStr(d) {
-    return String(d.getHours()).padStart(2, '0') + ':' +
-           String(d.getMinutes()).padStart(2, '0');
-  }
-
-  // 페이지 로드 시 오늘 출석 카운트 표시
-  const kioskRecords = JSON.parse(localStorage.getItem('kiosk_records') || '[]');
-  const todayCount = kioskRecords.filter(r => r.date === toDateStr(new Date())).length;
-  document.getElementById('stat-count').textContent = '오늘 출석: ' + todayCount + '명';
-</script>
+  </script>
 </body>
+
 </html>

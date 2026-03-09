@@ -109,7 +109,7 @@
       border-radius: 12px;
       color: #fff;
       font-weight: 900;
-      /* 
+      /*
         vmin 기준: iPad 세로모드에서 vmin = 가로 768px 기준
         8vmin = 약 61px — 버튼이 120px 높이면 절반 크기로 적절
       */
@@ -235,12 +235,26 @@
   updateClock();
   setInterval(updateClock, 1000);
 
-  /* 회원 명단 */
-  const members = [
-    // { phone: '12345678', name: '홍길동' },
-  ];
+  /* 회원 명단 - localStorage에서 로드 */
+  function getMembers() {
+    try {
+      const cached = localStorage.getItem('members_cache');
+      if (cached) return JSON.parse(cached);
+      const adminMembers = localStorage.getItem('gdcs_members');
+      if (adminMembers) return JSON.parse(adminMembers);
+    } catch (e) {
+      console.error('회원 명단 로드 실패:', e);
+    }
+    return [];
+  }
 
+  let members = getMembers();
   let input = '';
+
+  // 회원 명단 주기적으로 갱신 (관리자에서 추가/삭제 반영)
+  setInterval(() => {
+    members = getMembers();
+  }, 5000);
 
   function keyPress(k) {
     if      (k === 'clear') input = '';

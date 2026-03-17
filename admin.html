@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="ko">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -12,244 +11,94 @@
 
     :root {
       --primary: #1a3a6b;
-      --accent: #f5c400;
-      --bg: #0d1f4a;
-      --card: #162f5e;
-      --card2: #1e3f7a;
+      --accent:  #f5c400;
+      --bg:      #0d1f4a;
+      --card:    #162f5e;
+      --card2:   #1e3f7a;
       --success: #22c55e;
-      --error: #ef4444;
-      --warn: #f59e0b;
-      --text: #fff;
-      --muted: #94a3b8;
-      --border: rgba(255, 255, 255, 0.1);
+      --error:   #ef4444;
+      --warn:    #f59e0b;
+      --text:    #fff;
+      --muted:   #94a3b8;
+      --border:  rgba(255,255,255,0.1);
     }
 
-    *,
-    *::before,
-    *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      -webkit-tap-highlight-color: transparent;
-    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      font-family: 'Noto Sans KR', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
 
     /* ── 로그인 화면 ── */
     #login-screen {
-      position: fixed;
-      inset: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      background: var(--bg);
-      z-index: 999;
-      gap: 20px;
+      position: fixed; inset: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      background: var(--bg); z-index: 999; gap: 20px;
       padding: 40px;
     }
-
-    #login-screen h1 {
-      font-size: 20px;
-      font-weight: 900;
-      color: var(--accent);
-      text-align: center;
-      line-height: 1.5;
-    }
-
-    #login-screen p {
-      font-size: 13px;
-      color: var(--muted);
-    }
-
-    .login-box {
-      width: 100%;
-      max-width: 360px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
+    #login-screen h1 { font-size: 20px; font-weight: 900; color: var(--accent); text-align: center; line-height: 1.5; }
+    #login-screen p  { font-size: 13px; color: var(--muted); }
+    .login-box { width: 100%; max-width: 360px; display: flex; flex-direction: column; gap: 12px; }
     .pin-display {
-      background: var(--card2);
-      border: 2px solid var(--accent);
-      border-radius: 14px;
-      padding: 16px;
-      text-align: center;
-      font-size: 32px;
-      font-weight: 900;
-      letter-spacing: 16px;
-      color: var(--accent);
-      min-height: 64px;
+      background: var(--card2); border: 2px solid var(--accent);
+      border-radius: 14px; padding: 16px; text-align: center;
+      font-size: 32px; font-weight: 900; letter-spacing: 16px;
+      color: var(--accent); min-height: 64px;
     }
-
-    .pin-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-    }
-
+    .pin-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
     .pin-key {
-      background: var(--card2);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      font-family: inherit;
-      font-size: 24px;
-      font-weight: 700;
-      color: #fff;
-      cursor: pointer;
-      padding: 14px;
+      background: var(--card2); border: 1px solid var(--border);
+      border-radius: 12px; font-family: inherit; font-size: 24px;
+      font-weight: 700; color: #fff; cursor: pointer; padding: 14px;
       transition: background 0.08s, transform 0.08s;
     }
-
-    .pin-key:active {
-      background: var(--accent);
-      color: #000;
-      transform: scale(0.94);
-    }
-
-    .pin-key.del-key {
-      font-size: 18px;
-      color: var(--muted);
-    }
-
-    .login-err {
-      color: var(--error);
-      font-size: 13px;
-      text-align: center;
-      min-height: 20px;
-    }
+    .pin-key:active { background: var(--accent); color: #000; transform: scale(0.94); }
+    .pin-key.del-key { font-size: 18px; color: var(--muted); }
+    .login-err { color: var(--error); font-size: 13px; text-align: center; min-height: 20px; }
 
     /* ── 앱 레이아웃 ── */
-    #app {
-      display: none;
-      flex-direction: column;
-      min-height: 100vh;
-    }
-
-    #app.visible {
-      display: flex;
-    }
+    #app { display: none; flex-direction: column; min-height: 100vh; }
+    #app.visible { display: flex; }
 
     .header {
       background: var(--primary);
       border-bottom: 3px solid var(--accent);
       padding: 10px 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: sticky;
-      top: 0;
-      z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
     }
-
-    .header-logo {
-      font-size: 14px;
-      font-weight: 900;
-      color: var(--accent);
-    }
-
-    .header-logo span {
-      display: block;
-      font-size: 10px;
-      color: rgba(255, 255, 255, 0.6);
-      font-weight: 400;
-    }
-
-    .header-right {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
+    .header-logo { font-size: 14px; font-weight: 900; color: var(--accent); }
+    .header-logo span { display: block; font-size: 10px; color: rgba(255,255,255,0.6); font-weight: 400; }
+    .header-right { display: flex; align-items: center; gap: 8px; }
     .sync-badge {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 10px;
-      color: var(--muted);
-      background: rgba(255, 255, 255, 0.06);
-      padding: 4px 10px;
-      border-radius: 20px;
+      display: flex; align-items: center; gap: 5px;
+      font-size: 10px; color: var(--muted);
+      background: rgba(255,255,255,0.06);
+      padding: 4px 10px; border-radius: 20px;
     }
-
-    .sync-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--success);
-      animation: blink 2s infinite;
-    }
-
-    @keyframes blink {
-
-      0%,
-      100% {
-        opacity: 1
-      }
-
-      50% {
-        opacity: .3
-      }
-    }
+    .sync-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--success); animation: blink 2s infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
 
     /* ── 탭 네비 ── */
     .tab-bar {
-      display: flex;
-      background: var(--card);
+      display: flex; background: var(--card);
       border-bottom: 1px solid var(--border);
-      overflow-x: auto;
-      scrollbar-width: none;
+      overflow-x: auto; scrollbar-width: none;
     }
-
-    .tab-bar::-webkit-scrollbar {
-      display: none;
-    }
-
+    .tab-bar::-webkit-scrollbar { display: none; }
     .tab {
-      flex: none;
-      padding: 12px 20px;
-      font-family: inherit;
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--muted);
-      background: none;
-      border: none;
-      cursor: pointer;
-      border-bottom: 3px solid transparent;
-      white-space: nowrap;
+      flex: none; padding: 12px 20px;
+      font-family: inherit; font-size: 13px; font-weight: 700;
+      color: var(--muted); background: none; border: none; cursor: pointer;
+      border-bottom: 3px solid transparent; white-space: nowrap;
       transition: all 0.2s;
     }
-
-    .tab.active {
-      color: var(--accent);
-      border-bottom-color: var(--accent);
-    }
+    .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
 
     /* ── 페이지 컨텐츠 ── */
-    .page {
-      display: none;
-      flex: 1;
-    }
-
-    .page.active {
-      display: block;
-    }
-
-    .inner {
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 16px;
-    }
+    .page { display: none; flex: 1; }
+    .page.active { display: block; }
+    .inner { max-width: 960px; margin: 0 auto; padding: 16px; }
 
     /* ── 공통 카드 ── */
     .card {
@@ -259,1581 +108,1159 @@
       padding: 16px;
       margin-bottom: 14px;
     }
-
     .card-title {
-      font-size: 13px;
-      font-weight: 900;
-      color: var(--accent);
-      margin-bottom: 12px;
-      padding-bottom: 8px;
+      font-size: 13px; font-weight: 900; color: var(--accent);
+      margin-bottom: 12px; padding-bottom: 8px;
       border-bottom: 1px solid var(--border);
     }
 
     /* ── 통계 카드 ── */
-    .stat-row {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-      margin-bottom: 14px;
-    }
-
+    .stat-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-bottom: 14px; }
     .stat-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 14px;
-      text-align: center;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 14px; text-align: center;
     }
-
-    .stat-val {
-      font-size: 30px;
-      font-weight: 900;
-      color: var(--accent);
-    }
-
-    .stat-label {
-      font-size: 11px;
-      color: var(--muted);
-      margin-top: 4px;
-    }
+    .stat-val   { font-size: 30px; font-weight: 900; color: var(--accent); }
+    .stat-label { font-size: 11px; color: var(--muted); margin-top: 4px; }
 
     /* ── 오늘 출석 ── */
-    .today-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
+    .today-list { display: flex; flex-direction: column; gap: 8px; }
     .today-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      background: rgba(34, 197, 94, 0.07);
-      border: 1px solid rgba(34, 197, 94, 0.2);
-      border-radius: 10px;
-      padding: 10px 14px;
+      display: flex; align-items: center; gap: 12px;
+      background: rgba(34,197,94,0.07);
+      border: 1px solid rgba(34,197,94,0.2);
+      border-radius: 10px; padding: 10px 14px;
     }
-
     .today-num {
-      width: 26px;
-      height: 26px;
-      border-radius: 50%;
-      background: var(--success);
-      color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 11px;
-      font-weight: 900;
-      flex-shrink: 0;
+      width: 26px; height: 26px; border-radius: 50%;
+      background: var(--success); color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 900; flex-shrink: 0;
     }
-
-    .today-name {
-      font-size: 14px;
-      font-weight: 700;
-    }
-
-    .today-meta {
-      font-size: 11px;
-      color: var(--muted);
-      margin-top: 1px;
-    }
-
-    .today-time {
-      font-size: 13px;
-      color: var(--success);
-      font-weight: 700;
-      margin-left: auto;
-    }
-
-    .unreg-badge {
-      font-size: 10px;
-      padding: 2px 6px;
-      border-radius: 10px;
-      background: rgba(239, 68, 68, 0.2);
-      color: var(--error);
-      margin-left: 6px;
-    }
+    .today-name { font-size: 14px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .today-meta { font-size: 11px; color: var(--muted); margin-top: 1px; }
+    .today-time { font-size: 13px; color: var(--success); font-weight: 700; flex-shrink: 0; }
+    .unreg-badge { font-size: 10px; padding: 2px 6px; border-radius: 10px; background: rgba(239,68,68,0.2); color: var(--error); margin-left: 6px; }
 
     /* ── 이용자 명단 ── */
-    .member-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 10px;
-    }
-
+    .member-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(280px,1fr)); gap: 10px; }
     .member-card {
-      background: rgba(255, 255, 255, 0.03);
+      background: rgba(255,255,255,0.03);
       border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 12px 14px;
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
+      border-radius: 10px; padding: 12px 14px;
+      display: flex; align-items: flex-start; gap: 12px;
     }
-
     .avatar {
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 17px;
-      font-weight: 900;
-      flex-shrink: 0;
+      width: 42px; height: 42px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 17px; font-weight: 900; flex-shrink: 0;
     }
-
-    .avatar.m {
-      background: rgba(59, 130, 246, 0.25);
-      color: #60a5fa;
-    }
-
-    .avatar.f {
-      background: rgba(236, 72, 153, 0.25);
-      color: #f472b6;
-    }
-
-    .m-info {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .m-name {
-      font-size: 14px;
-      font-weight: 700;
-    }
-
-    .m-detail {
-      font-size: 11px;
-      color: var(--muted);
-      margin-top: 2px;
-    }
-
-    .m-phone {
-      font-size: 12px;
-      color: var(--accent);
-      font-weight: 700;
-      margin-top: 3px;
-    }
-
-    .m-type {
-      font-size: 10px;
-      padding: 2px 7px;
-      border-radius: 20px;
-      background: rgba(245, 196, 0, 0.12);
-      color: var(--accent);
-      font-weight: 700;
-    }
-
-    .m-actions {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      align-items: flex-end;
-    }
+    .avatar.m { background: rgba(59,130,246,0.25); color: #60a5fa; }
+    .avatar.f { background: rgba(236,72,153,0.25); color: #f472b6; }
+    .m-info { flex: 1; min-width: 0; }
+    .m-name   { font-size: 14px; font-weight: 700; }
+    .m-detail { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .m-phone  { font-size: 12px; color: var(--accent); font-weight: 700; margin-top: 3px; }
+    .m-type   { font-size: 10px; padding: 2px 7px; border-radius: 20px; background: rgba(245,196,0,0.12); color: var(--accent); font-weight: 700; }
+    .m-actions { display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
 
     /* ── 기록 테이블 ── */
-    .records-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 13px;
-    }
-
+    .records-table { width: 100%; border-collapse: collapse; font-size: 13px; }
     .records-table th {
-      background: var(--primary);
-      color: var(--accent);
-      padding: 10px 12px;
-      text-align: left;
-      font-weight: 900;
+      background: var(--primary); color: var(--accent);
+      padding: 10px 12px; text-align: left; font-weight: 900;
       border-bottom: 2px solid var(--accent);
     }
-
-    .records-table td {
-      padding: 9px 12px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .records-table tr:hover td {
-      background: rgba(255, 255, 255, 0.03);
-    }
-
-    .badge-reg {
-      background: rgba(34, 197, 94, 0.15);
-      color: var(--success);
-      padding: 2px 8px;
-      border-radius: 20px;
-      font-size: 11px;
-    }
-
-    .badge-unreg {
-      background: rgba(239, 68, 68, 0.15);
-      color: var(--error);
-      padding: 2px 8px;
-      border-radius: 20px;
-      font-size: 11px;
-    }
+    .records-table td { padding: 9px 12px; border-bottom: 1px solid var(--border); }
+    .records-table tr:hover td { background: rgba(255,255,255,0.03); }
+    .badge-reg   { background: rgba(34,197,94,0.15); color: var(--success); padding: 2px 8px; border-radius: 20px; font-size: 11px; }
+    .badge-unreg { background: rgba(239,68,68,0.15); color: var(--error);   padding: 2px 8px; border-radius: 20px; font-size: 11px; }
 
     /* ── 월별 차트 ── */
     .bar-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 7px 0;
-      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 10px;
+      padding: 7px 0; border-bottom: 1px solid var(--border);
     }
-
-    .bar-row:last-child {
-      border-bottom: none;
-    }
-
-    .bar-label {
-      font-size: 13px;
-      font-weight: 700;
-      width: 56px;
-      flex-shrink: 0;
-    }
-
-    .bar-track {
-      flex: 1;
-      height: 12px;
-      background: rgba(255, 255, 255, 0.07);
-      border-radius: 20px;
-      overflow: hidden;
-    }
-
-    .bar-fill {
-      height: 100%;
-      background: var(--accent);
-      border-radius: 20px;
-      transition: width 1s ease;
-    }
-
-    .bar-val {
-      font-size: 12px;
-      color: var(--muted);
-      width: 36px;
-      text-align: right;
-      flex-shrink: 0;
-    }
+    .bar-row:last-child { border-bottom: none; }
+    .bar-label { font-size: 13px; font-weight: 700; width: 56px; flex-shrink: 0; }
+    .bar-track { flex: 1; height: 12px; background: rgba(255,255,255,0.07); border-radius: 20px; overflow: hidden; }
+    .bar-fill  { height: 100%; background: var(--accent); border-radius: 20px; transition: width 1s ease; }
+    .bar-val   { font-size: 12px; color: var(--muted); width: 36px; text-align: right; flex-shrink: 0; }
 
     /* ── 폼 ── */
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-    }
-
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-    }
-
-    .form-label {
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--muted);
-    }
-
-    .form-input,
-    .form-select {
+    .form-grid  { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; }
+    .form-group { display: flex; flex-direction: column; gap: 5px; }
+    .form-label { font-size: 11px; font-weight: 700; color: var(--muted); }
+    .form-input, .form-select {
       padding: 10px 13px;
-      background: rgba(255, 255, 255, 0.06);
+      background: rgba(255,255,255,0.06);
       border: 1px solid var(--border);
-      border-radius: 10px;
-      color: #fff;
-      font-family: inherit;
-      font-size: 14px;
+      border-radius: 10px; color: #fff;
+      font-family: inherit; font-size: 14px;
     }
-
-    .form-input::placeholder {
-      color: var(--muted);
-    }
-
-    .form-input:focus,
-    .form-select:focus {
-      outline: none;
-      border-color: var(--accent);
-    }
-
-    .form-select option {
-      background: #162f5e;
-    }
-
-    .form-full {
-      grid-column: 1/-1;
-    }
+    .form-input::placeholder { color: var(--muted); }
+    .form-input:focus, .form-select:focus { outline: none; border-color: var(--accent); }
+    .form-select option { background: #162f5e; }
+    .form-full { grid-column: 1/-1; }
 
     /* ── 버튼 ── */
-    .btn {
-      padding: 10px 18px;
-      border-radius: 10px;
-      border: none;
-      cursor: pointer;
-      font-family: inherit;
-      font-size: 13px;
-      font-weight: 700;
-      transition: all 0.1s;
-    }
-
-    .btn:active {
-      transform: scale(0.96);
-    }
-
-    .btn-primary {
-      background: var(--accent);
-      color: #000;
-    }
-
-    .btn-danger {
-      background: var(--error);
-      color: #fff;
-    }
-
-    .btn-ghost {
-      background: rgba(255, 255, 255, 0.07);
-      color: #fff;
-      border: 1px solid var(--border);
-    }
-
-    .btn-sm {
-      padding: 5px 10px;
-      font-size: 11px;
-    }
+    .btn { padding: 10px 18px; border-radius: 10px; border: none; cursor: pointer; font-family: inherit; font-size: 13px; font-weight: 700; transition: all 0.1s; }
+    .btn:active { transform: scale(0.96); }
+    .btn-primary { background: var(--accent); color: #000; }
+    .btn-danger  { background: var(--error);  color: #fff; }
+    .btn-ghost   { background: rgba(255,255,255,0.07); color: #fff; border: 1px solid var(--border); }
+    .btn-sm      { padding: 5px 10px; font-size: 11px; }
 
     /* ── 검색바 ── */
-    .search-wrap {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 14px;
-    }
-
+    .search-wrap { display: flex; gap: 8px; margin-bottom: 14px; }
     .search-input {
-      flex: 1;
-      padding: 10px 14px;
-      background: rgba(255, 255, 255, 0.06);
+      flex: 1; padding: 10px 14px;
+      background: rgba(255,255,255,0.06);
       border: 1px solid var(--border);
-      border-radius: 10px;
-      color: #fff;
-      font-family: inherit;
-      font-size: 14px;
+      border-radius: 10px; color: #fff;
+      font-family: inherit; font-size: 14px;
     }
-
-    .search-input::placeholder {
-      color: var(--muted);
-    }
-
-    .search-input:focus {
-      outline: none;
-      border-color: var(--accent);
-    }
+    .search-input::placeholder { color: var(--muted); }
+    .search-input:focus { outline: none; border-color: var(--accent); }
 
     /* ── 날짜/월 필터 ── */
-    .filter-bar {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 14px;
-      flex-wrap: wrap;
+    .filter-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+    .filter-bar label { font-size: 12px; color: var(--muted); font-weight: 700; }
+    input[type=date], input[type=month] {
+      padding: 8px 12px; background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border); border-radius: 8px;
+      color: #fff; font-family: inherit; font-size: 13px;
     }
-
-    .filter-bar label {
-      font-size: 12px;
-      color: var(--muted);
-      font-weight: 700;
-    }
-
-    input[type=date],
-    input[type=month] {
-      padding: 8px 12px;
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      color: #fff;
-      font-family: inherit;
-      font-size: 13px;
-    }
-
-    input[type=date]:focus,
-    input[type=month]:focus {
-      outline: none;
-      border-color: var(--accent);
-    }
+    input[type=date]:focus, input[type=month]:focus { outline: none; border-color: var(--accent); }
 
     /* ── 설정 행 ── */
     .cfg-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 12px 0;
-      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 0; border-bottom: 1px solid var(--border);
     }
-
-    .cfg-row:last-child {
-      border-bottom: none;
-    }
-
-    .cfg-key {
-      font-size: 13px;
-      font-weight: 700;
-    }
-
-    .cfg-val {
-      font-size: 11px;
-      color: var(--muted);
-      margin-top: 2px;
-    }
+    .cfg-row:last-child { border-bottom: none; }
+    .cfg-key { font-size: 13px; font-weight: 700; }
+    .cfg-val { font-size: 11px; color: var(--muted); margin-top: 2px; }
 
     /* ── 모달 ── */
     .modal-bg {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.75);
-      z-index: 300;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.75); z-index: 300;
+      display: none; align-items: center; justify-content: center; padding: 20px;
     }
-
-    .modal-bg.open {
-      display: flex;
-    }
-
+    .modal-bg.open { display: flex; }
     .modal {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 22px;
-      width: 100%;
-      max-width: 440px;
-      max-height: 85vh;
-      overflow-y: auto;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 22px;
+      width: 100%; max-width: 440px; max-height: 85vh; overflow-y: auto;
     }
-
-    .modal-title {
-      font-size: 15px;
-      font-weight: 900;
-      color: var(--accent);
-      margin-bottom: 16px;
-    }
+    .modal-title { font-size: 15px; font-weight: 900; color: var(--accent); margin-bottom: 16px; }
 
     /* ── 토스트 ── */
     .toast {
-      position: fixed;
-      top: 64px;
-      left: 50%;
-      transform: translateX(-50%) translateY(-8px);
-      background: var(--success);
-      color: #fff;
-      padding: 12px 24px;
-      border-radius: 40px;
-      font-size: 14px;
-      font-weight: 700;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-      z-index: 999;
-      opacity: 0;
-      pointer-events: none;
-      transition: all 0.25s;
-      white-space: pre-line;
-      text-align: center;
+      position: fixed; top: 64px; left: 50%; transform: translateX(-50%) translateY(-8px);
+      background: var(--success); color: #fff;
+      padding: 12px 24px; border-radius: 40px;
+      font-size: 14px; font-weight: 700;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      z-index: 999; opacity: 0; pointer-events: none;
+      transition: all 0.25s; white-space: pre-line; text-align: center;
     }
-
-    .toast.error {
-      background: var(--error);
-    }
-
-    .toast.show {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
-    }
+    .toast.error { background: var(--error); }
+    .toast.show  { opacity: 1; transform: translateX(-50%) translateY(0); }
 
     /* ── 오프라인 대기 뱃지 ── */
     .queue-badge {
-      background: rgba(245, 158, 11, 0.2);
-      border: 1px solid rgba(245, 158, 11, 0.4);
-      color: var(--warn);
-      border-radius: 10px;
-      padding: 10px 14px;
-      font-size: 12px;
-      margin-bottom: 12px;
-      display: none;
+      background: rgba(245,158,11,0.2); border: 1px solid rgba(245,158,11,0.4);
+      color: var(--warn); border-radius: 10px; padding: 10px 14px;
+      font-size: 12px; margin-bottom: 12px; display: none;
     }
+    .queue-badge.show { display: block; }
 
-    .queue-badge.show {
-      display: block;
-    }
-
-    .empty {
-      text-align: center;
-      padding: 40px;
-      color: var(--muted);
-      font-size: 14px;
-    }
+    .empty { text-align: center; padding: 40px; color: var(--muted); font-size: 14px; }
 
     /* ── 삭제 버튼 ── */
     .btn-del {
-      padding: 4px 10px;
-      border-radius: 8px;
-      border: none;
-      cursor: pointer;
-      font-family: inherit;
-      font-size: 11px;
-      font-weight: 700;
-      background: rgba(239, 68, 68, 0.15);
-      color: var(--error);
-      border: 1px solid rgba(239, 68, 68, 0.3);
-      transition: all 0.1s;
-      white-space: nowrap;
+      padding: 4px 10px; border-radius: 8px; border: none;
+      cursor: pointer; font-family: inherit; font-size: 11px; font-weight: 700;
+      background: rgba(239,68,68,0.15); color: var(--error);
+      border: 1px solid rgba(239,68,68,0.3);
+      transition: all 0.1s; white-space: nowrap;
     }
-
-    .btn-del:active {
-      background: var(--error);
-      color: #fff;
-      transform: scale(0.95);
-    }
+    .btn-del:active { background: var(--error); color: #fff; transform: scale(0.95); }
 
     @media (max-width: 600px) {
-      .stat-row {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .form-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .member-grid {
-        grid-template-columns: 1fr;
-      }
+      .stat-row  { grid-template-columns: repeat(2,1fr); }
+      .form-grid { grid-template-columns: 1fr; }
+      .member-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
-
 <body>
 
-  <!-- ══ 로그인 ══ -->
-  <div id="login-screen">
-    <h1>강동종합사회복지관<br>경로식당 관리자</h1>
-    <p>관리자 PIN 4자리를 입력하세요</p>
-    <div class="login-box">
-      <div class="pin-display" id="pin-display">────</div>
-      <div class="pin-grid">
-        <button class="pin-key" data-p="1">1</button>
-        <button class="pin-key" data-p="2">2</button>
-        <button class="pin-key" data-p="3">3</button>
-        <button class="pin-key" data-p="4">4</button>
-        <button class="pin-key" data-p="5">5</button>
-        <button class="pin-key" data-p="6">6</button>
-        <button class="pin-key" data-p="7">7</button>
-        <button class="pin-key" data-p="8">8</button>
-        <button class="pin-key" data-p="9">9</button>
-        <button class="pin-key del-key" data-p="del">←</button>
-        <button class="pin-key" data-p="0">0</button>
-        <button class="pin-key del-key" data-p="clear">✕</button>
+<!-- ══ 로그인 ══ -->
+<div id="login-screen">
+  <h1>강동종합사회복지관<br>경로식당 관리자</h1>
+  <p>관리자 PIN 4자리를 입력하세요</p>
+  <div class="login-box">
+    <div class="pin-display" id="pin-display">────</div>
+    <div class="pin-grid">
+      <button class="pin-key" data-p="1">1</button>
+      <button class="pin-key" data-p="2">2</button>
+      <button class="pin-key" data-p="3">3</button>
+      <button class="pin-key" data-p="4">4</button>
+      <button class="pin-key" data-p="5">5</button>
+      <button class="pin-key" data-p="6">6</button>
+      <button class="pin-key" data-p="7">7</button>
+      <button class="pin-key" data-p="8">8</button>
+      <button class="pin-key" data-p="9">9</button>
+      <button class="pin-key del-key" data-p="del">←</button>
+      <button class="pin-key" data-p="0">0</button>
+      <button class="pin-key del-key" data-p="clear">✕</button>
+    </div>
+    <div class="login-err" id="login-err"></div>
+  </div>
+</div>
+
+<!-- ══ 앱 ══ -->
+<div id="app">
+  <header class="header">
+    <div class="header-logo">
+      강동종합사회복지관 경로식당
+      <span>관리자 시스템</span>
+    </div>
+    <div class="header-right">
+      <div class="sync-badge"><div class="sync-dot"></div><span id="sync-time">연결 중...</span></div>
+      <button class="btn btn-ghost btn-sm" onclick="doSync()">동기화</button>
+      <button class="btn btn-ghost btn-sm" onclick="logout()">로그아웃</button>
+    </div>
+  </header>
+
+  <div class="tab-bar">
+    <button class="tab active" onclick="showTab('dashboard')">📊 대시보드</button>
+    <button class="tab" onclick="showTab('today')">📋 오늘 출석</button>
+    <button class="tab" onclick="showTab('records')">📁 출석 기록</button>
+    <button class="tab" onclick="showTab('members')">👴 이용자 명단</button>
+    <button class="tab" onclick="showTab('stats')">📈 통계</button>
+    <button class="tab" onclick="showTab('settings')">⚙️ 설정</button>
+  </div>
+
+  <!-- ① 대시보드 -->
+  <div id="tab-dashboard" class="page active">
+    <div class="inner">
+      <div class="stat-row">
+        <div class="stat-card"><div class="stat-val" id="s-today">0</div><div class="stat-label">오늘 출석</div></div>
+        <div class="stat-card"><div class="stat-val" id="s-month-total">0</div><div class="stat-label">이달 연인원</div></div>
+        <div class="stat-card"><div class="stat-val" id="s-month-unique">0</div><div class="stat-label">이달 실인원</div></div>
+        <div class="stat-card"><div class="stat-val" id="s-members">0</div><div class="stat-label">전체 이용자</div></div>
       </div>
-      <div class="login-err" id="login-err"></div>
+
+      <div class="queue-badge" id="queue-badge">
+        ⚠ 오프라인 대기 기록이 있습니다. 동기화 버튼을 눌러 Google Sheets에 전송하세요.
+      </div>
+
+      <div class="card">
+        <div class="card-title">오늘 출석 현황 (<span id="dash-today-date"></span>)</div>
+        <div id="dash-today-list" class="today-list"><div class="empty">아직 출석 기록이 없습니다</div></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">최근 6개월 추이</div>
+        <div id="dash-chart"></div>
+      </div>
     </div>
   </div>
 
-  <!-- ══ 앱 ══ -->
-  <div id="app">
-    <header class="header">
-      <div class="header-logo">
-        강동종합사회복지관 경로식당
-        <span>관리자 시스템</span>
+  <!-- ② 오늘 출석 -->
+  <div id="tab-today" class="page">
+    <div class="inner">
+      <div class="filter-bar">
+        <label>날짜:</label>
+        <input type="date" id="today-date-filter" onchange="renderToday()" />
+        <button class="btn btn-ghost btn-sm" onclick="refreshFromSheets()">새로고침</button>
       </div>
-      <div class="header-right">
-        <div class="sync-badge">
-          <div class="sync-dot"></div><span id="sync-time">연결 중...</span>
-        </div>
-        <button class="btn btn-ghost btn-sm" onclick="doSync()">동기화</button>
-        <button class="btn btn-ghost btn-sm" onclick="logout()">로그아웃</button>
+      <div class="stat-row" style="grid-template-columns:repeat(2,1fr)">
+        <div class="stat-card"><div class="stat-val" id="t-count">0</div><div class="stat-label">연인원</div></div>
+        <div class="stat-card"><div class="stat-val" id="t-unique">0</div><div class="stat-label">실인원</div></div>
       </div>
-    </header>
-
-    <div class="tab-bar">
-      <button class="tab active" onclick="showTab('dashboard')">📊 대시보드</button>
-      <button class="tab" onclick="showTab('today')">📋 오늘 출석</button>
-      <button class="tab" onclick="showTab('records')">📁 출석 기록</button>
-      <button class="tab" onclick="showTab('members')">👴 이용자 명단</button>
-      <button class="tab" onclick="showTab('stats')">📈 통계</button>
-      <button class="tab" onclick="showTab('settings')">⚙️ 설정</button>
+      <div id="today-list-full" class="today-list"><div class="empty">출석 기록이 없습니다</div></div>
     </div>
+  </div>
 
-    <!-- ① 대시보드 -->
-    <div id="tab-dashboard" class="page active">
-      <div class="inner">
-        <div class="stat-row">
-          <div class="stat-card">
-            <div class="stat-val" id="s-today">0</div>
-            <div class="stat-label">오늘 출석</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-val" id="s-month-total">0</div>
-            <div class="stat-label">이달 연인원</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-val" id="s-month-unique">0</div>
-            <div class="stat-label">이달 실인원</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-val" id="s-members">0</div>
-            <div class="stat-label">전체 이용자</div>
-          </div>
-        </div>
-
-        <div class="queue-badge" id="queue-badge">
-          ⚠ 오프라인 대기 기록이 있습니다. 동기화 버튼을 눌러 Google Sheets에 전송하세요.
-        </div>
-
-        <div class="card">
-          <div class="card-title">오늘 출석 현황 (<span id="dash-today-date"></span>)</div>
-          <div id="dash-today-list" class="today-list">
-            <div class="empty">아직 출석 기록이 없습니다</div>
-          </div>
-        </div>
-
-        <div class="card">
-          <div class="card-title">최근 6개월 추이</div>
-          <div id="dash-chart"></div>
-        </div>
+  <!-- ③ 출석 기록 -->
+  <div id="tab-records" class="page">
+    <div class="inner">
+      <div class="filter-bar">
+        <label>기간:</label>
+        <input type="date" id="rec-from" /> ~
+        <input type="date" id="rec-to" />
+        <button class="btn btn-primary btn-sm" onclick="renderRecords()">조회</button>
+        <button class="btn btn-ghost btn-sm" onclick="exportCSV()">CSV 내보내기</button>
+      </div>
+      <div class="card" style="overflow-x:auto">
+        <table class="records-table" id="rec-table">
+          <thead><tr>
+            <th>번호</th><th>날짜</th><th>시간</th><th>이름</th><th>전화번호</th><th>구분</th><th>삭제</th>
+          </tr></thead>
+          <tbody id="rec-tbody"></tbody>
+        </table>
       </div>
     </div>
+  </div>
 
-    <!-- ② 오늘 출석 -->
-    <div id="tab-today" class="page">
-      <div class="inner">
-        <div class="filter-bar">
-          <label>날짜:</label>
-          <input type="date" id="today-date-filter" onchange="renderToday()" />
-          <button class="btn btn-ghost btn-sm" onclick="refreshFromSheets()">새로고침</button>
-        </div>
-        <div class="stat-row" style="grid-template-columns:repeat(2,1fr)">
-          <div class="stat-card">
-            <div class="stat-val" id="t-count">0</div>
-            <div class="stat-label">연인원</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-val" id="t-unique">0</div>
-            <div class="stat-label">실인원</div>
-          </div>
-        </div>
-        <div id="today-list-full" class="today-list">
-          <div class="empty">출석 기록이 없습니다</div>
-        </div>
+  <!-- ④ 이용자 명단 -->
+  <div id="tab-members" class="page">
+    <div class="inner">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+        <div style="font-size:15px;font-weight:900;color:var(--accent)">이용자 명단 (<span id="member-total">0</span>명)</div>
+        <button class="btn btn-primary" onclick="openAddModal()">+ 신규 등록</button>
       </div>
+      <div class="search-wrap">
+        <input class="search-input" id="member-search" placeholder="이름 · 전화번호 · 관할동 검색..." oninput="renderMembers()" />
+      </div>
+      <div id="member-grid" class="member-grid"></div>
     </div>
+  </div>
 
-    <!-- ③ 출석 기록 -->
-    <div id="tab-records" class="page">
-      <div class="inner">
-        <div class="filter-bar">
-          <label>기간:</label>
-          <input type="date" id="rec-from" /> ~
-          <input type="date" id="rec-to" />
-          <button class="btn btn-primary btn-sm" onclick="renderRecords()">조회</button>
-          <button class="btn btn-ghost btn-sm" onclick="exportCSV()">CSV 내보내기</button>
-        </div>
-        <div class="card" style="overflow-x:auto">
-          <table class="records-table" id="rec-table">
-            <thead>
-              <tr>
-                <th>번호</th>
-                <th>날짜</th>
-                <th>시간</th>
-                <th>이름</th>
-                <th>전화번호</th>
-                <th>구분</th>
-                <th>삭제</th>
-              </tr>
-            </thead>
-            <tbody id="rec-tbody"></tbody>
+  <!-- ⑤ 통계 -->
+  <div id="tab-stats" class="page">
+    <div class="inner">
+      <div class="filter-bar">
+        <label>월:</label>
+        <input type="month" id="stat-month" onchange="renderStats()" />
+      </div>
+      <div class="stat-row">
+        <div class="stat-card"><div class="stat-val" id="st-total">0</div><div class="stat-label">월 연인원</div></div>
+        <div class="stat-card"><div class="stat-val" id="st-unique">0</div><div class="stat-label">월 실인원</div></div>
+        <div class="stat-card"><div class="stat-val" id="st-days">0</div><div class="stat-label">운영 일수</div></div>
+        <div class="stat-card"><div class="stat-val" id="st-avg">0</div><div class="stat-label">일 평균</div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">6개월 연인원 추이</div>
+        <div id="stat-chart"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">일별 상세</div>
+        <div id="stat-daily" style="overflow-x:auto">
+          <table class="records-table" id="stat-daily-table">
+            <thead><tr><th>날짜</th><th>연인원</th><th>실인원</th></tr></thead>
+            <tbody id="stat-daily-body"></tbody>
           </table>
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- ④ 이용자 명단 -->
-    <div id="tab-members" class="page">
-      <div class="inner">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-          <div style="font-size:15px;font-weight:900;color:var(--accent)">이용자 명단 (<span id="member-total">0</span>명)
-          </div>
-          <button class="btn btn-primary" onclick="openAddModal()">+ 신규 등록</button>
+  <!-- ⑥ 설정 -->
+  <div id="tab-settings" class="page">
+    <div class="inner">
+      <div class="card">
+        <div class="card-title">Google Sheets 연동</div>
+        <div class="form-group" style="margin-bottom:12px">
+          <label class="form-label">Google Apps Script 웹앱 URL</label>
+          <input class="form-input" id="cfg-url" placeholder="https://script.google.com/macros/s/..." />
         </div>
-        <div class="search-wrap">
-          <input class="search-input" id="member-search" placeholder="이름 · 전화번호 · 관할동 검색..."
-            oninput="renderMembers()" />
-        </div>
-        <div id="member-grid" class="member-grid"></div>
-      </div>
-    </div>
-
-    <!-- ⑤ 통계 -->
-    <div id="tab-stats" class="page">
-      <div class="inner">
-        <div class="filter-bar">
-          <label>월:</label>
-          <input type="month" id="stat-month" onchange="renderStats()" />
-        </div>
-        <div class="stat-row">
-          <div class="stat-card">
-            <div class="stat-val" id="st-total">0</div>
-            <div class="stat-label">월 연인원</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-val" id="st-unique">0</div>
-            <div class="stat-label">월 실인원</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-val" id="st-days">0</div>
-            <div class="stat-label">운영 일수</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-val" id="st-avg">0</div>
-            <div class="stat-label">일 평균</div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-title">6개월 연인원 추이</div>
-          <div id="stat-chart"></div>
-        </div>
-        <div class="card">
-          <div class="card-title">일별 상세</div>
-          <div id="stat-daily" style="overflow-x:auto">
-            <table class="records-table" id="stat-daily-table">
-              <thead>
-                <tr>
-                  <th>날짜</th>
-                  <th>연인원</th>
-                  <th>실인원</th>
-                </tr>
-              </thead>
-              <tbody id="stat-daily-body"></tbody>
-            </table>
-          </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-primary" onclick="saveSettings()">저장</button>
+          <button class="btn btn-ghost" onclick="testConn()">연결 테스트</button>
         </div>
       </div>
-    </div>
 
-    <!-- ⑥ 설정 -->
-    <div id="tab-settings" class="page">
-      <div class="inner">
-        <div class="card">
-          <div class="card-title">Google Sheets 연동</div>
-          <div class="form-group" style="margin-bottom:12px">
-            <label class="form-label">Google Apps Script 웹앱 URL</label>
-            <input class="form-input" id="cfg-url" placeholder="https://script.google.com/macros/s/..." />
+      <div class="card">
+        <div class="card-title">PIN 변경</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">현재 PIN</label>
+            <input class="form-input" id="pin-cur"  type="password" maxlength="4" placeholder="현재 PIN" />
           </div>
-          <div style="display:flex;gap:8px">
-            <button class="btn btn-primary" onclick="saveSettings()">저장</button>
-            <button class="btn btn-ghost" onclick="testConn()">연결 테스트</button>
+          <div class="form-group">
+            <label class="form-label">새 PIN</label>
+            <input class="form-input" id="pin-new"  type="password" maxlength="4" placeholder="새 PIN (4자리)" />
           </div>
         </div>
+        <button class="btn btn-primary" style="margin-top:10px" onclick="changePin()">PIN 변경</button>
+      </div>
 
-        <div class="card">
-          <div class="card-title">PIN 변경</div>
-          <div class="form-grid">
-            <div class="form-group">
-              <label class="form-label">현재 PIN</label>
-              <input class="form-input" id="pin-cur" type="password" maxlength="4" placeholder="현재 PIN" />
-            </div>
-            <div class="form-group">
-              <label class="form-label">새 PIN</label>
-              <input class="form-input" id="pin-new" type="password" maxlength="4" placeholder="새 PIN (4자리)" />
-            </div>
-          </div>
-          <button class="btn btn-primary" style="margin-top:10px" onclick="changePin()">PIN 변경</button>
+      <div class="card">
+        <div class="card-title">데이터 관리</div>
+        <div class="cfg-row">
+          <div><div class="cfg-key">전체 이용자</div><div class="cfg-val" id="cfg-mc">0명</div></div>
+          <button class="btn btn-ghost btn-sm" onclick="exportMembers()">명단 내보내기</button>
         </div>
-
-        <div class="card">
-          <div class="card-title">데이터 관리</div>
-          <div class="cfg-row">
-            <div>
-              <div class="cfg-key">전체 이용자</div>
-              <div class="cfg-val" id="cfg-mc">0명</div>
-            </div>
-            <button class="btn btn-ghost btn-sm" onclick="exportMembers()">명단 내보내기</button>
-          </div>
-          <div class="cfg-row">
-            <div>
-              <div class="cfg-key">전체 출석 기록</div>
-              <div class="cfg-val" id="cfg-rc">0건</div>
-            </div>
-            <button class="btn btn-ghost btn-sm" onclick="exportCSV()">CSV 내보내기</button>
-          </div>
-          <div class="cfg-row">
-            <div>
-              <div class="cfg-key">전체 백업 / 복원</div>
-              <div class="cfg-val">JSON 파일</div>
-            </div>
-            <div style="display:flex;gap:6px">
-              <button class="btn btn-ghost btn-sm" onclick="backup()">백업</button>
-              <label class="btn btn-ghost btn-sm" style="cursor:pointer">복원<input type="file" accept=".json"
-                  style="display:none" onchange="restore(event)"></label>
-            </div>
-          </div>
-          <div class="cfg-row">
-            <div>
-              <div class="cfg-key" style="color:var(--error)">출석 기록 초기화</div>
-              <div class="cfg-val">이용자 명단은 유지됩니다</div>
-            </div>
-            <button class="btn btn-danger btn-sm" onclick="resetRecords()">초기화</button>
+        <div class="cfg-row">
+          <div><div class="cfg-key">전체 출석 기록</div><div class="cfg-val" id="cfg-rc">0건</div></div>
+          <button class="btn btn-ghost btn-sm" onclick="exportCSV()">CSV 내보내기</button>
+        </div>
+        <div class="cfg-row">
+          <div><div class="cfg-key">전체 백업 / 복원</div><div class="cfg-val">JSON 파일</div></div>
+          <div style="display:flex;gap:6px">
+            <button class="btn btn-ghost btn-sm" onclick="backup()">백업</button>
+            <label class="btn btn-ghost btn-sm" style="cursor:pointer">복원<input type="file" accept=".json" style="display:none" onchange="restore(event)"></label>
           </div>
         </div>
-
-        <div class="card">
-          <div class="card-title">앱 정보</div>
-          <div class="cfg-row">
-            <div class="cfg-key">버전</div>
-            <div class="cfg-val">2.0.0</div>
-          </div>
-          <div class="cfg-row">
-            <div class="cfg-key">키오스크 URL</div>
-            <div class="cfg-val" id="kiosk-url-label">-</div>
-          </div>
-          <div class="cfg-row">
-            <div class="cfg-key">기기 (키오스크)</div>
-            <div class="cfg-val">Samsung Galaxy Tab A (2016) with S Pen</div>
-          </div>
+        <div class="cfg-row">
+          <div><div class="cfg-key" style="color:var(--error)">출석 기록 초기화</div><div class="cfg-val">이용자 명단은 유지됩니다</div></div>
+          <button class="btn btn-danger btn-sm" onclick="resetRecords()">초기화</button>
         </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">앱 정보</div>
+        <div class="cfg-row"><div class="cfg-key">버전</div><div class="cfg-val">2.0.0</div></div>
+        <div class="cfg-row"><div class="cfg-key">키오스크 URL</div><div class="cfg-val" id="kiosk-url-label">-</div></div>
+        <div class="cfg-row"><div class="cfg-key">기기 (키오스크)</div><div class="cfg-val">Samsung Galaxy Tab A (2016) with S Pen</div></div>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- 신규 등록 모달 -->
-  <div class="modal-bg" id="modal-add">
-    <div class="modal">
-      <div class="modal-title">신규 이용자 등록</div>
-      <div class="form-grid">
-        <div class="form-group">
-          <label class="form-label">이름 *</label>
-          <input class="form-input" id="n-name" placeholder="이름" />
-        </div>
-        <div class="form-group">
-          <label class="form-label">생년월일 (YYMMDD) *</label>
-          <input class="form-input" id="n-birth" placeholder="예) 450101" maxlength="6" />
-        </div>
-        <div class="form-group">
-          <label class="form-label">성별</label>
-          <select class="form-select" id="n-gender">
-            <option value="남">남</option>
-            <option value="여">여</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">전화번호 (010 제외 8자리) *</label>
-          <input class="form-input" id="n-phone" placeholder="예) 12345678" maxlength="8" />
-        </div>
-        <div class="form-group">
-          <label class="form-label">관할동</label>
-          <input class="form-input" id="n-dong" placeholder="예) 천호3동" />
-        </div>
-        <div class="form-group">
-          <label class="form-label">보호유형</label>
-          <select class="form-select" id="n-type">
-            <option>수급자</option>
-            <option>기초연금</option>
-            <option>기초생활수급자</option>
-            <option>급여탈락</option>
-            <option>노맞돌</option>
-            <option>기타</option>
-          </select>
-        </div>
-        <div class="form-group form-full">
-          <label class="form-label">주소</label>
-          <input class="form-input" id="n-addr" placeholder="주소" />
-        </div>
+<!-- 신규 등록 모달 -->
+<div class="modal-bg" id="modal-add">
+  <div class="modal">
+    <div class="modal-title">신규 이용자 등록</div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label class="form-label">이름 *</label>
+        <input class="form-input" id="n-name" placeholder="이름" />
       </div>
-      <div style="display:flex;gap:8px;margin-top:14px">
-        <button class="btn btn-primary" onclick="addMember()">등록</button>
-        <button class="btn btn-ghost" onclick="closeModal('modal-add')">취소</button>
+      <div class="form-group">
+        <label class="form-label">생년월일 (YYMMDD) *</label>
+        <input class="form-input" id="n-birth" placeholder="예) 450101" maxlength="6" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">성별</label>
+        <select class="form-select" id="n-gender">
+          <option value="남">남</option>
+          <option value="여">여</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">전화번호 (010 제외 8자리) *</label>
+        <input class="form-input" id="n-phone" placeholder="예) 12345678" maxlength="8" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">관할동</label>
+        <input class="form-input" id="n-dong" placeholder="예) 천호3동" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">보호유형</label>
+        <select class="form-select" id="n-type">
+          <option>수급자</option><option>기초연금</option>
+          <option>기초생활수급자</option><option>급여탈락</option>
+          <option>노맞돌</option><option>기타</option>
+        </select>
+      </div>
+      <div class="form-group form-full">
+        <label class="form-label">주소</label>
+        <input class="form-input" id="n-addr" placeholder="주소" />
       </div>
     </div>
+    <div style="display:flex;gap:8px;margin-top:14px">
+      <button class="btn btn-primary" onclick="addMember()">등록</button>
+      <button class="btn btn-ghost" onclick="closeModal('modal-add')">취소</button>
+    </div>
   </div>
+</div>
 
-  <!-- 토스트 -->
-  <div class="toast" id="toast"></div>
+<!-- 토스트 -->
+<div class="toast" id="toast"></div>
 
-  <script>
-    // ══════════════════════════════════════════
-    //  STORAGE KEYS
-    // ══════════════════════════════════════════
-    const K = {
-      members: 'gdcs_members',
-      records: 'gdcs_records',
-      config: 'gdcs_config',
-      pin: 'gdcs_pin',
-      kiosk_q: 'offline_queue',         // 키오스크 오프라인 대기 기록
-      kiosk_r: 'kiosk_records',         // 키오스크 로컬 기록
-    };
+<script>
+// ══════════════════════════════════════════
+//  STORAGE KEYS
+// ══════════════════════════════════════════
+const K = {
+  members : 'gdcs_members',
+  records : 'gdcs_records',
+  config  : 'gdcs_config',
+  pin     : 'gdcs_pin',
+  kiosk_q : 'offline_queue',         // 키오스크 오프라인 대기 기록
+  kiosk_r : 'kiosk_records',         // 키오스크 로컬 기록
+};
 
-    const DEFAULT_PIN = '1234';
+const DEFAULT_PIN = '1234';
 
-    // ══════════════════════════════════════════
-    //  DATA HELPERS
-    // ══════════════════════════════════════════
-    const load = key => { try { return JSON.parse(localStorage.getItem(key) || 'null'); } catch { return null; } };
-    const save = (key, val) => localStorage.setItem(key, JSON.stringify(val));
+// ══════════════════════════════════════════
+//  DATA HELPERS
+// ══════════════════════════════════════════
+const load = key => { try { return JSON.parse(localStorage.getItem(key) || 'null'); } catch { return null; } };
+const save = (key, val) => localStorage.setItem(key, JSON.stringify(val));
 
-    function getMembers() { return load(K.members) || INITIAL_MEMBERS; }
-    function getRecords() {
-      // 관리자 기록 + 키오스크 로컬 기록 합산 (중복 제거)
-      const admin = load(K.records) || [];
-      const kiosk = load(K.kiosk_r) || [];
-      const all = [...admin];
-      kiosk.forEach(kr => {
-        if (!all.find(a => a.id === kr.id)) all.push(kr);
-      });
-      return all.sort((a, b) => (a.date + a.time) > (b.date + b.time) ? 1 : -1);
-    }
-    function getConfig() { return load(K.config) || {}; }
+function getMembers() { return load(K.members) || INITIAL_MEMBERS; }
+function getRecords() {
+  // 관리자 기록 + 키오스크 로컬 기록 합산 (중복 제거)
+  const admin  = load(K.records)  || [];
+  const kiosk  = load(K.kiosk_r) || [];
+  const all    = [...admin];
+  kiosk.forEach(kr => {
+    if (!all.find(a => a.id === kr.id)) all.push(kr);
+  });
+  return all.sort((a,b) => (a.date+a.time) > (b.date+b.time) ? 1 : -1);
+}
+function getConfig() { return load(K.config) || {}; }
 
-    // ══════════════════════════════════════════
-    //  PIN / LOGIN
-    // ══════════════════════════════════════════
-    let pinInput = '';
+// ══════════════════════════════════════════
+//  PIN / LOGIN
+// ══════════════════════════════════════════
+let pinInput = '';
 
-    document.querySelectorAll('.pin-key').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const p = btn.dataset.p;
-        if (p === 'del') { pinInput = pinInput.slice(0, -1); }
-        else if (p === 'clear') { pinInput = ''; }
-        else { if (pinInput.length >= 4) return; pinInput += p; }
-        updatePinDisplay();
-        if (pinInput.length === 4) setTimeout(checkPin, 150);
-      });
-    });
+document.querySelectorAll('.pin-key').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const p = btn.dataset.p;
+    if (p === 'del')   { pinInput = pinInput.slice(0,-1); }
+    else if (p === 'clear') { pinInput = ''; }
+    else { if (pinInput.length >= 4) return; pinInput += p; }
+    updatePinDisplay();
+    if (pinInput.length === 4) setTimeout(checkPin, 150);
+  });
+});
 
-    function updatePinDisplay() {
-      const d = document.getElementById('pin-display');
-      d.textContent = '●'.repeat(pinInput.length) + '─'.repeat(4 - pinInput.length);
-    }
+function updatePinDisplay() {
+  const d = document.getElementById('pin-display');
+  d.textContent = '●'.repeat(pinInput.length) + '─'.repeat(4 - pinInput.length);
+}
 
-    function checkPin() {
-      const stored = localStorage.getItem(K.pin) || DEFAULT_PIN;
-      if (pinInput === stored) {
-        document.getElementById('login-screen').style.display = 'none';
-        document.getElementById('app').classList.add('visible');
-        initApp();
-      } else {
-        document.getElementById('login-err').textContent = '핀 번호가 틀렸습니다';
-        pinInput = '';
-        updatePinDisplay();
-        setTimeout(() => document.getElementById('login-err').textContent = '', 1500);
-      }
-    }
+function checkPin() {
+  const stored = localStorage.getItem(K.pin) || DEFAULT_PIN;
+  if (pinInput === stored) {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app').classList.add('visible');
+    initApp();
+  } else {
+    document.getElementById('login-err').textContent = '핀 번호가 틀렸습니다';
+    pinInput = '';
+    updatePinDisplay();
+    setTimeout(() => document.getElementById('login-err').textContent = '', 1500);
+  }
+}
 
-    function logout() {
-      if (!confirm('로그아웃 하시겠습니까?')) return;
-      document.getElementById('app').classList.remove('visible');
-      document.getElementById('login-screen').style.display = 'flex';
-      pinInput = '';
-      updatePinDisplay();
-    }
+function logout() {
+  if (!confirm('로그아웃 하시겠습니까?')) return;
+  document.getElementById('app').classList.remove('visible');
+  document.getElementById('login-screen').style.display = 'flex';
+  pinInput = '';
+  updatePinDisplay();
+}
 
-    // ══════════════════════════════════════════
-    //  APP INIT
-    // ══════════════════════════════════════════
-    function initApp() {
-      const cfg = getConfig();
-      if (cfg.scriptUrl) document.getElementById('cfg-url').value = cfg.scriptUrl;
+// ══════════════════════════════════════════
+//  APP INIT
+// ══════════════════════════════════════════
+function initApp() {
+  const cfg = getConfig();
+  if (cfg.scriptUrl) document.getElementById('cfg-url').value = cfg.scriptUrl;
 
-      document.getElementById('kiosk-url-label').textContent =
-        location.href.replace('admin.html', 'kiosk.html');
+  document.getElementById('kiosk-url-label').textContent =
+    location.href.replace('admin.html','kiosk.html');
 
-      // 날짜 기본값
-      const today = toDateStr(new Date());
-      document.getElementById('today-date-filter').value = today;
-      document.getElementById('rec-from').value = today.slice(0, 7) + '-01';
-      document.getElementById('rec-to').value = today;
+  // 날짜 기본값
+  const today = toDateStr(new Date());
+  document.getElementById('today-date-filter').value = today;
+  document.getElementById('rec-from').value = today.slice(0,7) + '-01';
+  document.getElementById('rec-to').value   = today;
 
-      const ym = today.slice(0, 7);
-      document.getElementById('stat-month').value = ym;
+  const ym = today.slice(0,7);
+  document.getElementById('stat-month').value = ym;
 
-      renderDashboard();
-      checkOfflineQueue();
-    }
+  renderDashboard();
+  checkOfflineQueue();
+}
 
-    // ══════════════════════════════════════════
-    //  TAB NAVIGATION
-    // ══════════════════════════════════════════
-    function showTab(id) {
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-      document.getElementById('tab-' + id).classList.add('active');
-      event.currentTarget.classList.add('active');
-      if (id === 'dashboard') renderDashboard();
-      if (id === 'today') renderToday();
-      if (id === 'records') renderRecords();
-      if (id === 'members') renderMembers();
-      if (id === 'stats') renderStats();
-      if (id === 'settings') renderSettings();
-    }
+// ══════════════════════════════════════════
+//  TAB NAVIGATION
+// ══════════════════════════════════════════
+function showTab(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  event.currentTarget.classList.add('active');
+  if (id === 'dashboard') renderDashboard();
+  if (id === 'today')     renderToday();
+  if (id === 'records')   renderRecords();
+  if (id === 'members')   renderMembers();
+  if (id === 'stats')     renderStats();
+  if (id === 'settings')  renderSettings();
+}
 
-    // ══════════════════════════════════════════
-    //  DASHBOARD
-    // ══════════════════════════════════════════
-    function renderDashboard() {
-      const today = toDateStr(new Date());
-      const records = getRecords();
-      const members = getMembers();
-      const ym = today.slice(0, 7);
+// ══════════════════════════════════════════
+//  DASHBOARD
+// ══════════════════════════════════════════
+function renderDashboard() {
+  const today   = toDateStr(new Date());
+  const records = getRecords();
+  const members = getMembers();
+  const ym      = today.slice(0,7);
 
-      const todayRecs = records.filter(r => r.date === today);
-      const monthRecs = records.filter(r => r.date.startsWith(ym));
+  const todayRecs  = records.filter(r => r.date === today);
+  const monthRecs  = records.filter(r => r.date.startsWith(ym));
 
-      document.getElementById('s-today').textContent = todayRecs.length;
-      document.getElementById('s-month-total').textContent = monthRecs.length;
-      document.getElementById('s-month-unique').textContent = new Set(monthRecs.map(r => r.phone)).size;
-      document.getElementById('s-members').textContent = members.length;
+  document.getElementById('s-today').textContent       = todayRecs.length;
+  document.getElementById('s-month-total').textContent = monthRecs.length;
+  document.getElementById('s-month-unique').textContent= new Set(monthRecs.map(r=>r.phone)).size;
+  document.getElementById('s-members').textContent     = members.length;
 
-      document.getElementById('dash-today-date').textContent = formatDate(today);
+  document.getElementById('dash-today-date').textContent = formatDate(today);
 
-      // 오늘 목록
-      const list = document.getElementById('dash-today-list');
-      list.innerHTML = todayRecs.length === 0
-        ? '<div class="empty">아직 출석 기록이 없습니다</div>'
-        : todayRecs.map((r, i) => todayItemHtml(r, i + 1)).join('');
+  // 오늘 목록
+  const list = document.getElementById('dash-today-list');
+  list.innerHTML = todayRecs.length === 0
+    ? '<div class="empty">아직 출석 기록이 없습니다</div>'
+    : todayRecs.map((r,i) => todayItemHtml(r, i+1)).join('');
 
-      // 차트
-      renderBarChart('dash-chart');
-    }
+  // 차트
+  renderBarChart('dash-chart');
+}
 
-    // ══════════════════════════════════════════
-    //  TODAY
-    // ══════════════════════════════════════════
-    function renderToday() {
-      const date = document.getElementById('today-date-filter').value || toDateStr(new Date());
-      const recs = getRecords().filter(r => r.date === date);
-      const unique = new Set(recs.map(r => r.phone)).size;
-      document.getElementById('t-count').textContent = recs.length;
-      document.getElementById('t-unique').textContent = unique;
-      const list = document.getElementById('today-list-full');
-      list.innerHTML = recs.length === 0
-        ? '<div class="empty">출석 기록이 없습니다</div>'
-        : recs.map((r, i) => todayItemHtml(r, i + 1)).join('');
-    }
+// ══════════════════════════════════════════
+//  TODAY
+// ══════════════════════════════════════════
+function renderToday() {
+  const date = document.getElementById('today-date-filter').value || toDateStr(new Date());
+  const recs = getRecords().filter(r => r.date === date);
+  const unique = new Set(recs.map(r=>r.phone)).size;
+  document.getElementById('t-count').textContent  = recs.length;
+  document.getElementById('t-unique').textContent = unique;
+  const list = document.getElementById('today-list-full');
+  list.innerHTML = recs.length === 0
+    ? '<div class="empty">출석 기록이 없습니다</div>'
+    : recs.map((r,i) => todayItemHtml(r, i+1)).join('');
+}
 
-    function todayItemHtml(r, n) {
-      return `
+function todayItemHtml(r, n) {
+  return `
     <div class="today-item">
       <div class="today-num">${n}</div>
-      <div style="flex:1">
+      <div style="flex:1;min-width:0">
         <div class="today-name">${r.name}${!r.registered ? '<span class="unreg-badge">미등록</span>' : ''}</div>
-        <div class="today-meta">010-${r.phone.slice(0, 4)}-${r.phone.slice(4)}</div>
+        <div class="today-meta">010-${r.phone.slice(0,4)}-${r.phone.slice(4)}</div>
       </div>
-      <div class="today-time">${r.time}</div>
-      <button class="btn-del" onclick="deleteRecord('${r.id}', '${r.name}', '${r.date}')">삭제</button>
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+        <div class="today-time">${r.time}</div>
+        <button class="btn-del" onclick="deleteRecord('${r.id}', '${r.name}', '${r.date}')">삭제</button>
+      </div>
     </div>`;
-    }
+}
 
-    // ══════════════════════════════════════════
-    //  RECORDS
-    // ══════════════════════════════════════════
-    function renderRecords() {
-      const from = document.getElementById('rec-from').value;
-      const to = document.getElementById('rec-to').value;
-      const recs = getRecords().filter(r => (!from || r.date >= from) && (!to || r.date <= to));
-      recs.reverse();
-      const tbody = document.getElementById('rec-tbody');
-      tbody.innerHTML = recs.length === 0
-        ? '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:30px">기록이 없습니다</td></tr>'
-        : recs.map((r, i) => `
+// ══════════════════════════════════════════
+//  RECORDS
+// ══════════════════════════════════════════
+function renderRecords() {
+  const from = document.getElementById('rec-from').value;
+  const to   = document.getElementById('rec-to').value;
+  const recs = getRecords().filter(r => (!from || r.date >= from) && (!to || r.date <= to));
+  recs.reverse();
+  const tbody = document.getElementById('rec-tbody');
+  tbody.innerHTML = recs.length === 0
+    ? '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:30px">기록이 없습니다</td></tr>'
+    : recs.map((r,i) => `
         <tr>
           <td>${recs.length - i}</td>
           <td>${r.date}</td>
           <td>${r.time}</td>
           <td>${r.name}</td>
-          <td>010-${r.phone.slice(0, 4)}-${r.phone.slice(4)}</td>
+          <td>010-${r.phone.slice(0,4)}-${r.phone.slice(4)}</td>
           <td><span class="${r.registered ? 'badge-reg' : 'badge-unreg'}">${r.registered ? '등록' : '미등록'}</span></td>
           <td><button class="btn-del" onclick="deleteRecord('${r.id}', '${r.name}', '${r.date}')">삭제</button></td>
         </tr>`).join('');
-    }
+}
 
-    // ══════════════════════════════════════════
-    //  MEMBERS
-    // ══════════════════════════════════════════
-    function renderMembers() {
-      const q = (document.getElementById('member-search')?.value || '').trim().toLowerCase();
-      let list = getMembers();
-      if (q) list = list.filter(m =>
-        m.name.includes(q) || m.phone.includes(q) || (m.dong || '').includes(q)
-      );
-      document.getElementById('member-total').textContent = getMembers().length;
-      const grid = document.getElementById('member-grid');
-      grid.innerHTML = list.length === 0
-        ? '<div class="empty">검색 결과가 없습니다</div>'
-        : list.map(m => `
+// ══════════════════════════════════════════
+//  MEMBERS
+// ══════════════════════════════════════════
+function renderMembers() {
+  const q = (document.getElementById('member-search')?.value || '').trim().toLowerCase();
+  let list = getMembers();
+  if (q) list = list.filter(m =>
+    m.name.includes(q) || m.phone.includes(q) || (m.dong||'').includes(q)
+  );
+  document.getElementById('member-total').textContent = getMembers().length;
+  const grid = document.getElementById('member-grid');
+  grid.innerHTML = list.length === 0
+    ? '<div class="empty">검색 결과가 없습니다</div>'
+    : list.map(m => `
         <div class="member-card">
-          <div class="avatar ${m.gender === '남' ? 'm' : 'f'}">${m.name[0]}</div>
+          <div class="avatar ${m.gender==='남'?'m':'f'}">${m.name[0]}</div>
           <div class="m-info">
             <div class="m-name">${m.name} <small style="color:var(--muted)">${m.gender}</small></div>
-            <div class="m-detail">${m.birth} · ${m.dong || '-'}</div>
-            <div class="m-phone">010-${m.phone.slice(0, 4)}-${m.phone.slice(4)}</div>
-            <div class="m-detail" style="margin-top:3px">${m.addr || ''}</div>
+            <div class="m-detail">${m.birth} · ${m.dong||'-'}</div>
+            <div class="m-phone">010-${m.phone.slice(0,4)}-${m.phone.slice(4)}</div>
+            <div class="m-detail" style="margin-top:3px">${m.addr||''}</div>
           </div>
           <div class="m-actions">
             <span class="m-type">${m.type}</span>
             <button class="btn btn-danger btn-sm" style="margin-top:6px" onclick="deleteMember(${m.id})">삭제</button>
           </div>
         </div>`).join('');
-    }
+}
 
-    // ══════════════════════════════════════════
-    //  ADD / DELETE MEMBER
-    // ══════════════════════════════════════════
-    function openAddModal() {
-      ['n-name', 'n-birth', 'n-phone', 'n-dong', 'n-addr'].forEach(id => { document.getElementById(id).value = ''; });
-      document.getElementById('modal-add').classList.add('open');
-    }
-    function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+// ══════════════════════════════════════════
+//  ADD / DELETE MEMBER
+// ══════════════════════════════════════════
+function openAddModal() {
+  ['n-name','n-birth','n-phone','n-dong','n-addr'].forEach(id => { document.getElementById(id).value=''; });
+  document.getElementById('modal-add').classList.add('open');
+}
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 
-    function addMember() {
-      const name = document.getElementById('n-name').value.trim();
-      const birth = document.getElementById('n-birth').value.trim();
-      const gender = document.getElementById('n-gender').value;
-      const phone = document.getElementById('n-phone').value.trim().replace(/-/g, '');
-      const dong = document.getElementById('n-dong').value.trim();
-      const addr = document.getElementById('n-addr').value.trim();
-      const type = document.getElementById('n-type').value;
+function addMember() {
+  const name  = document.getElementById('n-name').value.trim();
+  const birth = document.getElementById('n-birth').value.trim();
+  const gender= document.getElementById('n-gender').value;
+  const phone = document.getElementById('n-phone').value.trim().replace(/-/g,'');
+  const dong  = document.getElementById('n-dong').value.trim();
+  const addr  = document.getElementById('n-addr').value.trim();
+  const type  = document.getElementById('n-type').value;
 
-      if (!name || !birth || !phone) { toast('이름, 생년월일, 전화번호는 필수입니다', 'error'); return; }
-      if (!/^\d{8}$/.test(phone)) { toast('전화번호는 010 제외 8자리 숫자', 'error'); return; }
+  if (!name || !birth || !phone) { toast('이름, 생년월일, 전화번호는 필수입니다', 'error'); return; }
+  if (!/^\d{8}$/.test(phone))    { toast('전화번호는 010 제외 8자리 숫자', 'error'); return; }
 
-      const members = getMembers();
-      if (members.find(m => m.phone === phone)) { toast('이미 등록된 전화번호입니다', 'error'); return; }
+  const members = getMembers();
+  if (members.find(m => m.phone === phone)) { toast('이미 등록된 전화번호입니다', 'error'); return; }
 
-      const newId = Math.max(0, ...members.map(m => m.id)) + 1;
-      members.push({ id: newId, name, birth, gender, dong, addr, phone, type });
-      save(K.members, members);
+  const newId = Math.max(0, ...members.map(m=>m.id)) + 1;
+  members.push({ id: newId, name, birth, gender, dong, addr, phone, type });
+  save(K.members, members);
 
-      // 키오스크 캐시도 갱신
-      localStorage.setItem('members_cache', JSON.stringify(members));
+  // 키오스크 캐시도 갱신
+  localStorage.setItem('members_cache', JSON.stringify(members));
 
-      closeModal('modal-add');
-      renderMembers();
-      toast(`${name} 어르신 등록 완료`);
-      syncMembersToSheets(members);
-    }
+  closeModal('modal-add');
+  renderMembers();
+  toast(`${name} 어르신 등록 완료`);
+  syncMembersToSheets(members);
+}
 
-    function deleteMember(id) {
-      if (!confirm('이 이용자를 삭제하시겠습니까?')) return;
-      const members = getMembers().filter(m => m.id !== id);
-      save(K.members, members);
-      localStorage.setItem('members_cache', JSON.stringify(members));
-      renderMembers();
-      toast('삭제되었습니다');
-      syncMembersToSheets(members);
-    }
+function deleteMember(id) {
+  if (!confirm('이 이용자를 삭제하시겠습니까?')) return;
+  const members = getMembers().filter(m => m.id !== id);
+  save(K.members, members);
+  localStorage.setItem('members_cache', JSON.stringify(members));
+  renderMembers();
+  toast('삭제되었습니다');
+  syncMembersToSheets(members);
+}
 
-    // ══════════════════════════════════════════
-    //  STATS
-    // ══════════════════════════════════════════
-    function renderStats() {
-      const ym = document.getElementById('stat-month').value || toDateStr(new Date()).slice(0, 7);
-      const recs = getRecords().filter(r => r.date.startsWith(ym));
-      const byDay = {};
-      recs.forEach(r => { byDay[r.date] = (byDay[r.date] || []).concat(r); });
-      const days = Object.keys(byDay).length;
-      const total = recs.length;
-      const uniq = new Set(recs.map(r => r.phone)).size;
-      const avg = days ? Math.round(total / days) : 0;
+// ══════════════════════════════════════════
+//  STATS
+// ══════════════════════════════════════════
+function renderStats() {
+  const ym   = document.getElementById('stat-month').value || toDateStr(new Date()).slice(0,7);
+  const recs = getRecords().filter(r => r.date.startsWith(ym));
+  const byDay = {};
+  recs.forEach(r => { byDay[r.date] = (byDay[r.date]||[]).concat(r); });
+  const days  = Object.keys(byDay).length;
+  const total = recs.length;
+  const uniq  = new Set(recs.map(r=>r.phone)).size;
+  const avg   = days ? Math.round(total/days) : 0;
 
-      document.getElementById('st-total').textContent = total;
-      document.getElementById('st-unique').textContent = uniq;
-      document.getElementById('st-days').textContent = days;
-      document.getElementById('st-avg').textContent = avg;
+  document.getElementById('st-total').textContent  = total;
+  document.getElementById('st-unique').textContent = uniq;
+  document.getElementById('st-days').textContent   = days;
+  document.getElementById('st-avg').textContent    = avg;
 
-      renderBarChart('stat-chart');
+  renderBarChart('stat-chart');
 
-      const tbody = document.getElementById('stat-daily-body');
-      tbody.innerHTML = Object.keys(byDay).sort().reverse().map(d => `
+  const tbody = document.getElementById('stat-daily-body');
+  tbody.innerHTML = Object.keys(byDay).sort().reverse().map(d => `
     <tr>
       <td>${formatDate(d)}</td>
       <td>${byDay[d].length}</td>
-      <td>${new Set(byDay[d].map(r => r.phone)).size}</td>
+      <td>${new Set(byDay[d].map(r=>r.phone)).size}</td>
     </tr>`).join('') || '<tr><td colspan="3" style="text-align:center;color:var(--muted);padding:20px">기록 없음</td></tr>';
-    }
+}
 
-    function renderBarChart(targetId) {
-      const now = new Date();
-      const months = [];
-      for (let i = 5; i >= 0; i--) {
-        const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-        const key = toYM(d);
-        const cnt = getRecords().filter(r => r.date.startsWith(key)).length;
-        months.push({ key, label: `${d.getMonth() + 1}월`, cnt });
-      }
-      const max = Math.max(1, ...months.map(m => m.cnt));
-      document.getElementById(targetId).innerHTML = months.map(m => `
+function renderBarChart(targetId) {
+  const now = new Date();
+  const months = [];
+  for (let i=5; i>=0; i--) {
+    const d   = new Date(now.getFullYear(), now.getMonth()-i, 1);
+    const key = toYM(d);
+    const cnt = getRecords().filter(r => r.date.startsWith(key)).length;
+    months.push({ key, label: `${d.getMonth()+1}월`, cnt });
+  }
+  const max = Math.max(1, ...months.map(m=>m.cnt));
+  document.getElementById(targetId).innerHTML = months.map(m => `
     <div class="bar-row">
       <div class="bar-label">${m.label}</div>
-      <div class="bar-track"><div class="bar-fill" style="width:${(m.cnt / max * 100).toFixed(1)}%"></div></div>
+      <div class="bar-track"><div class="bar-fill" style="width:${(m.cnt/max*100).toFixed(1)}%"></div></div>
       <div class="bar-val">${m.cnt}명</div>
     </div>`).join('');
+}
+
+// ══════════════════════════════════════════
+//  SETTINGS
+// ══════════════════════════════════════════
+function renderSettings() {
+  const cfg = getConfig();
+  if (cfg.scriptUrl) document.getElementById('cfg-url').value = cfg.scriptUrl;
+  document.getElementById('cfg-mc').textContent = getMembers().length + '명';
+  document.getElementById('cfg-rc').textContent = getRecords().length + '건';
+}
+
+function saveSettings() {
+  const cfg = getConfig();
+  cfg.scriptUrl = document.getElementById('cfg-url').value.trim();
+  save(K.config, cfg);
+  // 키오스크도 같은 localStorage 쓰면 공유됨 (같은 도메인)
+  localStorage.setItem('scriptUrl', cfg.scriptUrl);
+  toast('설정 저장 완료');
+}
+
+async function testConn() {
+  const url = document.getElementById('cfg-url').value.trim();
+  if (!url) { toast('URL을 먼저 입력하세요', 'error'); return; }
+  toast('연결 테스트 중...');
+  try {
+    const res = await fetch(url + '?action=ping');
+    if (res.ok) toast('✓ 연결 성공!');
+    else toast('연결 실패: ' + res.status, 'error');
+  } catch { toast('연결 실패 (CORS 또는 네트워크)', 'error'); }
+}
+
+function changePin() {
+  const cur = document.getElementById('pin-cur').value;
+  const nw  = document.getElementById('pin-new').value;
+  const stored = localStorage.getItem(K.pin) || DEFAULT_PIN;
+  if (cur !== stored) { toast('현재 PIN이 틀렸습니다', 'error'); return; }
+  if (!/^\d{4}$/.test(nw)) { toast('새 PIN은 숫자 4자리여야 합니다', 'error'); return; }
+  localStorage.setItem(K.pin, nw);
+  document.getElementById('pin-cur').value = '';
+  document.getElementById('pin-new').value = '';
+  toast('PIN 변경 완료');
+}
+
+// ══════════════════════════════════════════
+//  DELETE RECORD
+// ══════════════════════════════════════════
+async function deleteRecord(id, name, date) {
+  if (!confirm(`${name} 어르신의 ${date} 출석 기록을 삭제하시겠습니까?`)) return;
+
+  // 1) localStorage 삭제 (admin + kiosk 양쪽)
+  const adminRecs = JSON.parse(localStorage.getItem('gdcs_records') || '[]');
+  const kioskRecs = JSON.parse(localStorage.getItem('kiosk_records') || '[]');
+  const filteredAdmin = adminRecs.filter(r => String(r.id) !== String(id));
+  const filteredKiosk = kioskRecs.filter(r => String(r.id) !== String(id));
+  localStorage.setItem('gdcs_records', JSON.stringify(filteredAdmin));
+  localStorage.setItem('kiosk_records', JSON.stringify(filteredKiosk));
+
+  // 2) Google Sheets 삭제
+  const cfg = getConfig();
+  if (cfg.scriptUrl) {
+    try {
+      const params = new URLSearchParams({ action: 'deleteRecord', id: String(id) });
+      await fetch(cfg.scriptUrl + '?' + params.toString(), { method: 'GET', mode: 'no-cors' });
+    } catch(e) { console.warn('Sheets 삭제 실패:', e); }
+  }
+
+  toast(`${name} 어르신 출석 기록 삭제 완료`);
+
+  // 3) 현재 탭 새로고침
+  renderDashboard();
+  renderToday();
+  renderRecords();
+}
+
+// ══════════════════════════════════════════
+//  GOOGLE SHEETS SYNC
+// ══════════════════════════════════════════
+// JSONP 방식으로 Apps Script GET 호출 (CORS 완전 우회)
+function jsonpFetch(url) {
+  return new Promise((resolve, reject) => {
+    const cbName = '_jsonp_' + Date.now();
+    const script = document.createElement('script');
+    const timer = setTimeout(() => {
+      cleanup();
+      reject(new Error('JSONP timeout'));
+    }, 8000);
+    function cleanup() {
+      clearTimeout(timer);
+      delete window[cbName];
+      if (script.parentNode) script.parentNode.removeChild(script);
     }
+    window[cbName] = (data) => { cleanup(); resolve(data); };
+    script.src = url + '&callback=' + cbName;
+    script.onerror = () => { cleanup(); reject(new Error('JSONP error')); };
+    document.head.appendChild(script);
+  });
+}
 
-    // ══════════════════════════════════════════
-    //  SETTINGS
-    // ══════════════════════════════════════════
-    function renderSettings() {
-      const cfg = getConfig();
-      if (cfg.scriptUrl) document.getElementById('cfg-url').value = cfg.scriptUrl;
-      document.getElementById('cfg-mc').textContent = getMembers().length + '명';
-      document.getElementById('cfg-rc').textContent = getRecords().length + '건';
-    }
-
-    function saveSettings() {
-      const cfg = getConfig();
-      cfg.scriptUrl = document.getElementById('cfg-url').value.trim();
-      save(K.config, cfg);
-      // 키오스크도 같은 localStorage 쓰면 공유됨 (같은 도메인)
-      localStorage.setItem('scriptUrl', cfg.scriptUrl);
-      toast('설정 저장 완료');
-    }
-
-    async function testConn() {
-      const url = document.getElementById('cfg-url').value.trim();
-      if (!url) { toast('URL을 먼저 입력하세요', 'error'); return; }
-      toast('연결 테스트 중...');
-      try {
-        const res = await fetch(url + '?action=ping');
-        if (res.ok) toast('✓ 연결 성공!');
-        else toast('연결 실패: ' + res.status, 'error');
-      } catch { toast('연결 실패 (CORS 또는 네트워크)', 'error'); }
-    }
-
-    function changePin() {
-      const cur = document.getElementById('pin-cur').value;
-      const nw = document.getElementById('pin-new').value;
-      const stored = localStorage.getItem(K.pin) || DEFAULT_PIN;
-      if (cur !== stored) { toast('현재 PIN이 틀렸습니다', 'error'); return; }
-      if (!/^\d{4}$/.test(nw)) { toast('새 PIN은 숫자 4자리여야 합니다', 'error'); return; }
-      localStorage.setItem(K.pin, nw);
-      document.getElementById('pin-cur').value = '';
-      document.getElementById('pin-new').value = '';
-      toast('PIN 변경 완료');
-    }
-
-    // ══════════════════════════════════════════
-    //  DELETE RECORD
-    // ══════════════════════════════════════════
-    async function deleteRecord(id, name, date) {
-      if (!confirm(`${name} 어르신의 ${date} 출석 기록을 삭제하시겠습니까?`)) return;
-
-      // 1) localStorage 삭제 (admin + kiosk 양쪽)
-      const adminRecs = JSON.parse(localStorage.getItem('gdcs_records') || '[]');
-      const kioskRecs = JSON.parse(localStorage.getItem('kiosk_records') || '[]');
-      const filteredAdmin = adminRecs.filter(r => String(r.id) !== String(id));
-      const filteredKiosk = kioskRecs.filter(r => String(r.id) !== String(id));
-      localStorage.setItem('gdcs_records', JSON.stringify(filteredAdmin));
-      localStorage.setItem('kiosk_records', JSON.stringify(filteredKiosk));
-
-      // 2) Google Sheets 삭제
-      const cfg = getConfig();
-      if (cfg.scriptUrl) {
-        try {
-          const params = new URLSearchParams({ action: 'deleteRecord', id: String(id) });
-          await fetch(cfg.scriptUrl + '?' + params.toString(), { method: 'GET', mode: 'no-cors' });
-        } catch (e) { console.warn('Sheets 삭제 실패:', e); }
-      }
-
-      toast(`${name} 어르신 출석 기록 삭제 완료`);
-
-      // 3) 현재 탭 새로고침
-      renderDashboard();
-      renderToday();
-      renderRecords();
-    }
-
-    // ══════════════════════════════════════════
-    //  GOOGLE SHEETS SYNC
-    // ══════════════════════════════════════════
-    async function doSync() {
-      const cfg = getConfig();
-      if (!cfg.scriptUrl) { toast('Script URL을 먼저 설정하세요', 'error'); return; }
-      toast('동기화 중...');
-      try {
-        // ① Sheets에서 최신 출석 기록 가져오기 (키오스크 데이터 포함)
-        const res = await fetch(cfg.scriptUrl + '?action=getRecords');
-        const data = await res.json();
-        if (data.records && data.records.length > 0) {
-          // 로컬 기록과 Sheets 기록 병합 (id 기준 중복 제거)
-          const local = load(K.records) || [];
-          const merged = [...local];
-          data.records.forEach(sr => {
-            if (!merged.find(lr => String(lr.id) === String(sr.id))) {
-              merged.push({
-                ...sr,
-                registered: sr.registered === true || sr.registered === 'true' || sr.registered === '등록',
-              });
-            }
+async function doSync() {
+  const cfg = getConfig();
+  if (!cfg.scriptUrl) { toast('Script URL을 먼저 설정하세요', 'error'); return; }
+  toast('동기화 중...');
+  try {
+    // ① Sheets에서 최신 출석 기록 가져오기 (JSONP 방식 — CORS 우회)
+    const data = await jsonpFetch(cfg.scriptUrl + '?action=getRecords');
+    if (data && data.records && data.records.length > 0) {
+      const local = load(K.records) || [];
+      const merged = [...local];
+      data.records.forEach(sr => {
+        if (!merged.find(lr => String(lr.id) === String(sr.id))) {
+          merged.push({
+            ...sr,
+            registered: sr.registered === true || sr.registered === 'true' || sr.registered === '등록',
           });
-          // 날짜+시간 순 정렬
-          merged.sort((a, b) => (a.date + a.time) > (b.date + b.time) ? 1 : -1);
-          save(K.records, merged);
-          // kiosk_records도 갱신
-          localStorage.setItem('kiosk_records', JSON.stringify(merged));
         }
-
-        // ② 오프라인 큐 전송
-        const queue = load(K.kiosk_q) || [];
-        if (queue.length > 0) {
-          for (const r of queue) {
-            const params = new URLSearchParams({
-              action: 'addRecord', id: r.id, phone: r.phone,
-              name: r.name, date: r.date, time: r.time,
-              registered: r.registered ? 'true' : 'false',
-            });
-            await fetch(cfg.scriptUrl + '?' + params.toString(), { method: 'GET', mode: 'no-cors' });
-          }
-          localStorage.removeItem(K.kiosk_q);
-        }
-
-        document.getElementById('sync-time').textContent = new Date().toTimeString().slice(0, 5);
-        checkOfflineQueue();
-
-        // ③ 화면 갱신
-        renderDashboard();
-        renderToday();
-        renderRecords();
-
-        toast('✓ Google Sheets 동기화 완료');
-      } catch (e) { toast('동기화 실패: ' + e.message, 'error'); }
+      });
+      merged.sort((a, b) => (a.date + a.time) > (b.date + b.time) ? 1 : -1);
+      save(K.records, merged);
+      localStorage.setItem('kiosk_records', JSON.stringify(merged));
     }
 
-    async function syncMembersToSheets(members) {
-      const cfg = getConfig();
-      if (!cfg.scriptUrl) return;
-      try {
-        await fetch(cfg.scriptUrl, {
-          method: 'POST', mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'syncMembers', members }),
+    // ② 오프라인 큐 전송
+    const queue = load(K.kiosk_q) || [];
+    if (queue.length > 0) {
+      for (const r of queue) {
+        const params = new URLSearchParams({
+          action: 'addRecord', id: r.id, phone: r.phone,
+          name: r.name, date: r.date, time: r.time,
+          registered: r.registered ? 'true' : 'false',
         });
-      } catch { }
-    }
-
-    async function refreshFromSheets() {
-      const cfg = getConfig();
-      if (!cfg.scriptUrl) { toast('Script URL 설정 필요', 'error'); return; }
-      toast('서버에서 불러오는 중...');
-      try {
-        const date = document.getElementById('today-date-filter').value;
-        const res = await fetch(cfg.scriptUrl + `?action=getRecords&date=${date}`);
-        const data = await res.json();
-        if (data.records) {
-          // 서버 기록을 로컬에 병합
-          const local = load(K.records) || [];
-          data.records.forEach(sr => {
-            if (!local.find(lr => lr.id === sr.id)) local.push(sr);
-          });
-          save(K.records, local);
-          renderToday();
-          toast('✓ 새로고침 완료');
-        }
-      } catch { toast('불러오기 실패', 'error'); }
-    }
-
-    function checkOfflineQueue() {
-      const q = load(K.kiosk_q) || [];
-      const badge = document.getElementById('queue-badge');
-      if (q.length > 0) {
-        badge.textContent = `⚠ 오프라인 대기 기록 ${q.length}건이 있습니다. 동기화 버튼을 눌러 전송하세요.`;
-        badge.classList.add('show');
-      } else {
-        badge.classList.remove('show');
+        await fetch(cfg.scriptUrl + '?' + params.toString(), { method: 'GET', mode: 'no-cors' });
       }
-    }
-
-    // ══════════════════════════════════════════
-    //  EXPORT / BACKUP
-    // ══════════════════════════════════════════
-    function exportCSV() {
-      const from = document.getElementById('rec-from')?.value || '';
-      const to = document.getElementById('rec-to')?.value || '';
-      const recs = getRecords().filter(r => (!from || r.date >= from) && (!to || r.date <= to));
-      let csv = '\uFEFF날짜,시간,이름,전화번호,등록여부\n';
-      recs.forEach(r => {
-        csv += `${r.date},${r.time},${r.name},010-${r.phone.slice(0, 4)}-${r.phone.slice(4)},${r.registered ? '등록' : '미등록'}\n`;
-      });
-      downloadBlob(csv, `출석기록_${toDateStr(new Date())}.csv`, 'text/csv;charset=utf-8');
-      toast('CSV 내보내기 완료');
-    }
-
-    function exportMembers() {
-      let csv = '\uFEFF번호,이름,생년월일,성별,관할동,전화번호,보호유형\n';
-      getMembers().forEach(m => {
-        csv += `${m.id},${m.name},${m.birth},${m.gender},${m.dong || ''},010-${m.phone.slice(0, 4)}-${m.phone.slice(4)},${m.type}\n`;
-      });
-      downloadBlob(csv, `이용자명단_${toDateStr(new Date())}.csv`, 'text/csv;charset=utf-8');
-      toast('명단 내보내기 완료');
-    }
-
-    function backup() {
-      const data = { members: getMembers(), records: getRecords(), config: getConfig(), exportedAt: new Date().toISOString() };
-      downloadBlob(JSON.stringify(data, null, 2), `경로식당_백업_${toDateStr(new Date())}.json`, 'application/json');
-      toast('백업 파일 다운로드 완료');
-    }
-
-    function restore(e) {
-      const file = e.target.files[0]; if (!file) return;
-      const r = new FileReader();
-      r.onload = ev => {
-        try {
-          const d = JSON.parse(ev.target.result);
-          if (!confirm(`복원하시겠습니까?\n회원: ${d.members?.length}명, 기록: ${d.records?.length}건`)) return;
-          if (d.members) { save(K.members, d.members); localStorage.setItem('members_cache', JSON.stringify(d.members)); }
-          if (d.records) save(K.records, d.records);
-          if (d.config) save(K.config, d.config);
-          toast('복원 완료');
-          renderSettings();
-        } catch { toast('파일 형식 오류', 'error'); }
-      };
-      r.readAsText(file);
-    }
-
-    function resetRecords() {
-      if (!confirm('출석 기록을 모두 삭제하시겠습니까?')) return;
-      if (!confirm('정말로 삭제합니다. 되돌릴 수 없습니다.')) return;
-      localStorage.removeItem(K.records);
-      localStorage.removeItem(K.kiosk_r);
       localStorage.removeItem(K.kiosk_q);
-      toast('출석 기록 초기화 완료');
+    }
+
+    document.getElementById('sync-time').textContent = new Date().toTimeString().slice(0, 5);
+    checkOfflineQueue();
+
+    // ③ 화면 갱신
+    renderDashboard();
+    renderToday();
+    renderRecords();
+
+    toast('✓ Google Sheets 동기화 완료');
+  } catch(e) { toast('동기화 실패: ' + e.message, 'error'); }
+}
+
+async function syncMembersToSheets(members) {
+  const cfg = getConfig();
+  if (!cfg.scriptUrl) return;
+  try {
+    await fetch(cfg.scriptUrl, {
+      method: 'POST', mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'syncMembers', members }),
+    });
+  } catch {}
+}
+
+async function refreshFromSheets() {
+  const cfg = getConfig();
+  if (!cfg.scriptUrl) { toast('Script URL 설정 필요', 'error'); return; }
+  toast('서버에서 불러오는 중...');
+  try {
+    const date = document.getElementById('today-date-filter').value;
+    const res  = await fetch(cfg.scriptUrl + `?action=getRecords&date=${date}`);
+    const data = await res.json();
+    if (data.records) {
+      // 서버 기록을 로컬에 병합
+      const local = load(K.records) || [];
+      data.records.forEach(sr => {
+        if (!local.find(lr => lr.id === sr.id)) local.push(sr);
+      });
+      save(K.records, local);
+      renderToday();
+      toast('✓ 새로고침 완료');
+    }
+  } catch { toast('불러오기 실패', 'error'); }
+}
+
+function checkOfflineQueue() {
+  const q = load(K.kiosk_q) || [];
+  const badge = document.getElementById('queue-badge');
+  if (q.length > 0) {
+    badge.textContent = `⚠ 오프라인 대기 기록 ${q.length}건이 있습니다. 동기화 버튼을 눌러 전송하세요.`;
+    badge.classList.add('show');
+  } else {
+    badge.classList.remove('show');
+  }
+}
+
+// ══════════════════════════════════════════
+//  EXPORT / BACKUP
+// ══════════════════════════════════════════
+function exportCSV() {
+  const from = document.getElementById('rec-from')?.value || '';
+  const to   = document.getElementById('rec-to')?.value || '';
+  const recs = getRecords().filter(r => (!from || r.date >= from) && (!to || r.date <= to));
+  let csv = '\uFEFF날짜,시간,이름,전화번호,등록여부\n';
+  recs.forEach(r => {
+    csv += `${r.date},${r.time},${r.name},010-${r.phone.slice(0,4)}-${r.phone.slice(4)},${r.registered?'등록':'미등록'}\n`;
+  });
+  downloadBlob(csv, `출석기록_${toDateStr(new Date())}.csv`, 'text/csv;charset=utf-8');
+  toast('CSV 내보내기 완료');
+}
+
+function exportMembers() {
+  let csv = '\uFEFF번호,이름,생년월일,성별,관할동,전화번호,보호유형\n';
+  getMembers().forEach(m => {
+    csv += `${m.id},${m.name},${m.birth},${m.gender},${m.dong||''},010-${m.phone.slice(0,4)}-${m.phone.slice(4)},${m.type}\n`;
+  });
+  downloadBlob(csv, `이용자명단_${toDateStr(new Date())}.csv`, 'text/csv;charset=utf-8');
+  toast('명단 내보내기 완료');
+}
+
+function backup() {
+  const data = { members: getMembers(), records: getRecords(), config: getConfig(), exportedAt: new Date().toISOString() };
+  downloadBlob(JSON.stringify(data, null,2), `경로식당_백업_${toDateStr(new Date())}.json`, 'application/json');
+  toast('백업 파일 다운로드 완료');
+}
+
+function restore(e) {
+  const file = e.target.files[0]; if (!file) return;
+  const r = new FileReader();
+  r.onload = ev => {
+    try {
+      const d = JSON.parse(ev.target.result);
+      if (!confirm(`복원하시겠습니까?\n회원: ${d.members?.length}명, 기록: ${d.records?.length}건`)) return;
+      if (d.members) { save(K.members, d.members); localStorage.setItem('members_cache', JSON.stringify(d.members)); }
+      if (d.records) save(K.records, d.records);
+      if (d.config)  save(K.config, d.config);
+      toast('복원 완료');
       renderSettings();
-    }
+    } catch { toast('파일 형식 오류', 'error'); }
+  };
+  r.readAsText(file);
+}
 
-    function downloadBlob(content, filename, mime) {
-      const blob = new Blob([content], { type: mime });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = filename;
-      a.click();
-    }
+function resetRecords() {
+  if (!confirm('출석 기록을 모두 삭제하시겠습니까?')) return;
+  if (!confirm('정말로 삭제합니다. 되돌릴 수 없습니다.')) return;
+  localStorage.removeItem(K.records);
+  localStorage.removeItem(K.kiosk_r);
+  localStorage.removeItem(K.kiosk_q);
+  toast('출석 기록 초기화 완료');
+  renderSettings();
+}
 
-    // ══════════════════════════════════════════
-    //  TOAST
-    // ══════════════════════════════════════════
-    let _tt = null;
-    function toast(msg, type = '') {
-      const t = document.getElementById('toast');
-      t.textContent = msg;
-      t.className = 'toast ' + (type === 'error' ? 'error' : '') + ' show';
-      if (_tt) clearTimeout(_tt);
-      _tt = setTimeout(() => t.classList.remove('show'), 2800);
-    }
+function downloadBlob(content, filename, mime) {
+  const blob = new Blob([content], { type: mime });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.click();
+}
 
-    // ══════════════════════════════════════════
-    //  UTILS
-    // ══════════════════════════════════════════
-    function toDateStr(d) {
-      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-    }
-    function toYM(d) {
-      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
-    }
-    function formatDate(s) {
-      if (!s) return '';
-      const [y, m, d] = s.split('-');
-      return `${y}년 ${parseInt(m)}월 ${parseInt(d)}일`;
-    }
+// ══════════════════════════════════════════
+//  TOAST
+// ══════════════════════════════════════════
+let _tt = null;
+function toast(msg, type='') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast ' + (type==='error'?'error':'') + ' show';
+  if (_tt) clearTimeout(_tt);
+  _tt = setTimeout(() => t.classList.remove('show'), 2800);
+}
 
-    // ══════════════════════════════════════════
-    //  INITIAL DATA (기존 명단 그대로)
-    // ══════════════════════════════════════════
-    const INITIAL_MEMBERS = [
-      { id: 1, name: "강봉심", birth: "370307", gender: "여", dong: "천호3동", addr: "강동구 천호대로 1055, 101동 513호", phone: "64497367", type: "수급자" },
-      { id: 2, name: "강화순", birth: "240822", gender: "여", dong: "천호3동", addr: "강동구 구천면로30길 5-10, 2층", phone: "62664333", type: "수급자" },
-      { id: 3, name: "김귀숙", birth: "531015", gender: "여", dong: "천호3동", addr: "강동구 천호대로 1055, 101동 515호", phone: "65224658", type: "기초연금" },
-      { id: 4, name: "김규호", birth: "570228", gender: "남", dong: "천호3동", addr: "강동구 구천면로30길 9, B02호", phone: "75067401", type: "수급자" },
-      { id: 5, name: "김금례", birth: "420506", gender: "여", dong: "길동", addr: "강동구 양재대로116길 38, 103호", phone: "74086020", type: "수급자" },
-      { id: 6, name: "김금주", birth: "350124", gender: "여", dong: "천호3동", addr: "강동구 성안로25길 14, 104동 503호", phone: "90330778", type: "수급자" },
-      { id: 7, name: "김기연", birth: "461026", gender: "여", dong: "암사1동", addr: "강동구 상암로 65-14 B1호", phone: "29874861", type: "수급자" },
-      { id: 8, name: "김덕순", birth: "360323", gender: "여", dong: "천호3동", addr: "강동구 진황도로23길 7, 710호", phone: "51466798", type: "수급자" },
-      { id: 9, name: "김명석", birth: "600510", gender: "남", dong: "둔촌2동", addr: "강동구 동남로49길 38, 가동 2층 301호", phone: "52168912", type: "수급자" },
-      { id: 10, name: "김복식", birth: "551220", gender: "남", dong: "성내2동", addr: "강동구 성안로 125-2, B01호", phone: "75593351", type: "수급자" },
-      { id: 11, name: "김성오", birth: "540225", gender: "남", dong: "암사1동", addr: "강동구 고덕로20길 23-3", phone: "95264450", type: "수급자" },
-      { id: 12, name: "김수남", birth: "400912", gender: "남", dong: "천호3동", addr: "강동구 진황도로25길 13, 202호", phone: "32277989", type: "수급자" },
-      { id: 13, name: "김승옥", birth: "611102", gender: "남", dong: "천호3동", addr: "강동구 성안로31다길 2, B101호", phone: "89489318", type: "수급자" },
-      { id: 14, name: "김영균", birth: "631013", gender: "남", dong: "둔촌2동", addr: "강동구 풍성로 65길 67, 203호", phone: "53098824", type: "수급자" },
-      { id: 15, name: "김영수", birth: "480421", gender: "남", dong: "천호3동", addr: "강동구 진황도로27다길 8, 301호", phone: "62248949", type: "기초연금" },
-      { id: 16, name: "김영중", birth: "550313", gender: "남", dong: "천호3동", addr: "강동구 성안로31가길 6-3, B02호", phone: "33565885", type: "수급자" },
-      { id: 17, name: "김인근", birth: "390710", gender: "여", dong: "천호3동", addr: "강동구 천중로32길 36-1, 101호", phone: "43185852", type: "수급자" },
-      { id: 18, name: "김일규", birth: "510929", gender: "남", dong: "천호3동", addr: "강동구 진황도로31길 62-1", phone: "56326064", type: "수급자" },
-      { id: 19, name: "김창현", birth: "520923", gender: "남", dong: "암사2동", addr: "강동구 상암로 8-6, 303호", phone: "84282895", type: "수급자" },
-      { id: 20, name: "김환중", birth: "591023", gender: "남", dong: "천호3동", addr: "강동구 진황도로31길 72, 203호", phone: "39733767", type: "수급자" },
-      { id: 21, name: "남승환", birth: "590228", gender: "남", dong: "천호2동", addr: "강동구 상암로14길 52, 402호", phone: "67382253", type: "수급자" },
-      { id: 22, name: "남정자", birth: "440423", gender: "여", dong: "천호3동", addr: "강동구 성안로25길 14, 104동 1504호", phone: "73746113", type: "수급자" },
-      { id: 23, name: "명상엽", birth: "510110", gender: "남", dong: "천호3동", addr: "강동구 성안로 199-2, 101호", phone: "33138313", type: "수급자" },
-      { id: 24, name: "박금옥", birth: "580421", gender: "여", dong: "명일1동", addr: "강동구 상암로47길 54-5, 101호", phone: "40306303", type: "수급자" },
-      { id: 25, name: "박길순", birth: "470625", gender: "여", dong: "천호1동", addr: "강동구 구천면로64길 9-27", phone: "34774529", type: "기초연금" },
-      { id: 26, name: "박바울", birth: "471016", gender: "남", dong: "둔촌2동", addr: "강동구 풍성로65길 52-5, 1층 201호", phone: "99111947", type: "수급자" },
-      { id: 27, name: "박인순", birth: "401016", gender: "여", dong: "둔촌2동", addr: "강동구 명일로10길 23-12, B01호", phone: "34563419", type: "수급자" },
-      { id: 28, name: "변명성", birth: "420425", gender: "여", dong: "천호3동", addr: "강동구 구천면로 28길 15-27, 102호", phone: "71918876", type: "수급자" },
-      { id: 29, name: "서순임", birth: "581230", gender: "여", dong: "성내2동", addr: "강동구 천호대로 164길11, 101호", phone: "89744279", type: "기초연금" },
-      { id: 30, name: "서정숙", birth: "471025", gender: "여", dong: "천호3동", addr: "강동구 구천면로30길 17-11, 1층", phone: "53062862", type: "기초연금" },
-      { id: 31, name: "송수현", birth: "520908", gender: "여", dong: "천호3동", addr: "강동구 진황도로23길 7, 807호", phone: "91645910", type: "수급자" },
-      { id: 32, name: "안만호", birth: "530905", gender: "남", dong: "천호2동", addr: "강동구 천중로2길 14-7", phone: "65505309", type: "수급자" },
-      { id: 33, name: "양영분", birth: "420420", gender: "여", dong: "천호1동", addr: "강동구 구천면로50길 15-5, 203호", phone: "55440422", type: "수급자" },
-      { id: 34, name: "양재순", birth: "540818", gender: "여", dong: "천호3동", addr: "강동구 성안로31길 43, 301호", phone: "75767678", type: "수급자" },
-      { id: 35, name: "엄성용", birth: "600701", gender: "남", dong: "천호3동", addr: "강동구 성안로31다길 18-1, b03호", phone: "95080042", type: "수급자" },
-      { id: 36, name: "원기종", birth: "630206", gender: "남", dong: "둔촌2동", addr: "강동구 천호대로182길 57 2층 1호", phone: "71544431", type: "수급자" },
-      { id: 37, name: "유경자", birth: "500917", gender: "여", dong: "성내2동", addr: "강동구 천호대로 168나길 26, 301호", phone: "86684202", type: "수급자" },
-      { id: 38, name: "유경하", birth: "550307", gender: "남", dong: "천호3동", addr: "강동구 구천면로30길 20-1, 1층 1호", phone: "58512258", type: "기초연금" },
-      { id: 39, name: "이명례", birth: "460608", gender: "여", dong: "성내2동", addr: "강동구 성안로13길 20-17, B동 302호", phone: "57366018", type: "수급자" },
-      { id: 40, name: "이석문", birth: "610225", gender: "남", dong: "고덕1동", addr: "강동구 아리수로64길 16-8, 103호", phone: "92657610", type: "수급자" },
-      { id: 41, name: "이성봉", birth: "470305", gender: "남", dong: "천호3동", addr: "강동구 천호대로 1055, 101동 112호", phone: "27810185", type: "수급자" },
-      { id: 42, name: "이승우", birth: "520326", gender: "남", dong: "천호3동", addr: "강동구 진황도로23길 7, 810호", phone: "59694677", type: "기초연금" },
-      { id: 43, name: "이영택", birth: "470217", gender: "남", dong: "성내2동", addr: "강동구 천호대로168길 30-6, 101호", phone: "62259192", type: "수급자" },
-      { id: 44, name: "이중근", birth: "540916", gender: "남", dong: "천호3동", addr: "강동구 진황도로23길 7, 1209호", phone: "38931560", type: "수급자" },
-      { id: 45, name: "이진우", birth: "490404", gender: "남", dong: "고덕2동", addr: "강동구 아리수로 385, 205동 104호", phone: "55804387", type: "수급자" },
-      { id: 46, name: "이춘자", birth: "551229", gender: "여", dong: "천호2동", addr: "강동구 구천면로 189, 805호", phone: "44704758", type: "기초연금" },
-      { id: 47, name: "임인혁", birth: "421008", gender: "남", dong: "천호3동", addr: "강동구 성안로 155, 1101호", phone: "40136519", type: "수급자" },
-      { id: 48, name: "임정학", birth: "440512", gender: "남", dong: "천호2동", addr: "강동구 올림픽로78길 60, 104동 2101호", phone: "26061518", type: "수급자" },
-      { id: 49, name: "임종두", birth: "520717", gender: "남", dong: "천호3동", addr: "강동구 구천면로28길 15-22, 지층", phone: "94989824", type: "수급자" },
-      { id: 50, name: "장용규", birth: "500503", gender: "남", dong: "천호2동", addr: "강동구 구천면로 189, 806호", phone: "71607893", type: "수급자" },
-      { id: 51, name: "전기순", birth: "340714", gender: "여", dong: "천호3동", addr: "강동구 천호대로 1055, 101동 1011호", phone: "52665776", type: "기초연금" },
-      { id: 52, name: "조금자", birth: "420506", gender: "여", dong: "천호3동", addr: "강동구 천호대로 1055, 101동 1708호", phone: "33404060", type: "수급자" },
-      { id: 53, name: "조순남", birth: "450112", gender: "여", dong: "천호1동", addr: "강동구 구천면로64길 9-27", phone: "27323817", type: "수급자" },
-      { id: 54, name: "조은자", birth: "461102", gender: "여", dong: "천호3동", addr: "강동구 성안로27길 58-10, 지층 2호", phone: "52278532", type: "수급자" },
-      { id: 55, name: "진병호", birth: "551120", gender: "남", dong: "천호3동", addr: "강동구 진황도로23길 7, 808호", phone: "96658675", type: "수급자" },
-      { id: 56, name: "채희균", birth: "571027", gender: "남", dong: "길동", addr: "강동구 천중로44길 58, 가동 402호", phone: "31124237", type: "수급자" },
-      { id: 57, name: "최경자", birth: "610802", gender: "여", dong: "천호3동", addr: "강동구 진황도로323길 7, 1307호", phone: "51325206", type: "수급자" },
-      { id: 58, name: "최광덕", birth: "571014", gender: "남", dong: "천호3동", addr: "강동구 천중로33길 8, 1층 201호", phone: "40879980", type: "수급자" },
-      { id: 59, name: "최삼영", birth: "470710", gender: "남", dong: "성내2동", addr: "강동구 풍성로37길 21, B02호", phone: "99444761", type: "수급자" },
-      { id: 60, name: "최영자", birth: "420610", gender: "여", dong: "천호3동", addr: "강동구 성안로31라길 22", phone: "89717592", type: "수급자" },
-      { id: 61, name: "하운섭", birth: "520725", gender: "남", dong: "천호3동", addr: "강동구 진황도로27라길 33, 1층 201호", phone: "89884495", type: "수급자" },
-      { id: 62, name: "한순동", birth: "391202", gender: "여", dong: "천호3동", addr: "강동구 성안로25길 15, 104동 601호", phone: "47226302", type: "수급자" },
-      { id: 63, name: "한영애", birth: "430212", gender: "여", dong: "천호3동", addr: "강동구 천호대로 1055, 101동 314호", phone: "63209956", type: "급여탈락" },
-      { id: 64, name: "홍순용", birth: "610620", gender: "남", dong: "둔촌2동", addr: "강동구 풍성로65길52-28길", phone: "64366687", type: "노맞돌" },
-      { id: 65, name: "황남규", birth: "350709", gender: "남", dong: "천호3동", addr: "강동구 천중로33길 26, 102호", phone: "30610017", type: "수급자" },
-      { id: 66, name: "황란", birth: "471224", gender: "여", dong: "명일1동", addr: "강동구 양재대로1130길 23, 601호", phone: "32131942", type: "수급자" },
-      { id: 67, name: "황용구", birth: "560605", gender: "남", dong: "성내2동", addr: "강동구 천호대로219나길 18, 202호", phone: "22299503", type: "수급자" },
-      { id: 68, name: "윤옥신", birth: "400718", gender: "여", dong: "천호2동", addr: "강동구 천중로12길 23-11, 201호", phone: "99456041", type: "기초생활수급자" },
-      { id: 69, name: "최상국", birth: "560828", gender: "남", dong: "천호2동", addr: "강동구 올림픽로70길 61, 1304호", phone: "74331058", type: "기초생활수급자" },
-    ];
+// ══════════════════════════════════════════
+//  UTILS
+// ══════════════════════════════════════════
+function toDateStr(d) {
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+function toYM(d) {
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+}
+function formatDate(s) {
+  if (!s) return '';
+  const [y,m,d] = s.split('-');
+  return `${y}년 ${parseInt(m)}월 ${parseInt(d)}일`;
+}
 
-    // ── 첫 실행 시 명단 초기화
-    if (!localStorage.getItem(K.members)) {
-      save(K.members, INITIAL_MEMBERS);
-      localStorage.setItem('members_cache', JSON.stringify(INITIAL_MEMBERS));
-    }
+// ══════════════════════════════════════════
+//  INITIAL DATA (기존 명단 그대로)
+// ══════════════════════════════════════════
+const INITIAL_MEMBERS = [
+  {id:1,name:"강봉심",birth:"370307",gender:"여",dong:"천호3동",addr:"강동구 천호대로 1055, 101동 513호",phone:"64497367",type:"수급자"},
+  {id:2,name:"강화순",birth:"240822",gender:"여",dong:"천호3동",addr:"강동구 구천면로30길 5-10, 2층",phone:"62664333",type:"수급자"},
+  {id:3,name:"김귀숙",birth:"531015",gender:"여",dong:"천호3동",addr:"강동구 천호대로 1055, 101동 515호",phone:"65224658",type:"기초연금"},
+  {id:4,name:"김규호",birth:"570228",gender:"남",dong:"천호3동",addr:"강동구 구천면로30길 9, B02호",phone:"75067401",type:"수급자"},
+  {id:5,name:"김금례",birth:"420506",gender:"여",dong:"길동",addr:"강동구 양재대로116길 38, 103호",phone:"74086020",type:"수급자"},
+  {id:6,name:"김금주",birth:"350124",gender:"여",dong:"천호3동",addr:"강동구 성안로25길 14, 104동 503호",phone:"90330778",type:"수급자"},
+  {id:7,name:"김기연",birth:"461026",gender:"여",dong:"암사1동",addr:"강동구 상암로 65-14 B1호",phone:"29874861",type:"수급자"},
+  {id:8,name:"김덕순",birth:"360323",gender:"여",dong:"천호3동",addr:"강동구 진황도로23길 7, 710호",phone:"51466798",type:"수급자"},
+  {id:9,name:"김명석",birth:"600510",gender:"남",dong:"둔촌2동",addr:"강동구 동남로49길 38, 가동 2층 301호",phone:"52168912",type:"수급자"},
+  {id:10,name:"김복식",birth:"551220",gender:"남",dong:"성내2동",addr:"강동구 성안로 125-2, B01호",phone:"75593351",type:"수급자"},
+  {id:11,name:"김성오",birth:"540225",gender:"남",dong:"암사1동",addr:"강동구 고덕로20길 23-3",phone:"95264450",type:"수급자"},
+  {id:12,name:"김수남",birth:"400912",gender:"남",dong:"천호3동",addr:"강동구 진황도로25길 13, 202호",phone:"32277989",type:"수급자"},
+  {id:13,name:"김승옥",birth:"611102",gender:"남",dong:"천호3동",addr:"강동구 성안로31다길 2, B101호",phone:"89489318",type:"수급자"},
+  {id:14,name:"김영균",birth:"631013",gender:"남",dong:"둔촌2동",addr:"강동구 풍성로 65길 67, 203호",phone:"53098824",type:"수급자"},
+  {id:15,name:"김영수",birth:"480421",gender:"남",dong:"천호3동",addr:"강동구 진황도로27다길 8, 301호",phone:"62248949",type:"기초연금"},
+  {id:16,name:"김영중",birth:"550313",gender:"남",dong:"천호3동",addr:"강동구 성안로31가길 6-3, B02호",phone:"33565885",type:"수급자"},
+  {id:17,name:"김인근",birth:"390710",gender:"여",dong:"천호3동",addr:"강동구 천중로32길 36-1, 101호",phone:"43185852",type:"수급자"},
+  {id:18,name:"김일규",birth:"510929",gender:"남",dong:"천호3동",addr:"강동구 진황도로31길 62-1",phone:"56326064",type:"수급자"},
+  {id:19,name:"김창현",birth:"520923",gender:"남",dong:"암사2동",addr:"강동구 상암로 8-6, 303호",phone:"84282895",type:"수급자"},
+  {id:20,name:"김환중",birth:"591023",gender:"남",dong:"천호3동",addr:"강동구 진황도로31길 72, 203호",phone:"39733767",type:"수급자"},
+  {id:21,name:"남승환",birth:"590228",gender:"남",dong:"천호2동",addr:"강동구 상암로14길 52, 402호",phone:"67382253",type:"수급자"},
+  {id:22,name:"남정자",birth:"440423",gender:"여",dong:"천호3동",addr:"강동구 성안로25길 14, 104동 1504호",phone:"73746113",type:"수급자"},
+  {id:23,name:"명상엽",birth:"510110",gender:"남",dong:"천호3동",addr:"강동구 성안로 199-2, 101호",phone:"33138313",type:"수급자"},
+  {id:24,name:"박금옥",birth:"580421",gender:"여",dong:"명일1동",addr:"강동구 상암로47길 54-5, 101호",phone:"40306303",type:"수급자"},
+  {id:25,name:"박길순",birth:"470625",gender:"여",dong:"천호1동",addr:"강동구 구천면로64길 9-27",phone:"34774529",type:"기초연금"},
+  {id:26,name:"박바울",birth:"471016",gender:"남",dong:"둔촌2동",addr:"강동구 풍성로65길 52-5, 1층 201호",phone:"99111947",type:"수급자"},
+  {id:27,name:"박인순",birth:"401016",gender:"여",dong:"둔촌2동",addr:"강동구 명일로10길 23-12, B01호",phone:"34563419",type:"수급자"},
+  {id:28,name:"변명성",birth:"420425",gender:"여",dong:"천호3동",addr:"강동구 구천면로 28길 15-27, 102호",phone:"71918876",type:"수급자"},
+  {id:29,name:"서순임",birth:"581230",gender:"여",dong:"성내2동",addr:"강동구 천호대로 164길11, 101호",phone:"89744279",type:"기초연금"},
+  {id:30,name:"서정숙",birth:"471025",gender:"여",dong:"천호3동",addr:"강동구 구천면로30길 17-11, 1층",phone:"53062862",type:"기초연금"},
+  {id:31,name:"송수현",birth:"520908",gender:"여",dong:"천호3동",addr:"강동구 진황도로23길 7, 807호",phone:"91645910",type:"수급자"},
+  {id:32,name:"안만호",birth:"530905",gender:"남",dong:"천호2동",addr:"강동구 천중로2길 14-7",phone:"65505309",type:"수급자"},
+  {id:33,name:"양영분",birth:"420420",gender:"여",dong:"천호1동",addr:"강동구 구천면로50길 15-5, 203호",phone:"55440422",type:"수급자"},
+  {id:34,name:"양재순",birth:"540818",gender:"여",dong:"천호3동",addr:"강동구 성안로31길 43, 301호",phone:"75767678",type:"수급자"},
+  {id:35,name:"엄성용",birth:"600701",gender:"남",dong:"천호3동",addr:"강동구 성안로31다길 18-1, b03호",phone:"95080042",type:"수급자"},
+  {id:36,name:"원기종",birth:"630206",gender:"남",dong:"둔촌2동",addr:"강동구 천호대로182길 57 2층 1호",phone:"71544431",type:"수급자"},
+  {id:37,name:"유경자",birth:"500917",gender:"여",dong:"성내2동",addr:"강동구 천호대로 168나길 26, 301호",phone:"86684202",type:"수급자"},
+  {id:38,name:"유경하",birth:"550307",gender:"남",dong:"천호3동",addr:"강동구 구천면로30길 20-1, 1층 1호",phone:"58512258",type:"기초연금"},
+  {id:39,name:"이명례",birth:"460608",gender:"여",dong:"성내2동",addr:"강동구 성안로13길 20-17, B동 302호",phone:"57366018",type:"수급자"},
+  {id:40,name:"이석문",birth:"610225",gender:"남",dong:"고덕1동",addr:"강동구 아리수로64길 16-8, 103호",phone:"92657610",type:"수급자"},
+  {id:41,name:"이성봉",birth:"470305",gender:"남",dong:"천호3동",addr:"강동구 천호대로 1055, 101동 112호",phone:"27810185",type:"수급자"},
+  {id:42,name:"이승우",birth:"520326",gender:"남",dong:"천호3동",addr:"강동구 진황도로23길 7, 810호",phone:"59694677",type:"기초연금"},
+  {id:43,name:"이영택",birth:"470217",gender:"남",dong:"성내2동",addr:"강동구 천호대로168길 30-6, 101호",phone:"62259192",type:"수급자"},
+  {id:44,name:"이중근",birth:"540916",gender:"남",dong:"천호3동",addr:"강동구 진황도로23길 7, 1209호",phone:"38931560",type:"수급자"},
+  {id:45,name:"이진우",birth:"490404",gender:"남",dong:"고덕2동",addr:"강동구 아리수로 385, 205동 104호",phone:"55804387",type:"수급자"},
+  {id:46,name:"이춘자",birth:"551229",gender:"여",dong:"천호2동",addr:"강동구 구천면로 189, 805호",phone:"44704758",type:"기초연금"},
+  {id:47,name:"임인혁",birth:"421008",gender:"남",dong:"천호3동",addr:"강동구 성안로 155, 1101호",phone:"40136519",type:"수급자"},
+  {id:48,name:"임정학",birth:"440512",gender:"남",dong:"천호2동",addr:"강동구 올림픽로78길 60, 104동 2101호",phone:"26061518",type:"수급자"},
+  {id:49,name:"임종두",birth:"520717",gender:"남",dong:"천호3동",addr:"강동구 구천면로28길 15-22, 지층",phone:"94989824",type:"수급자"},
+  {id:50,name:"장용규",birth:"500503",gender:"남",dong:"천호2동",addr:"강동구 구천면로 189, 806호",phone:"71607893",type:"수급자"},
+  {id:51,name:"전기순",birth:"340714",gender:"여",dong:"천호3동",addr:"강동구 천호대로 1055, 101동 1011호",phone:"52665776",type:"기초연금"},
+  {id:52,name:"조금자",birth:"420506",gender:"여",dong:"천호3동",addr:"강동구 천호대로 1055, 101동 1708호",phone:"33404060",type:"수급자"},
+  {id:53,name:"조순남",birth:"450112",gender:"여",dong:"천호1동",addr:"강동구 구천면로64길 9-27",phone:"27323817",type:"수급자"},
+  {id:54,name:"조은자",birth:"461102",gender:"여",dong:"천호3동",addr:"강동구 성안로27길 58-10, 지층 2호",phone:"52278532",type:"수급자"},
+  {id:55,name:"진병호",birth:"551120",gender:"남",dong:"천호3동",addr:"강동구 진황도로23길 7, 808호",phone:"96658675",type:"수급자"},
+  {id:56,name:"채희균",birth:"571027",gender:"남",dong:"길동",addr:"강동구 천중로44길 58, 가동 402호",phone:"31124237",type:"수급자"},
+  {id:57,name:"최경자",birth:"610802",gender:"여",dong:"천호3동",addr:"강동구 진황도로323길 7, 1307호",phone:"51325206",type:"수급자"},
+  {id:58,name:"최광덕",birth:"571014",gender:"남",dong:"천호3동",addr:"강동구 천중로33길 8, 1층 201호",phone:"40879980",type:"수급자"},
+  {id:59,name:"최삼영",birth:"470710",gender:"남",dong:"성내2동",addr:"강동구 풍성로37길 21, B02호",phone:"99444761",type:"수급자"},
+  {id:60,name:"최영자",birth:"420610",gender:"여",dong:"천호3동",addr:"강동구 성안로31라길 22",phone:"89717592",type:"수급자"},
+  {id:61,name:"하운섭",birth:"520725",gender:"남",dong:"천호3동",addr:"강동구 진황도로27라길 33, 1층 201호",phone:"89884495",type:"수급자"},
+  {id:62,name:"한순동",birth:"391202",gender:"여",dong:"천호3동",addr:"강동구 성안로25길 15, 104동 601호",phone:"47226302",type:"수급자"},
+  {id:63,name:"한영애",birth:"430212",gender:"여",dong:"천호3동",addr:"강동구 천호대로 1055, 101동 314호",phone:"63209956",type:"급여탈락"},
+  {id:64,name:"홍순용",birth:"610620",gender:"남",dong:"둔촌2동",addr:"강동구 풍성로65길52-28길",phone:"64366687",type:"노맞돌"},
+  {id:65,name:"황남규",birth:"350709",gender:"남",dong:"천호3동",addr:"강동구 천중로33길 26, 102호",phone:"30610017",type:"수급자"},
+  {id:66,name:"황란",birth:"471224",gender:"여",dong:"명일1동",addr:"강동구 양재대로1130길 23, 601호",phone:"32131942",type:"수급자"},
+  {id:67,name:"황용구",birth:"560605",gender:"남",dong:"성내2동",addr:"강동구 천호대로219나길 18, 202호",phone:"22299503",type:"수급자"},
+  {id:68,name:"윤옥신",birth:"400718",gender:"여",dong:"천호2동",addr:"강동구 천중로12길 23-11, 201호",phone:"99456041",type:"기초생활수급자"},
+  {id:69,name:"최상국",birth:"560828",gender:"남",dong:"천호2동",addr:"강동구 올림픽로70길 61, 1304호",phone:"74331058",type:"기초생활수급자"},
+];
 
-    // ── Script URL 하드코딩
-    const HARDCODED_URL = 'https://script.google.com/macros/s/AKfycbzycyMkszAeqYCH4-UVJYXUvnEFh4dZSrJGWEmm76UYNRJjanJk1V-j2MRNFm4vamhT/exec';
-    if (!localStorage.getItem('scriptUrl')) {
-      localStorage.setItem('scriptUrl', HARDCODED_URL);
-    }
-    const _cfg = loadConfig();
-    if (!_cfg.scriptUrl) { _cfg.scriptUrl = HARDCODED_URL; save(K.config, _cfg); }
+// ── 첫 실행 시 명단 초기화
+if (!localStorage.getItem(K.members)) {
+  save(K.members, INITIAL_MEMBERS);
+  localStorage.setItem('members_cache', JSON.stringify(INITIAL_MEMBERS));
+}
 
-    // ── SW 등록
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('./sw.js').catch(() => { });
-    }
-  </script>
+// ── Script URL 하드코딩
+const HARDCODED_URL = 'https://script.google.com/macros/s/AKfycbw4wHR4VpAomKGMizlV2dTZS7X5p8mqIb0DmEViuP147Y51ezbh10eKkYOcyoEO02UL/exec';
+if (!localStorage.getItem('scriptUrl')) {
+  localStorage.setItem('scriptUrl', HARDCODED_URL);
+}
+const _cfg = getConfig();
+if (!_cfg.scriptUrl) { _cfg.scriptUrl = HARDCODED_URL; save(K.config, _cfg); }
+
+// ── SW 등록
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./sw.js').catch(()=>{});
+}
+</script>
 </body>
-
 </html>

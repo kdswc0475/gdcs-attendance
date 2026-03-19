@@ -14,6 +14,9 @@
 
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
+    html {
+      height: -webkit-fill-available;
+    }
     html, body {
       width: 100%; height: 100%;
       font-family: 'Noto Sans KR', sans-serif;
@@ -28,10 +31,14 @@
       display: flex;
       flex-direction: column;
       width: 100%;
+      /* Safari iOS 주소창 포함한 실제 높이 대응 */
       height: 100vh;
+      height: -webkit-fill-available;
       height: 100dvh;
-      padding: 10px 14px 16px;
-      gap: 8px;
+      max-height: -webkit-fill-available;
+      padding: 10px 14px 12px;
+      gap: 6px;
+      overflow: hidden;
     }
 
     /* ── 헤더 ── */
@@ -101,7 +108,7 @@
       border: 2px solid rgba(255,255,255,0.35);
       border-radius: 14px;
       font-family: inherit;
-      font-size: clamp(28px, 6vh, 52px);
+      font-size: clamp(30px, 7vh, 56px);
       font-weight: 900;
       color: #fff;
       cursor: pointer;
@@ -130,12 +137,14 @@
     /* ── 출석 체크 버튼 ── */
     .submit-btn {
       flex: 0 0 auto;
+      flex-shrink: 0;
       width: 100%;
-      height: clamp(60px, 9vh, 80px);
+      min-height: 58px;
+      height: clamp(58px, 8vh, 76px);
       background: #fff200;
       color: #000;
       font-family: inherit;
-      font-size: clamp(20px, 4vh, 30px);
+      font-size: clamp(20px, 3.5vh, 28px);
       font-weight: 900;
       letter-spacing: 6px;
       border: none;
@@ -149,6 +158,7 @@
     /* ── 하단 상태 바 ── */
     .status-bar {
       flex: 0 0 auto;
+      flex-shrink: 0;
       display: flex;
       justify-content: space-between;
       font-size: 11px;

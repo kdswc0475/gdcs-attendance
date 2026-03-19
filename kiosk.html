@@ -14,9 +14,8 @@
 
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
-    html {
-      height: -webkit-fill-available;
-    }
+    html { height: -webkit-fill-available; }
+
     html, body {
       width: 100%; height: 100%;
       font-family: 'Noto Sans KR', sans-serif;
@@ -31,13 +30,12 @@
       display: flex;
       flex-direction: column;
       width: 100%;
-      /* Safari iOS 주소창 포함한 실제 높이 대응 */
       height: 100vh;
       height: -webkit-fill-available;
       height: 100dvh;
       max-height: -webkit-fill-available;
-      padding: 10px 14px 12px;
-      gap: 6px;
+      padding: 10px 12px 8px;
+      gap: 7px;
       overflow: hidden;
     }
 
@@ -45,54 +43,70 @@
     .hd {
       flex: 0 0 auto;
       background: #fff200;
-      border-radius: 10px;
-      padding: 8px 14px;
+      border-radius: 14px;
+      padding: 10px 18px;
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
-    .hd-title { font-size: 15px; font-weight: 900; color: #1a1a1a; line-height: 1.3; }
-    .hd-time  { font-size: 20px; font-weight: 900; color: #1a1a1a; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .hd-title {
+      font-size: 17px;
+      font-weight: 900;
+      color: #1a1a1a;
+      line-height: 1.4;
+    }
+    .hd-title span {
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .hd-time {
+      font-size: 30px;
+      font-weight: 900;
+      color: #1a1a1a;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
 
     /* ── 안내문 ── */
     .guide {
       flex: 0 0 auto;
       text-align: center;
-      font-size: 16px;
+      font-size: 19px;
       font-weight: 700;
       color: #fff;
       letter-spacing: 1px;
+      padding: 2px 0;
     }
 
     /* ── 입력 디스플레이 ── */
     .display {
       flex: 0 0 auto;
-      background: rgba(255,255,255,0.9);
-      border-radius: 12px;
-      padding: 0 16px;
-      height: 64px;
+      background: rgba(255,255,255,0.95);
+      border-radius: 16px;
+      padding: 0 20px;
+      height: 76px;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
+      gap: 10px;
     }
     .display-number {
-      font-size: 38px;
+      font-size: clamp(36px, 7vw, 52px);
       font-weight: 900;
-      letter-spacing: 8px;
+      letter-spacing: 10px;
       color: #1565c0;
       font-variant-numeric: tabular-nums;
     }
     .display-name {
-      font-size: 15px;
+      font-size: 20px;
       font-weight: 700;
       color: #1a1a1a;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    .display-name.found    { color: #1b7c3a; }
-    .display-name.notfound { color: #c62828; }
+    .display-name.found    { color: #1b7c3a; font-size: 22px; }
+    .display-name.notfound { color: #c62828; font-size: 22px; }
 
     /* ── 키패드 ── */
     .keypad {
@@ -100,15 +114,15 @@
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       grid-template-rows: repeat(4, 1fr);
-      gap: 8px;
+      gap: 7px;
       min-height: 0;
     }
     .key {
       background: #1976d2;
-      border: 2px solid rgba(255,255,255,0.35);
+      border: 3px solid rgba(255,255,255,0.4);
       border-radius: 14px;
       font-family: inherit;
-      font-size: clamp(30px, 7vh, 56px);
+      font-size: clamp(38px, 7.5vh, 60px);
       font-weight: 900;
       color: #fff;
       cursor: pointer;
@@ -117,21 +131,23 @@
       justify-content: center;
       transition: background 0.08s, transform 0.08s;
       -webkit-user-select: none;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.25);
     }
     .key:active {
       background: #fff200;
       color: #000;
       transform: scale(0.93);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
     .key.key-clear {
-      font-size: clamp(18px, 3.5vh, 28px);
+      font-size: clamp(22px, 4vh, 32px);
       font-weight: 900;
       color: #ffcdd2;
       border-color: rgba(255,205,210,0.5);
     }
     .key.key-del {
-      font-size: clamp(22px, 4.5vh, 36px);
-      color: rgba(255,255,255,0.7);
+      font-size: clamp(30px, 6vh, 50px);
+      color: rgba(255,255,255,0.85);
     }
 
     /* ── 출석 체크 버튼 ── */
@@ -139,21 +155,22 @@
       flex: 0 0 auto;
       flex-shrink: 0;
       width: 100%;
-      min-height: 58px;
-      height: clamp(58px, 8vh, 76px);
+      min-height: 72px;
+      height: clamp(72px, 10vh, 92px);
       background: #fff200;
       color: #000;
       font-family: inherit;
-      font-size: clamp(20px, 3.5vh, 28px);
+      font-size: clamp(26px, 4.5vh, 36px);
       font-weight: 900;
       letter-spacing: 6px;
       border: none;
-      border-radius: 12px;
+      border-radius: 16px;
       cursor: pointer;
       transition: background 0.1s, transform 0.1s, opacity 0.2s;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     }
     .submit-btn:active    { background: #e6d800; transform: scale(0.98); }
-    .submit-btn:disabled  { opacity: 0.4; cursor: not-allowed; }
+    .submit-btn:disabled  { opacity: 0.35; cursor: not-allowed; box-shadow: none; }
 
     /* ── 하단 상태 바 ── */
     .status-bar {
@@ -161,20 +178,22 @@
       flex-shrink: 0;
       display: flex;
       justify-content: space-between;
-      font-size: 11px;
-      color: rgba(255,255,255,0.5);
-      padding: 0 4px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.6);
+      padding: 0 4px 2px;
     }
-    .dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-right: 4px; vertical-align: middle; }
+    .dot {
+      display: inline-block;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      margin-right: 5px;
+      vertical-align: middle;
+    }
     .dot.on  { background: #4caf50; animation: blink 2s infinite; }
     .dot.off { background: #f44336; }
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
 
-    /* 음성 아이콘 표시 */
-    .voice-indicator {
-      font-size: 11px;
-      color: rgba(255,255,255,0.5);
-    }
+    .voice-indicator { font-size: 12px; color: rgba(255,255,255,0.5); }
     .voice-indicator.active { color: #4caf50; }
 
     /* ── 결과 오버레이 ── */
@@ -182,35 +201,44 @@
       position: fixed; inset: 0;
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
-      gap: 16px; z-index: 500;
+      gap: 20px; z-index: 500;
       opacity: 0; pointer-events: none;
       transition: opacity 0.2s;
     }
     .overlay.show { opacity: 1; pointer-events: all; }
     .overlay-bg   { position: absolute; inset: 0; }
-    .overlay.ok  .overlay-bg { background: rgba(27,124,58,0.93); }
-    .overlay.err .overlay-bg { background: rgba(198,40,40,0.93); }
-    .ov-icon { font-size: 72px; position: relative; z-index: 1; }
-    .ov-msg  { font-size: 26px; font-weight: 900; color: #fff; position: relative; z-index: 1; text-align: center; line-height: 1.4; white-space: pre-line; }
-    .ov-sub  { font-size: 16px; color: rgba(255,255,255,0.85); position: relative; z-index: 1; }
+    .overlay.ok  .overlay-bg { background: rgba(27,124,58,0.95); }
+    .overlay.err .overlay-bg { background: rgba(198,40,40,0.95); }
+    .ov-icon { font-size: 96px; position: relative; z-index: 1; }
+    .ov-msg  {
+      font-size: clamp(30px, 6vw, 44px);
+      font-weight: 900;
+      color: #fff;
+      position: relative; z-index: 1;
+      text-align: center; line-height: 1.4;
+      white-space: pre-line;
+    }
+    .ov-sub  {
+      font-size: clamp(20px, 4vw, 28px);
+      color: rgba(255,255,255,0.9);
+      position: relative; z-index: 1;
+      text-align: center;
+    }
 
-    /* ── 로딩 인디케이터 ── */
-    .submit-btn.loading {
-      opacity: 0.7;
-      cursor: not-allowed;
-    }
-    .submit-btn.loading::after {
-      content: ' ⏳';
-    }
+    /* ── 로딩 ── */
+    .submit-btn.loading { opacity: 0.7; cursor: not-allowed; }
+    .submit-btn.loading::after { content: ' ⏳'; }
   </style>
 </head>
 <body>
-
 <div class="wrap">
 
   <!-- 헤더 -->
   <div class="hd">
-    <div class="hd-title">강동종합사회복지관 경로식당<br><span style="font-size:12px;font-weight:700">출석체크 시스템</span></div>
+    <div class="hd-title">
+      강동종합사회복지관 경로식당<br>
+      <span>출석체크 시스템</span>
+    </div>
     <div class="hd-time" id="hd-clock">00:00</div>
   </div>
 
@@ -265,7 +293,7 @@
 // ══════════════════════════════════════════
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw4wHR4VpAomKGMizlV2dTZS7X5p8mqIb0DmEViuP147Y51ezbh10eKkYOcyoEO02UL/exec';
 localStorage.setItem('scriptUrl', SCRIPT_URL);
-const AUTO_CLOSE = 2800;  // 결과 화면 자동 닫힘 (ms)
+const AUTO_CLOSE = 2800;
 
 // ══════════════════════════════════════════
 //  상태
@@ -273,37 +301,32 @@ const AUTO_CLOSE = 2800;  // 결과 화면 자동 닫힘 (ms)
 let input    = '';
 let members  = [];
 let todayCnt = 0;
-let isSubmitting = false;  // 중복 제출 방지 플래그
+let isSubmitting = false;
 
 // ══════════════════════════════════════════
-//  음성(TTS) 초기화
+//  음성(TTS)
 // ══════════════════════════════════════════
-let ttsReady  = false;
-let ttsVoice  = null;  // 한국어 음성
+let ttsReady = false;
+let ttsVoice = null;
 
 function initTTS() {
   if (!('speechSynthesis' in window)) {
     document.getElementById('voice-lbl').textContent = '🔇 음성 미지원';
     return;
   }
-
-  // 음성 목록 로드 (비동기일 수 있음)
   function loadVoices() {
     const voices = window.speechSynthesis.getVoices();
-    // 한국어 음성 우선 탐색
     ttsVoice = voices.find(v => v.lang === 'ko-KR') ||
                voices.find(v => v.lang.startsWith('ko')) ||
                null;
     if (voices.length > 0) {
       ttsReady = true;
-      const voiceEl = document.getElementById('voice-lbl');
-      voiceEl.textContent = '🔊 음성 ' + (ttsVoice ? '(' + ttsVoice.name.slice(0,8) + ')' : '(기본)');
-      voiceEl.classList.add('active');
+      const el = document.getElementById('voice-lbl');
+      el.textContent = '🔊 음성 ' + (ttsVoice ? '(' + ttsVoice.name.slice(0,8) + ')' : '(기본)');
+      el.classList.add('active');
     }
   }
-
   loadVoices();
-  // Chrome 등 일부 브라우저는 onvoiceschanged 이벤트 이후에 음성 목록이 채워짐
   if (window.speechSynthesis.onvoiceschanged !== undefined) {
     window.speechSynthesis.onvoiceschanged = loadVoices;
   }
@@ -312,17 +335,15 @@ function initTTS() {
 function speak(text) {
   if (!ttsReady || !('speechSynthesis' in window)) return;
   try {
-    window.speechSynthesis.cancel(); // 이전 음성 중단
+    window.speechSynthesis.cancel();
     const utt = new SpeechSynthesisUtterance(text);
-    utt.lang  = 'ko-KR';
-    utt.rate  = 0.95;
-    utt.pitch = 1.0;
+    utt.lang   = 'ko-KR';
+    utt.rate   = 0.95;
+    utt.pitch  = 1.0;
     utt.volume = 1.0;
     if (ttsVoice) utt.voice = ttsVoice;
     window.speechSynthesis.speak(utt);
-  } catch (e) {
-    console.warn('TTS 오류:', e);
-  }
+  } catch (e) { console.warn('TTS 오류:', e); }
 }
 
 // ══════════════════════════════════════════
@@ -340,7 +361,6 @@ async function init() {
   countToday();
 }
 
-// ── 시계
 function startClock() {
   const tick = () => {
     document.getElementById('hd-clock').textContent =
@@ -350,14 +370,12 @@ function startClock() {
   setInterval(tick, 1000);
 }
 
-// ── 네트워크 상태
 function updateNet() {
   const on = navigator.onLine;
   document.getElementById('net-dot').className = 'dot ' + (on ? 'on' : 'off');
   document.getElementById('net-lbl').textContent = on ? '온라인' : '오프라인';
 }
 
-// ── 키 바인딩
 function bindKeys() {
   document.querySelectorAll('.key').forEach(btn => {
     btn.addEventListener('click', () => keyPress(btn.dataset.k));
@@ -370,11 +388,9 @@ function bindKeys() {
   });
 }
 
-// ── 이용자 명단 로드
 async function loadMembers() {
   const cached = localStorage.getItem('members_cache');
   if (cached) members = JSON.parse(cached);
-
   if (!SCRIPT_URL) return;
   try {
     const res  = await fetch(SCRIPT_URL + '?action=getMembers');
@@ -386,7 +402,6 @@ async function loadMembers() {
   } catch {}
 }
 
-// ── 오늘 출석 카운트 (로컬 기반)
 function countToday() {
   const today = dateStr(new Date());
   const recs  = JSON.parse(localStorage.getItem('kiosk_records') || '[]');
@@ -398,7 +413,7 @@ function countToday() {
 //  키패드 로직
 // ══════════════════════════════════════════
 function keyPress(k) {
-  if (isSubmitting) return; // 제출 중에는 키 입력 무시
+  if (isSubmitting) return;
   if (k === 'clear')    { input = ''; }
   else if (k === 'del') { input = input.slice(0, -1); }
   else                  { if (input.length >= 8) return; input += k; }
@@ -411,7 +426,6 @@ function updateDisplay() {
   const btn    = document.getElementById('submit-btn');
 
   numEl.textContent = (input + '________').slice(0, 8);
-
   nameEl.textContent = '';
   nameEl.className   = 'display-name';
 
@@ -431,11 +445,10 @@ function updateDisplay() {
 }
 
 // ══════════════════════════════════════════
-//  출석 등록 ★ 핵심 수정 부분
+//  출석 등록
 // ══════════════════════════════════════════
 async function submitAttendance() {
   if (input.length !== 8 || isSubmitting) return;
-
   isSubmitting = true;
   const btn = document.getElementById('submit-btn');
   btn.disabled = true;
@@ -447,7 +460,6 @@ async function submitAttendance() {
   const member = members.find(m => m.phone === input);
   const phone  = input;
 
-  // ── STEP 0: 미등록자 차단
   if (!member) {
     speak('미등록자입니다. 출석 처리가 되지 않습니다.');
     showOverlay('err', '⛔ 미등록자', '등록되지 않은 전화번호입니다.\n담당자에게 문의하세요.');
@@ -455,19 +467,16 @@ async function submitAttendance() {
     return;
   }
 
-  // ── STEP 1: 로컬 스토리지 중복 체크 (빠른 1차 검사)
   const localRecs = JSON.parse(localStorage.getItem('kiosk_records') || '[]');
   const localDup  = localRecs.find(r => r.phone === phone && r.date === today);
-
   if (localDup) {
-    const name = member ? member.name + ' 어르신' : phone;
+    const name = member.name + ' 어르신';
     speak(name + ', 오늘 이미 출석 체크 되셨습니다.');
     showOverlay('err', name, '오늘 이미 출석 체크 되었습니다 (' + localDup.time + ')');
     resetInput();
     return;
   }
 
-  // ── STEP 2: 서버(Google Sheets) 중복 체크 (2차 검사 — 다른 기기/세션 대응)
   let serverDup = false;
   if (SCRIPT_URL && navigator.onLine) {
     try {
@@ -475,74 +484,51 @@ async function submitAttendance() {
       const res    = await fetch(SCRIPT_URL + '?' + params.toString());
       const data   = await res.json();
       if (data.records) {
-        // 서버 기록과 로컬 기록을 동기화
         syncLocalFromServer(data.records, today);
-        // 중복 여부 확인
         serverDup = data.records.some(r => r.phone === phone);
       }
-    } catch {
-      // 네트워크 오류 시 로컬 기록만으로 진행
-    }
+    } catch {}
   }
 
   if (serverDup) {
-    // 서버에는 있지만 로컬에 없던 경우 → 로컬에도 추가
     const serverRecs = JSON.parse(localStorage.getItem('kiosk_records') || '[]');
     const existing   = serverRecs.find(r => r.phone === phone && r.date === today);
     const dupTime    = existing ? existing.time : '(서버 기록)';
-    const name = member ? member.name + ' 어르신' : phone;
+    const name = member.name + ' 어르신';
     speak(name + ', 오늘 이미 출석 체크 되셨습니다.');
     showOverlay('err', name, '오늘 이미 출석 체크 되었습니다 ' + dupTime);
     resetInput();
     return;
   }
 
-  // ── STEP 3: 정상 출석 등록
   const record = {
-    id: Date.now(),
+    id        : Date.now(),
     phone,
-    name      : member ? member.name : '미등록',
+    name      : member.name,
     date      : today,
     time,
-    registered: !!member,
+    registered: true,
   };
 
-  // 로컬 저장
   localRecs.push(record);
   localStorage.setItem('kiosk_records', JSON.stringify(localRecs));
   todayCnt++;
   document.getElementById('today-cnt').textContent = '오늘 출석: ' + todayCnt + '명';
 
-  // 음성 안내
-  if (member) {
-    speak(member.name + ' 어르신, 출석 체크 완료되었습니다.');
-  } else {
-    speak('출석 체크 완료되었습니다.');
-  }
-
-  // 결과 화면
-  showOverlay('ok',
-    member ? member.name + ' 어르신' : '출석 등록',
-    '출석 체크 완료!  ' + time
-  );
-
-  // 서버 전송
+  speak(member.name + ' 어르신, 출석 체크 완료되었습니다.');
+  showOverlay('ok', member.name + ' 어르신', '출석 체크 완료!  ' + time);
   sendToSheets(record);
-
   resetInput();
 }
 
-// 입력 초기화 및 제출 잠금 해제
 function resetInput() {
   input = '';
   updateDisplay();
   isSubmitting = false;
   const btn = document.getElementById('submit-btn');
   btn.classList.remove('loading');
-  // disabled 상태는 updateDisplay()에서 자동 처리됨
 }
 
-// 서버 기록을 로컬과 동기화 (서버 기준으로 당일 기록 보완)
 function syncLocalFromServer(serverRecords, today) {
   const local = JSON.parse(localStorage.getItem('kiosk_records') || '[]');
   let changed = false;
@@ -560,7 +546,6 @@ function syncLocalFromServer(serverRecords, today) {
     }
   });
   if (changed) localStorage.setItem('kiosk_records', JSON.stringify(local));
-  // 카운트 재계산
   todayCnt = local.filter(r => r.date === today).length;
   document.getElementById('today-cnt').textContent = '오늘 출석: ' + todayCnt + '명';
 }
@@ -581,11 +566,10 @@ function showOverlay(type, msg, sub) {
 }
 
 // ══════════════════════════════════════════
-//  Google Sheets 전송 (JSONP 방식 — CORS 우회 + 응답 수신 가능)
+//  Google Sheets 전송 (JSONP)
 // ══════════════════════════════════════════
 function sendToSheets(record) {
   if (!SCRIPT_URL) return Promise.resolve({ status: 'no-url' });
-
   return new Promise((resolve) => {
     const cbName = '_cb_' + Date.now();
     const params = new URLSearchParams({
@@ -596,34 +580,22 @@ function sendToSheets(record) {
       date      : record.date,
       time      : record.time,
       registered: record.registered ? 'true' : 'false',
-      callback  : cbName,   // ← JSONP 콜백 이름
+      callback  : cbName,
     });
-
     const script = document.createElement('script');
     const timer  = setTimeout(() => {
       cleanup();
-      // 타임아웃 시 오프라인 큐에 저장
       enqueueOffline(record);
       resolve({ status: 'timeout' });
     }, 8000);
-
-    window[cbName] = (data) => {
-      cleanup();
-      resolve(data);
-    };
-
+    window[cbName] = (data) => { cleanup(); resolve(data); };
     function cleanup() {
       clearTimeout(timer);
       delete window[cbName];
       if (script.parentNode) script.parentNode.removeChild(script);
     }
-
     script.src = SCRIPT_URL + '?' + params.toString();
-    script.onerror = () => {
-      cleanup();
-      enqueueOffline(record);
-      resolve({ status: 'error' });
-    };
+    script.onerror = () => { cleanup(); enqueueOffline(record); resolve({ status: 'error' }); };
     document.head.appendChild(script);
   });
 }
@@ -636,14 +608,11 @@ function enqueueOffline(record) {
   }
 }
 
-// ── 오프라인 큐 재전송 (온라인 복구 시)
 window.addEventListener('online', async () => {
   updateNet();
   const q = JSON.parse(localStorage.getItem('offline_queue') || '[]');
   if (!q.length) return;
-  for (const record of q) {
-    await sendToSheets(record);
-  }
+  for (const record of q) { await sendToSheets(record); }
   localStorage.removeItem('offline_queue');
 });
 
@@ -656,9 +625,6 @@ function dateStr(d) {
     String(d.getDate()).padStart(2, '0');
 }
 
-// ══════════════════════════════════════════
-//  Service Worker
-// ══════════════════════════════════════════
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('./sw.js').catch(() => {});
 }

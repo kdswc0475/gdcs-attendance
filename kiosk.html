@@ -14,9 +14,6 @@
 
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
-    html {
-      height: -webkit-fill-available;
-    }
     html, body {
       width: 100%; height: 100%;
       font-family: 'Noto Sans KR', sans-serif;
@@ -31,14 +28,10 @@
       display: flex;
       flex-direction: column;
       width: 100%;
-      /* Safari iOS 주소창 포함한 실제 높이 대응 */
-      height: 100vh;
-      height: -webkit-fill-available;
-      height: 100dvh;
-      max-height: -webkit-fill-available;
-      padding: 10px 14px 12px;
-      gap: 4px;
-      overflow: hidden;
+      /* JS가 --real-vh 를 주입 → iOS 12 Safari 100vh 버그 완전 우회 */
+      height: calc(var(--real-vh, 1vh) * 100);
+      padding: 10px 14px 10px;
+      gap: 8px;
     }
 
     /* ── 헤더 ── */
@@ -46,19 +39,19 @@
       flex: 0 0 auto;
       background: #fff200;
       border-radius: 10px;
-      padding: 6px 14px;
+      padding: 8px 14px;
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
-    .hd-title { font-size: 13px; font-weight: 900; color: #1a1a1a; line-height: 1.3; }
-    .hd-time  { font-size: 18px; font-weight: 900; color: #1a1a1a; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .hd-title { font-size: 15px; font-weight: 900; color: #1a1a1a; line-height: 1.3; }
+    .hd-time  { font-size: 20px; font-weight: 900; color: #1a1a1a; font-variant-numeric: tabular-nums; white-space: nowrap; }
 
     /* ── 안내문 ── */
     .guide {
       flex: 0 0 auto;
       text-align: center;
-      font-size: 14px;
+      font-size: 16px;
       font-weight: 700;
       color: #fff;
       letter-spacing: 1px;
@@ -70,14 +63,14 @@
       background: rgba(255,255,255,0.9);
       border-radius: 12px;
       padding: 0 16px;
-      height: 54px;
+      height: 64px;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
     }
     .display-number {
-      font-size: 32px;
+      font-size: 38px;
       font-weight: 900;
       letter-spacing: 8px;
       color: #1565c0;
@@ -100,15 +93,15 @@
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       grid-template-rows: repeat(4, 1fr);
-      gap: 5px;
+      gap: 8px;
       min-height: 0;
     }
     .key {
       background: #1976d2;
       border: 2px solid rgba(255,255,255,0.35);
-      border-radius: 10px;
+      border-radius: 14px;
       font-family: inherit;
-      font-size: clamp(24px, 5.5vh, 44px);
+      font-size: clamp(22px, 5vw, 36px);
       font-weight: 900;
       color: #fff;
       cursor: pointer;
@@ -124,29 +117,27 @@
       transform: scale(0.93);
     }
     .key.key-clear {
-      font-size: clamp(18px, 3.5vh, 28px);
+      font-size: clamp(14px, 3.5vw, 20px);
       font-weight: 900;
       color: #ffcdd2;
       border-color: rgba(255,205,210,0.5);
     }
     .key.key-del {
-      font-size: clamp(22px, 4.5vh, 36px);
+      font-size: clamp(18px, 4vw, 28px);
       color: rgba(255,255,255,0.7);
     }
 
     /* ── 출석 체크 버튼 ── */
     .submit-btn {
       flex: 0 0 auto;
-      flex-shrink: 0;
       width: 100%;
-      min-height: 52px;
-      height: clamp(52px, 7vh, 68px);
+      height: calc(var(--real-vh, 1vh) * 8);
       background: #fff200;
       color: #000;
       font-family: inherit;
-      font-size: clamp(18px, 3vh, 24px);
+      font-size: clamp(18px, 4vw, 26px);
       font-weight: 900;
-      letter-spacing: 4px;
+      letter-spacing: 6px;
       border: none;
       border-radius: 12px;
       cursor: pointer;
@@ -158,23 +149,18 @@
     /* ── 하단 상태 바 ── */
     .status-bar {
       flex: 0 0 auto;
-      flex-shrink: 0;
       display: flex;
       justify-content: space-between;
-      font-size: 10px;
+      font-size: 11px;
       color: rgba(255,255,255,0.5);
-      padding: 0 2px;
+      padding: 0 4px;
     }
     .dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-right: 4px; vertical-align: middle; }
     .dot.on  { background: #4caf50; animation: blink 2s infinite; }
     .dot.off { background: #f44336; }
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
 
-    /* 음성 아이콘 표시 */
-    .voice-indicator {
-      font-size: 11px;
-      color: rgba(255,255,255,0.5);
-    }
+    .voice-indicator { font-size: 11px; color: rgba(255,255,255,0.5); }
     .voice-indicator.active { color: #4caf50; }
 
     /* ── 결과 오버레이 ── */
@@ -192,15 +178,37 @@
     .overlay.err .overlay-bg { background: rgba(198,40,40,0.93); }
     .ov-icon { font-size: 72px; position: relative; z-index: 1; }
     .ov-msg  { font-size: 26px; font-weight: 900; color: #fff; position: relative; z-index: 1; text-align: center; line-height: 1.4; white-space: pre-line; }
-    .ov-sub  { font-size: 16px; color: rgba(255,255,255,0.85); position: relative; z-index: 1; }
+    .ov-sub  { font-size: 16px; color: rgba(255,255,255,0.85); position: relative; z-index: 1; text-align: center; }
 
-    /* ── 로딩 인디케이터 ── */
-    .submit-btn.loading {
-      opacity: 0.7;
-      cursor: not-allowed;
+    /* ── 로딩 ── */
+    .submit-btn.loading { opacity: 0.7; cursor: not-allowed; }
+    .submit-btn.loading::after { content: ' ⏳'; }
+
+    /* ── 홈화면 추가 안내 배너 ── */
+    .install-banner {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: rgba(0,0,0,0.88);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      text-align: center;
+      padding: 14px 20px 28px;
+      z-index: 1000;
+      line-height: 2;
     }
-    .submit-btn.loading::after {
-      content: ' ⏳';
+    .install-banner button {
+      display: inline-block;
+      margin-top: 8px;
+      background: #fff200;
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 28px;
+      font-size: 14px;
+      font-weight: 900;
+      cursor: pointer;
+      font-family: inherit;
     }
   </style>
 </head>
@@ -259,51 +267,76 @@
   <div class="ov-sub"  id="ov-sub"></div>
 </div>
 
+<!-- 홈화면 추가 안내 (Safari iOS 전용) -->
+<div class="install-banner" id="install-banner" style="display:none">
+  📲 전체화면으로 사용하려면<br>
+  하단 <strong>공유 버튼 (□↑)</strong> →  <strong>"홈 화면에 추가"</strong> 를 탭하세요
+  <br>
+  <button onclick="dismissBanner()">확인 (다시 보지 않기)</button>
+</div>
+
 <script>
 // ══════════════════════════════════════════
 //  설정
 // ══════════════════════════════════════════
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw4wHR4VpAomKGMizlV2dTZS7X5p8mqIb0DmEViuP147Y51ezbh10eKkYOcyoEO02UL/exec';
 localStorage.setItem('scriptUrl', SCRIPT_URL);
-const AUTO_CLOSE = 2800;  // 결과 화면 자동 닫힘 (ms)
+const AUTO_CLOSE = 2800;
 
 // ══════════════════════════════════════════
 //  상태
 // ══════════════════════════════════════════
-let input    = '';
-let members  = [];
-let todayCnt = 0;
-let isSubmitting = false;  // 중복 제출 방지 플래그
+let input        = '';
+let members      = [];
+let todayCnt     = 0;
+let isSubmitting = false;
 
 // ══════════════════════════════════════════
-//  음성(TTS) 초기화
+//  홈화면 추가 안내
 // ══════════════════════════════════════════
-let ttsReady  = false;
-let ttsVoice  = null;  // 한국어 음성
+function checkInstallBanner() {
+  // 이미 홈화면 앱(standalone)으로 실행 중이면 숨김
+  const isStandalone =
+    window.navigator.standalone === true ||
+    window.matchMedia('(display-mode: standalone)').matches ||
+    window.matchMedia('(display-mode: fullscreen)').matches;
+  if (isStandalone) return;
+  if (localStorage.getItem('banner_dismissed')) return;
+
+  const isSafari = /Safari/.test(navigator.userAgent) && !/CriOS|Chrome/.test(navigator.userAgent);
+  const isIOS    = /iPad|iPhone|iPod/.test(navigator.userAgent);
+  if (isSafari && isIOS) {
+    document.getElementById('install-banner').style.display = 'block';
+  }
+}
+function dismissBanner() {
+  document.getElementById('install-banner').style.display = 'none';
+  localStorage.setItem('banner_dismissed', '1');
+}
+
+// ══════════════════════════════════════════
+//  음성(TTS)
+// ══════════════════════════════════════════
+let ttsReady = false;
+let ttsVoice = null;
 
 function initTTS() {
   if (!('speechSynthesis' in window)) {
     document.getElementById('voice-lbl').textContent = '🔇 음성 미지원';
     return;
   }
-
-  // 음성 목록 로드 (비동기일 수 있음)
   function loadVoices() {
     const voices = window.speechSynthesis.getVoices();
-    // 한국어 음성 우선 탐색
     ttsVoice = voices.find(v => v.lang === 'ko-KR') ||
-               voices.find(v => v.lang.startsWith('ko')) ||
-               null;
+               voices.find(v => v.lang.startsWith('ko')) || null;
     if (voices.length > 0) {
       ttsReady = true;
-      const voiceEl = document.getElementById('voice-lbl');
-      voiceEl.textContent = '🔊 음성 ' + (ttsVoice ? '(' + ttsVoice.name.slice(0,8) + ')' : '(기본)');
-      voiceEl.classList.add('active');
+      const el = document.getElementById('voice-lbl');
+      el.textContent = '🔊 음성 ON';
+      el.classList.add('active');
     }
   }
-
   loadVoices();
-  // Chrome 등 일부 브라우저는 onvoiceschanged 이벤트 이후에 음성 목록이 채워짐
   if (window.speechSynthesis.onvoiceschanged !== undefined) {
     window.speechSynthesis.onvoiceschanged = loadVoices;
   }
@@ -312,23 +345,22 @@ function initTTS() {
 function speak(text) {
   if (!ttsReady || !('speechSynthesis' in window)) return;
   try {
-    window.speechSynthesis.cancel(); // 이전 음성 중단
-    const utt = new SpeechSynthesisUtterance(text);
-    utt.lang  = 'ko-KR';
-    utt.rate  = 0.95;
-    utt.pitch = 1.0;
-    utt.volume = 1.0;
+    window.speechSynthesis.cancel();
+    const utt    = new SpeechSynthesisUtterance(text);
+    utt.lang     = 'ko-KR';
+    utt.rate     = 0.95;
+    utt.pitch    = 1.0;
+    utt.volume   = 1.0;
     if (ttsVoice) utt.voice = ttsVoice;
     window.speechSynthesis.speak(utt);
-  } catch (e) {
-    console.warn('TTS 오류:', e);
-  }
+  } catch(e) {}
 }
 
 // ══════════════════════════════════════════
 //  초기화
 // ══════════════════════════════════════════
 async function init() {
+  setRealVh();   // ← iOS 12 Safari vh 버그 수정
   initTTS();
   startClock();
   bindKeys();
@@ -338,9 +370,21 @@ async function init() {
   updateNet();
   await loadMembers();
   countToday();
+  checkInstallBanner();
 }
 
-// ── 시계
+// ── iOS 12 Safari 100vh 버그 수정 ──────────
+// window.innerHeight = 주소창 제외한 실제 높이
+function setRealVh() {
+  const vh = window.innerHeight * 0.01;
+  document.documentElement.style.setProperty('--real-vh', vh + 'px');
+}
+// 화면 회전·리사이즈 시 재계산
+window.addEventListener('resize', setRealVh);
+window.addEventListener('orientationchange', function() {
+  setTimeout(setRealVh, 200);  // 회전 애니메이션 후 재계산
+});
+
 function startClock() {
   const tick = () => {
     document.getElementById('hd-clock').textContent =
@@ -350,31 +394,27 @@ function startClock() {
   setInterval(tick, 1000);
 }
 
-// ── 네트워크 상태
 function updateNet() {
   const on = navigator.onLine;
   document.getElementById('net-dot').className = 'dot ' + (on ? 'on' : 'off');
   document.getElementById('net-lbl').textContent = on ? '온라인' : '오프라인';
 }
 
-// ── 키 바인딩
 function bindKeys() {
   document.querySelectorAll('.key').forEach(btn => {
     btn.addEventListener('click', () => keyPress(btn.dataset.k));
   });
   document.addEventListener('keydown', e => {
     if (e.key >= '0' && e.key <= '9') keyPress(e.key);
-    else if (e.key === 'Backspace')   keyPress('del');
-    else if (e.key === 'Escape')      keyPress('clear');
-    else if (e.key === 'Enter')       submitAttendance();
+    else if (e.key === 'Backspace')    keyPress('del');
+    else if (e.key === 'Escape')       keyPress('clear');
+    else if (e.key === 'Enter')        submitAttendance();
   });
 }
 
-// ── 이용자 명단 로드
 async function loadMembers() {
   const cached = localStorage.getItem('members_cache');
   if (cached) members = JSON.parse(cached);
-
   if (!SCRIPT_URL) return;
   try {
     const res  = await fetch(SCRIPT_URL + '?action=getMembers');
@@ -386,19 +426,18 @@ async function loadMembers() {
   } catch {}
 }
 
-// ── 오늘 출석 카운트 (로컬 기반)
 function countToday() {
   const today = dateStr(new Date());
   const recs  = JSON.parse(localStorage.getItem('kiosk_records') || '[]');
-  todayCnt = recs.filter(r => r.date === today).length;
+  todayCnt    = recs.filter(r => r.date === today).length;
   document.getElementById('today-cnt').textContent = '오늘 출석: ' + todayCnt + '명';
 }
 
 // ══════════════════════════════════════════
-//  키패드 로직
+//  키패드
 // ══════════════════════════════════════════
 function keyPress(k) {
-  if (isSubmitting) return; // 제출 중에는 키 입력 무시
+  if (isSubmitting) return;
   if (k === 'clear')    { input = ''; }
   else if (k === 'del') { input = input.slice(0, -1); }
   else                  { if (input.length >= 8) return; input += k; }
@@ -410,8 +449,7 @@ function updateDisplay() {
   const nameEl = document.getElementById('disp-name');
   const btn    = document.getElementById('submit-btn');
 
-  numEl.textContent = (input + '________').slice(0, 8);
-
+  numEl.textContent  = (input + '________').slice(0, 8);
   nameEl.textContent = '';
   nameEl.className   = 'display-name';
 
@@ -431,7 +469,7 @@ function updateDisplay() {
 }
 
 // ══════════════════════════════════════════
-//  출석 등록 ★ 핵심 수정 부분
+//  출석 등록
 // ══════════════════════════════════════════
 async function submitAttendance() {
   if (input.length !== 8 || isSubmitting) return;
@@ -455,112 +493,69 @@ async function submitAttendance() {
     return;
   }
 
-  // ── STEP 1: 로컬 스토리지 중복 체크 (빠른 1차 검사)
+  // ── STEP 1: 로컬 중복 체크
   const localRecs = JSON.parse(localStorage.getItem('kiosk_records') || '[]');
   const localDup  = localRecs.find(r => r.phone === phone && r.date === today);
-
   if (localDup) {
-    const name = member ? member.name + ' 어르신' : phone;
-    speak(name + ', 오늘 이미 출석 체크 되셨습니다.');
-    showOverlay('err', name, '오늘 이미 출석 체크 되었습니다 (' + localDup.time + ')');
+    speak(member.name + ' 어르신, 오늘 이미 출석 체크 되셨습니다.');
+    showOverlay('err', member.name + ' 어르신', '오늘 이미 출석 체크 되었습니다\n(' + localDup.time + ')');
     resetInput();
     return;
   }
 
-  // ── STEP 2: 서버(Google Sheets) 중복 체크 (2차 검사 — 다른 기기/세션 대응)
-  let serverDup = false;
+  // ── STEP 2: 서버 중복 체크
   if (SCRIPT_URL && navigator.onLine) {
     try {
       const params = new URLSearchParams({ action: 'getRecords', date: today });
       const res    = await fetch(SCRIPT_URL + '?' + params.toString());
       const data   = await res.json();
       if (data.records) {
-        // 서버 기록과 로컬 기록을 동기화
         syncLocalFromServer(data.records, today);
-        // 중복 여부 확인
-        serverDup = data.records.some(r => r.phone === phone);
+        if (data.records.some(r => r.phone === phone)) {
+          speak(member.name + ' 어르신, 오늘 이미 출석 체크 되셨습니다.');
+          showOverlay('err', member.name + ' 어르신', '오늘 이미 출석 체크 되었습니다\n(서버 기록)');
+          resetInput();
+          return;
+        }
       }
-    } catch {
-      // 네트워크 오류 시 로컬 기록만으로 진행
-    }
-  }
-
-  if (serverDup) {
-    // 서버에는 있지만 로컬에 없던 경우 → 로컬에도 추가
-    const serverRecs = JSON.parse(localStorage.getItem('kiosk_records') || '[]');
-    const existing   = serverRecs.find(r => r.phone === phone && r.date === today);
-    const dupTime    = existing ? existing.time : '(서버 기록)';
-    const name = member ? member.name + ' 어르신' : phone;
-    speak(name + ', 오늘 이미 출석 체크 되셨습니다.');
-    showOverlay('err', name, '오늘 이미 출석 체크 되었습니다 ' + dupTime);
-    resetInput();
-    return;
+    } catch {}
   }
 
   // ── STEP 3: 정상 출석 등록
   const record = {
-    id: Date.now(),
-    phone,
-    name      : member ? member.name : '미등록',
-    date      : today,
-    time,
-    registered: !!member,
+    id: Date.now(), phone,
+    name: member.name, date: today, time,
+    registered: true,
   };
-
-  // 로컬 저장
   localRecs.push(record);
   localStorage.setItem('kiosk_records', JSON.stringify(localRecs));
   todayCnt++;
   document.getElementById('today-cnt').textContent = '오늘 출석: ' + todayCnt + '명';
 
-  // 음성 안내
-  if (member) {
-    speak(member.name + ' 어르신, 출석 체크 완료되었습니다.');
-  } else {
-    speak('출석 체크 완료되었습니다.');
-  }
-
-  // 결과 화면
-  showOverlay('ok',
-    member ? member.name + ' 어르신' : '출석 등록',
-    '출석 체크 완료!  ' + time
-  );
-
-  // 서버 전송
+  speak(member.name + ' 어르신, 출석 체크 완료되었습니다.');
+  showOverlay('ok', member.name + ' 어르신', '출석 체크 완료!  ' + time);
   sendToSheets(record);
-
   resetInput();
 }
 
-// 입력 초기화 및 제출 잠금 해제
 function resetInput() {
   input = '';
   updateDisplay();
   isSubmitting = false;
-  const btn = document.getElementById('submit-btn');
-  btn.classList.remove('loading');
-  // disabled 상태는 updateDisplay()에서 자동 처리됨
+  document.getElementById('submit-btn').classList.remove('loading');
 }
 
-// 서버 기록을 로컬과 동기화 (서버 기준으로 당일 기록 보완)
 function syncLocalFromServer(serverRecords, today) {
   const local = JSON.parse(localStorage.getItem('kiosk_records') || '[]');
   let changed = false;
   serverRecords.forEach(sr => {
     if (sr.date === today && !local.find(lr => lr.phone === sr.phone && lr.date === today)) {
-      local.push({
-        id        : sr.id || Date.now(),
-        phone     : sr.phone,
-        name      : sr.name,
-        date      : sr.date,
-        time      : sr.time,
-        registered: sr.registered,
-      });
+      local.push({ id: sr.id||Date.now(), phone: sr.phone, name: sr.name,
+                   date: sr.date, time: sr.time, registered: sr.registered });
       changed = true;
     }
   });
   if (changed) localStorage.setItem('kiosk_records', JSON.stringify(local));
-  // 카운트 재계산
   todayCnt = local.filter(r => r.date === today).length;
   document.getElementById('today-cnt').textContent = '오늘 출석: ' + todayCnt + '명';
 }
@@ -581,51 +576,26 @@ function showOverlay(type, msg, sub) {
 }
 
 // ══════════════════════════════════════════
-//  Google Sheets 전송 (JSONP 방식 — CORS 우회 + 응답 수신 가능)
+//  Google Sheets 전송 (JSONP)
 // ══════════════════════════════════════════
 function sendToSheets(record) {
-  if (!SCRIPT_URL) return Promise.resolve({ status: 'no-url' });
-
-  return new Promise((resolve) => {
-    const cbName = '_cb_' + Date.now();
-    const params = new URLSearchParams({
-      action    : 'addRecord',
-      id        : record.id,
-      phone     : record.phone,
-      name      : record.name,
-      date      : record.date,
-      time      : record.time,
-      registered: record.registered ? 'true' : 'false',
-      callback  : cbName,   // ← JSONP 콜백 이름
-    });
-
-    const script = document.createElement('script');
-    const timer  = setTimeout(() => {
-      cleanup();
-      // 타임아웃 시 오프라인 큐에 저장
-      enqueueOffline(record);
-      resolve({ status: 'timeout' });
-    }, 8000);
-
-    window[cbName] = (data) => {
-      cleanup();
-      resolve(data);
-    };
-
-    function cleanup() {
-      clearTimeout(timer);
-      delete window[cbName];
-      if (script.parentNode) script.parentNode.removeChild(script);
-    }
-
-    script.src = SCRIPT_URL + '?' + params.toString();
-    script.onerror = () => {
-      cleanup();
-      enqueueOffline(record);
-      resolve({ status: 'error' });
-    };
-    document.head.appendChild(script);
+  if (!SCRIPT_URL) return;
+  const cbName = '_cb_' + Date.now();
+  const params = new URLSearchParams({
+    action: 'addRecord', id: record.id, phone: record.phone,
+    name: record.name, date: record.date, time: record.time,
+    registered: 'true', callback: cbName,
   });
+  const script = document.createElement('script');
+  const timer  = setTimeout(() => { cleanup(); enqueueOffline(record); }, 8000);
+  window[cbName] = () => { cleanup(); };
+  function cleanup() {
+    clearTimeout(timer); delete window[cbName];
+    if (script.parentNode) script.parentNode.removeChild(script);
+  }
+  script.src    = SCRIPT_URL + '?' + params.toString();
+  script.onerror = () => { cleanup(); enqueueOffline(record); };
+  document.head.appendChild(script);
 }
 
 function enqueueOffline(record) {
@@ -636,14 +606,11 @@ function enqueueOffline(record) {
   }
 }
 
-// ── 오프라인 큐 재전송 (온라인 복구 시)
 window.addEventListener('online', async () => {
   updateNet();
   const q = JSON.parse(localStorage.getItem('offline_queue') || '[]');
   if (!q.length) return;
-  for (const record of q) {
-    await sendToSheets(record);
-  }
+  for (const r of q) sendToSheets(r);
   localStorage.removeItem('offline_queue');
 });
 
@@ -652,13 +619,10 @@ window.addEventListener('online', async () => {
 // ══════════════════════════════════════════
 function dateStr(d) {
   return d.getFullYear() + '-' +
-    String(d.getMonth() + 1).padStart(2, '0') + '-' +
-    String(d.getDate()).padStart(2, '0');
+    String(d.getMonth()+1).padStart(2,'0') + '-' +
+    String(d.getDate()).padStart(2,'0');
 }
 
-// ══════════════════════════════════════════
-//  Service Worker
-// ══════════════════════════════════════════
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('./sw.js').catch(() => {});
 }
